@@ -1,0 +1,7 @@
+{
+  "name": "groupbybroker",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
