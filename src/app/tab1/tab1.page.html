@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Tab 1 a
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,24 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="large">Tab 1 a</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <!-- <app-explore-container name="Tab 1 a page..."></app-explore-container> -->
+ <p>here </p>
+  <div>
+    <h1>Addresses Within 2 Miles of {{ targetAddress }}</h1>
+    <ul>
+      <li *ngFor="let address of withinRangeAddresses">{{ address }}</li>
+    </ul>
+    <div style="height: 500px;">
+      <google-map [options]="mapOptions">
+        <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
+        <map-marker *ngFor="let address of withinRangeAddresses" [position]="getLatLng(address)"></map-marker>
+      </google-map>
+    </div>
+  </div>
+
+  
 </ion-content>
