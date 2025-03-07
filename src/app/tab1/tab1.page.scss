@@ -1,0 +1,12 @@
+ion-item {
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+}
+
+ion-input {
+  border: 1px solid #ccc; /* Add a border */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  padding: 8px; /* Optional: Add padding for better appearance */
+  width: 120px; /* Optional: Make the input take the full width */
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}

@@ -7,20 +7,22 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+ 
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Tab 1 a</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-item>
-    <ion-input label="Lookup Range in Miles: " [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" placeholder="Enter Range"></ion-input>
+    <p style="padding-right: 20px;">Lookup range (miles) </p>
+    <ion-input [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" placeholder="Enter Range"></ion-input>
   </ion-item>
   <div>
     <h1>Addresses Within {{ findRadius }} Miles of {{ targetAddress }}</h1>
     <ul>
       <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
     </ul>
-    <div >
+    <div style="height: 500px;">
       <google-map [options]="mapOptions">
         <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
         <map-marker *ngFor="let addressObj of withinRangeAddresses" [position]="getLatLng(addressObj)"></map-marker>
