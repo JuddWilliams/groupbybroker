@@ -20,7 +20,7 @@
     <ul>
       <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
     </ul>
-    <div style="height: 200px;">
+    <div >
       <google-map [options]="mapOptions">
         <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
         <map-marker *ngFor="let addressObj of withinRangeAddresses" [position]="getLatLng(addressObj)"></map-marker>
@@ -28,3 +28,4 @@
     </div>
   </div>
 </ion-content>
+
