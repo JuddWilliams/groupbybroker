@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-tab1',
@@ -6,32 +6,36 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit {
 
   targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
 
+  findRadius: number = 0.5; // In miles
+
   addresses = [
-    '4320 Harbour Island Drive, Jacksonville, FL 32225',
-    '4324 Harbour Island Drive, Jacksonville, FL 32225'
+    '4225 Harbour Island Drive, Jacksonville, FL 32225',
+    '4325 Harbour Island Drive, Jacksonville, FL 32225',
+    '11269 Island Club Ln, Jacksonville, FL 32225',
+    '1794 Girvin Rd, Jacksonville, FL 32225'
   ];
-  
 
   targetLocation: google.maps.LatLngLiteral | undefined;
-  withinRangeAddresses: string[] = [];
+  withinRangeAddresses: { address: string, location: google.maps.LatLngLiteral }[] = [];
 
   mapOptions: google.maps.MapOptions = {
     center: { lat: 0, lng: 0 },
-    zoom: 12
+    zoom: 15
   };
-
 
   constructor() {}
 
-  
   ngOnInit() {
     this.geocodeAddress(this.targetAddress, (location) => {
       this.targetLocation = location;
-      this.mapOptions.center = location;
+      this.mapOptions = {
+        center: location,
+        zoom: 15 // Adjust the zoom level as needed
+      };
       this.checkAddressesWithinRange();
     });
   }
@@ -57,6 +61,7 @@ export class Tab1Page {
   }
 
   checkAddressesWithinRange() {
+    this.withinRangeAddresses = []; // Clear previous results
     this.addresses.forEach(address => {
       this.geocodeAddress(address, (location) => {
         console.log("checkAddressesWithinRange()->geocodeAddress(address): ", address);
@@ -69,19 +74,23 @@ export class Tab1Page {
           console.log("addressLocation: ", addressLocation);
           const distance = google.maps.geometry.spherical.computeDistanceBetween(targetLocation, addressLocation) / 1609.34; // Convert meters to miles
           console.log("distance: ", distance);
-          if (distance <= 2) {            
-            this.withinRangeAddresses.push(address);
+          if (distance <= this.findRadius) {
+            this.withinRangeAddresses.push({ address, location });
             console.log("this.withinRangeAddresses: ", this.withinRangeAddresses);
           }
-        }      
+        }
       });
     });
   }
 
-  getLatLng(address: any): google.maps.LatLngLiteral {
-    console.log("getLatLng(address):", address);
-    console.log("getLatLng(address)-> address.location:", address.location);
-    return address.location;
+  onRadiusChange() {
+    this.checkAddressesWithinRange();
+  }
+
+  getLatLng(addressObj: { address: string, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
+    console.log("getLatLng(addressObj):", addressObj);
+    console.log("getLatLng(addressObj)-> addressObj.location:", addressObj.location);
+    return addressObj.location;
   }
 
 }

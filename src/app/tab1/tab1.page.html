@@ -12,21 +12,19 @@
       <ion-title size="large">Tab 1 a</ion-title>
     </ion-toolbar>
   </ion-header>
-
-  <!-- <app-explore-container name="Tab 1 a page..."></app-explore-container> -->
- <p>here </p>
+  <ion-item>
+    <ion-input label="Lookup Range in Miles: " [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" placeholder="Enter Range"></ion-input>
+  </ion-item>
   <div>
-    <h1>Addresses Within 2 Miles of {{ targetAddress }}</h1>
+    <h1>Addresses Within {{ findRadius }} Miles of {{ targetAddress }}</h1>
     <ul>
-      <li *ngFor="let address of withinRangeAddresses">{{ address }}</li>
+      <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
     </ul>
-    <div style="height: 500px;">
+    <div style="height: 200px;">
       <google-map [options]="mapOptions">
         <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
-        <map-marker *ngFor="let address of withinRangeAddresses" [position]="getLatLng(address)"></map-marker>
+        <map-marker *ngFor="let addressObj of withinRangeAddresses" [position]="getLatLng(addressObj)"></map-marker>
       </google-map>
     </div>
   </div>
-
-  
 </ion-content>
