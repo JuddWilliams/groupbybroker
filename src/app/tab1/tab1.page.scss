@@ -17,16 +17,16 @@ ion-input {
 }
 
 .small-button {
-  --padding-start: 2px;
-  --padding-end: 2px;
+  --padding-start: 4px;
+  --padding-end: 4px;
   --padding-top: 0px;
   --padding-bottom: 0px;
   font-size: 10px;
-  //height: auto;
+ 
   margin-left: 8px;
-  //display: inline-block;
+ 
   vertical-align: middle; /* Ensure the button is vertically centered */
-  //line-height: 1.2; /* Adjust line height to reduce space above and below text */
+ 
 }
 
 .map-container {

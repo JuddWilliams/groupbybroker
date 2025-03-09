@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, AlertInput, IonInput } from '@ionic/angular';
+import { AlertController, AlertInput, IonInput, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -12,6 +12,7 @@ export class Tab1Page implements OnInit {
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
 
   targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
+  errorMessage: string | null = null;
 
   public alertButtons = [
     {
@@ -23,8 +24,7 @@ export class Tab1Page implements OnInit {
       handler: (data: any) => {
         if (data.zipCode && data.zipCode.length === 5) {
           this.targetAddress = data.streetAddress ? `${data.streetAddress}, ${data.zipCode}` : `${data.zipCode}`;
-          this.refreshMap();
-          //this.selectText(); // Select the radius input after refreshing the map
+          this.refreshMap(); 
           return true; // Allow the alert to be dismissed
         } else {
           // Show an error message if the zip code is not valid
@@ -70,7 +70,7 @@ export class Tab1Page implements OnInit {
     zoom: 15
   };
 
-  constructor(private alertController: AlertController) {}
+  constructor(private alertController: AlertController, private toastController: ToastController) {}
 
   ngOnInit() {
     this.refreshMap();
@@ -84,6 +84,16 @@ export class Tab1Page implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      color: 'danger'
+    });
+    await toast.present();
   }
 
   refreshMap() {
@@ -105,8 +115,10 @@ export class Tab1Page implements OnInit {
         const lat = location.lat();
         const lng = location.lng();
         callback({ lat, lng });
+        this.errorMessage = null; // Clear any previous error message
       } else {
         console.error('Geocode was not successful for the following reason: ' + status);
+        this.presentToast('Geocode was not successful for the following reason: ' + status);
       }
     });
   }
