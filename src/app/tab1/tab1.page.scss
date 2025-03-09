@@ -10,3 +10,15 @@ ion-input {
   width: 120px; /* Optional: Make the input take the full width */
   box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
+
+.map-container {
+  height: 300px; /* Set the desired height */
+  width: 100%; /* Ensure the container takes the full width of the parent */
+  overflow: hidden; /* Ensure the content does not overflow */
+  position: relative; /* Ensure the container has a position context */
+}
+
+google-map {
+  height: 100%; /* Ensure the google-map component takes the full height of the container */
+  width: 100%; /* Ensure the google-map component takes the full width of the container */
+}

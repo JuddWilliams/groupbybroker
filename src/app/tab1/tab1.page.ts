@@ -10,6 +10,23 @@ export class Tab1Page implements OnInit {
 
   targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
 
+  public alertButtons = ['OK'];
+  public alertInputs = [
+    {
+      placeholder: 'Street address   eg. 1600 Pennsylvania Avenue NW',
+    },
+  
+     {
+      type: 'number',
+      placeholder: 'Zip code  eg. 20500',
+      attributes: {
+             maxlength: 5,
+      },
+      min: 1,
+      max: 99999,
+    },
+  ];
+
   findRadius: number = 0.5; // In miles
 
   addresses = [
@@ -42,17 +59,17 @@ export class Tab1Page implements OnInit {
 
   geocodeAddress(address: string, callback: (location: google.maps.LatLngLiteral) => void) {
     const geocoder = new google.maps.Geocoder();
-    console.log("geocoder: ", geocoder);
-    console.log("address: ", address);
+    //console.log("geocoder: ", geocoder);
+    //console.log("address: ", address);
     geocoder.geocode({ address }, (results, status) => {
-      console.log("results: ", results);
-      console.log("status: ", status);
+      //console.log("results: ", results);
+      //console.log("status: ", status);
       if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
         const location = results[0].geometry.location;
         const lat = location.lat();
         const lng = location.lng();
-        console.log("lat: ", lat);
-        console.log("lng: ", lng);
+        //console.log("lat: ", lat);
+        //console.log("lng: ", lng);
         callback({ lat, lng });
       } else {
         console.error('Geocode was not successful for the following reason: ' + status);
@@ -64,19 +81,19 @@ export class Tab1Page implements OnInit {
     this.withinRangeAddresses = []; // Clear previous results
     this.addresses.forEach(address => {
       this.geocodeAddress(address, (location) => {
-        console.log("checkAddressesWithinRange()->geocodeAddress(address): ", address);
-        console.log("checkAddressesWithinRange()->geocodeAddress(location): ", location);
+        //console.log("checkAddressesWithinRange()->geocodeAddress(address): ", address);
+        //console.log("checkAddressesWithinRange()->geocodeAddress(location): ", location);
         if (this.targetLocation) {
-          console.log("this.targetLocation: ", this.targetLocation);
+          //console.log("this.targetLocation: ", this.targetLocation);
           const targetLocation = new google.maps.LatLng(this.targetLocation);
-          console.log("targetLocation: ", this.targetLocation);
+          //console.log("targetLocation: ", this.targetLocation);
           const addressLocation = new google.maps.LatLng(location);
-          console.log("addressLocation: ", addressLocation);
+          //console.log("addressLocation: ", addressLocation);
           const distance = google.maps.geometry.spherical.computeDistanceBetween(targetLocation, addressLocation) / 1609.34; // Convert meters to miles
-          console.log("distance: ", distance);
+          //console.log("distance: ", distance);
           if (distance <= this.findRadius) {
             this.withinRangeAddresses.push({ address, location });
-            console.log("this.withinRangeAddresses: ", this.withinRangeAddresses);
+            //console.log("this.withinRangeAddresses: ", this.withinRangeAddresses);
           }
         }
       });
@@ -88,8 +105,8 @@ export class Tab1Page implements OnInit {
   }
 
   getLatLng(addressObj: { address: string, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
-    console.log("getLatLng(addressObj):", addressObj);
-    console.log("getLatLng(addressObj)-> addressObj.location:", addressObj.location);
+    //console.log("getLatLng(addressObj):", addressObj);
+    //console.log("getLatLng(addressObj)-> addressObj.location:", addressObj.location);
     return addressObj.location;
   }
 
