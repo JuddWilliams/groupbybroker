@@ -74,6 +74,7 @@ export class Tab1Page implements OnInit {
 
   ngOnInit() {
     this.refreshMap();
+    this.onRadiusChange(); // Ensure addresses within range are displayed by default
   }
 
   async presentAlert() {
