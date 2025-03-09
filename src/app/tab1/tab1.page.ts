@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController, AlertInput } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AlertController, AlertInput, IonInput } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -8,6 +8,8 @@ import { AlertController, AlertInput } from '@ionic/angular';
   standalone: false,
 })
 export class Tab1Page implements OnInit {
+
+  @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
 
   targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
 
@@ -22,6 +24,7 @@ export class Tab1Page implements OnInit {
         if (data.zipCode && data.zipCode.length === 5) {
           this.targetAddress = data.streetAddress ? `${data.streetAddress}, ${data.zipCode}` : `${data.zipCode}`;
           this.refreshMap();
+          //this.selectText(); // Select the radius input after refreshing the map
           return true; // Allow the alert to be dismissed
         } else {
           // Show an error message if the zip code is not valid
@@ -132,4 +135,7 @@ export class Tab1Page implements OnInit {
     return addressObj.location;
   }
 
+  selectText() {
+    this.findRadiusInput.getInputElement().then(input => input.select());
+  }
 }

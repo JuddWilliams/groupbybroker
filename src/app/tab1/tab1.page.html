@@ -16,18 +16,19 @@
     <ion-card-header>
       <ion-card-subtitle>Lookup range (miles)</ion-card-subtitle>
       <ion-card-title>
-        <ion-input [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" placeholder="Enter Range"></ion-input>
-        <ion-button (click)="presentAlert()">Click Me</ion-button>
-        <ion-alert
-          trigger="present-alert"
-          header="Please enter address"
-          [buttons]="alertButtons"
-          [inputs]="alertInputs"
-        ></ion-alert>
+        <div class="input-container">
+          <ion-input #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>
+        </div>
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h3>Addresses Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress }}</b></h3>
+      <h3>Addresses Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button></h3>
+      <ion-alert
+        trigger="present-alert"
+        header="Please enter address"
+        [buttons]="alertButtons"
+        [inputs]="alertInputs"
+      ></ion-alert>
       <ul>
         <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
       </ul>

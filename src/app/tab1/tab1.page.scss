@@ -4,11 +4,29 @@ ion-item {
 }
 
 ion-input {
+  --padding-start: 10px;
   border: 1px solid #ccc; /* Add a border */
   border-radius: 4px; /* Optional: Add rounded corners */
-  padding: 8px; /* Optional: Add padding for better appearance */
-  width: 120px; /* Optional: Make the input take the full width */
+  width: 130px; /* Optional: Make the input take the full width */
   box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+}
+
+.small-button {
+  --padding-start: 2px;
+  --padding-end: 2px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  font-size: 10px;
+  //height: auto;
+  margin-left: 8px;
+  //display: inline-block;
+  vertical-align: middle; /* Ensure the button is vertically centered */
+  //line-height: 1.2; /* Adjust line height to reduce space above and below text */
 }
 
 .map-container {
