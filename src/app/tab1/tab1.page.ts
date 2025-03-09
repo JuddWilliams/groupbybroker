@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController, AlertInput } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -10,17 +11,39 @@ export class Tab1Page implements OnInit {
 
   targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
 
-  public alertButtons = ['OK'];
-  public alertInputs = [
+  public alertButtons = [
     {
-      placeholder: 'Street address   eg. 1600 Pennsylvania Avenue NW',
+      text: 'Cancel',
+      role: 'cancel',
     },
-  
-     {
+    {
+      text: 'OK',
+      handler: (data: any) => {
+        if (data.zipCode && data.zipCode.length === 5) {
+          this.targetAddress = data.streetAddress ? `${data.streetAddress}, ${data.zipCode}` : `${data.zipCode}`;
+          this.refreshMap();
+          return true; // Allow the alert to be dismissed
+        } else {
+          // Show an error message if the zip code is not valid
+          alert('Please enter a valid 5-digit zip code.');
+          return false; // Prevent the alert from being dismissed
+        }
+      }
+    }
+  ];
+
+  public alertInputs: AlertInput[] = [
+    {
+      name: 'streetAddress',
+      placeholder: 'Street address   eg. 1600 Pennsylvania Avenue NW',
+      type: 'text'
+    },
+    {
+      name: 'zipCode',
       type: 'number',
       placeholder: 'Zip code  eg. 20500',
       attributes: {
-             maxlength: 5,
+        maxlength: 5,
       },
       min: 1,
       max: 99999,
@@ -44,9 +67,23 @@ export class Tab1Page implements OnInit {
     zoom: 15
   };
 
-  constructor() {}
+  constructor(private alertController: AlertController) {}
 
   ngOnInit() {
+    this.refreshMap();
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Please enter address',
+      inputs: this.alertInputs,
+      buttons: this.alertButtons
+    });
+
+    await alert.present();
+  }
+
+  refreshMap() {
     this.geocodeAddress(this.targetAddress, (location) => {
       this.targetLocation = location;
       this.mapOptions = {
@@ -59,17 +96,11 @@ export class Tab1Page implements OnInit {
 
   geocodeAddress(address: string, callback: (location: google.maps.LatLngLiteral) => void) {
     const geocoder = new google.maps.Geocoder();
-    //console.log("geocoder: ", geocoder);
-    //console.log("address: ", address);
     geocoder.geocode({ address }, (results, status) => {
-      //console.log("results: ", results);
-      //console.log("status: ", status);
       if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
         const location = results[0].geometry.location;
         const lat = location.lat();
         const lng = location.lng();
-        //console.log("lat: ", lat);
-        //console.log("lng: ", lng);
         callback({ lat, lng });
       } else {
         console.error('Geocode was not successful for the following reason: ' + status);
@@ -81,19 +112,12 @@ export class Tab1Page implements OnInit {
     this.withinRangeAddresses = []; // Clear previous results
     this.addresses.forEach(address => {
       this.geocodeAddress(address, (location) => {
-        //console.log("checkAddressesWithinRange()->geocodeAddress(address): ", address);
-        //console.log("checkAddressesWithinRange()->geocodeAddress(location): ", location);
         if (this.targetLocation) {
-          //console.log("this.targetLocation: ", this.targetLocation);
           const targetLocation = new google.maps.LatLng(this.targetLocation);
-          //console.log("targetLocation: ", this.targetLocation);
           const addressLocation = new google.maps.LatLng(location);
-          //console.log("addressLocation: ", addressLocation);
           const distance = google.maps.geometry.spherical.computeDistanceBetween(targetLocation, addressLocation) / 1609.34; // Convert meters to miles
-          //console.log("distance: ", distance);
           if (distance <= this.findRadius) {
             this.withinRangeAddresses.push({ address, location });
-            //console.log("this.withinRangeAddresses: ", this.withinRangeAddresses);
           }
         }
       });
@@ -105,8 +129,6 @@ export class Tab1Page implements OnInit {
   }
 
   getLatLng(addressObj: { address: string, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
-    //console.log("getLatLng(addressObj):", addressObj);
-    //console.log("getLatLng(addressObj)-> addressObj.location:", addressObj.location);
     return addressObj.location;
   }
 
