@@ -9,6 +9,7 @@ ion-input {
   border-radius: 4px; /* Optional: Add rounded corners */
   width: 130px; /* Optional: Make the input take the full width */
   box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+  font-size: 1rem; /* Adjust the font size as needed */
 }
 
 .input-container {
@@ -39,4 +40,38 @@ ion-input {
 google-map {
   height: 100%; /* Ensure the google-map component takes the full height of the container */
   width: 100%; /* Ensure the google-map component takes the full width of the container */
+}
+
+// override the default styles for the ion-card component
+//
+/* filepath: c:\Development\groupbybroker\src\app\tab1\tab1.page.scss */
+ion-card-subtitle {
+  text-transform: none; /* Remove the all caps transformation */
+  font-size: 0.9rem; /* Adjust the font size as needed */
+}
+
+ion-header {
+  ion-title {
+    font-size: 1.2rem; /* Adjust the font size as needed */
+  }
+}
+
+ion-card-subtitle {
+  font-size: 0.9rem; /* Adjust the font size as needed */
+}
+
+ion-card-title {
+  font-size: 1.1rem; /* Adjust the font size as needed */
+}
+
+h3 {
+  font-size: 1rem; /* Adjust the font size as needed */
+}
+
+ion-button.small-button {
+  font-size: 0.8rem; /* Adjust the font size as needed */
+}
+
+ul li {
+  font-size: 0.9rem; /* Adjust the font size as needed */
 }
