@@ -14,30 +14,85 @@
   </ion-header>
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>Lookup range (miles)</ion-card-subtitle>
+      <ion-card-subtitle>I should ask if service provider or a consumer</ion-card-subtitle>
       <ion-card-title>
-        <div class="input-container">
-          <ion-input #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>
-        </div>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-select label="What are you intested in? " label-placement="floating">
+                  <ion-select-option value="apple">Find a service provider</ion-select-option>
+                  <ion-select-option value="banana">Buy, sell, or trade</ion-select-option>
+                  <ion-select-option value="orange">Rate another</ion-select-option>
+                </ion-select>
+              </ion-item>
+            
+             </ion-col>
+            <ion-col>
+              Lookup range (miles)
+              <ion-input #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>
+          
+           
+            </ion-col>
+            <ion-col>
+              
+            </ion-col>
+          
+          </ion-row>
+
+        </ion-grid>
+    
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h3>Addresses Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button></h3>
-      <ion-alert
-        trigger="present-alert"
-        header="Please enter address"
-        [buttons]="alertButtons"
-        [inputs]="alertInputs"
-      ></ion-alert>
-      <ul>
-        <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
-      </ul>
-      <div class="map-container">
-        <google-map [options]="mapOptions">
-          <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
-          <map-marker *ngFor="let addressObj of withinRangeAddresses" [position]="getLatLng(addressObj)"></map-marker>
-        </google-map>
-      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+          tbd
+          
+           </ion-col>
+          <ion-col>
+          
+         
+          </ion-col>
+          <ion-col>
+            
+          </ion-col>
+        
+        </ion-row>
+        <ion-row>
+          <ion-col>
+             <h3>Addresses Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button></h3>
+              <ion-alert
+              trigger="present-alert"
+              header="Please enter address"
+              [buttons]="alertButtons"
+              [inputs]="alertInputs"
+              ></ion-alert>
+          </ion-col>
+        </ion-row>
+        <ion-row>      
+          <ion-col>                  
+            <div class="map-container">
+              <google-map [options]="mapOptions">
+                <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
+                <map-marker *ngFor="let addressObj of withinRangeAddresses" [position]="getLatLng(addressObj)"></map-marker>
+              </google-map>
+            </div>
+          </ion-col>  
+          <ion-col>            
+          
+            <ul>
+              <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
+            </ul>
+          </ion-col>
+   
+        </ion-row>
+      </ion-grid>
+
+
     </ion-card-content>
   </ion-card>
 </ion-content>
