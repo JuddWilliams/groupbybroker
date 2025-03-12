@@ -1,103 +1,63 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      What we offer... 
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <ion-header collapse="condense">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">About</ion-title>
+      <ion-title>What we do...</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Our plan is to lower cost for contractors enabling price savings for the consumer.
-        <ul>
-          <li>Contractors will offer discounts by area if they can reduce travel & loading time.</li>
-          <li>Neighbors generally require similar level of service.</li>
-          <li>Read reviews / ratings.</li>
-        </ul>
-      </ion-card-subtitle>
-      <ion-card-title>        
-      </ion-card-title>
-    </ion-card-header>
+  <ion-card> 
     <ion-card-content>
       <ion-grid>
         <ion-row>
-          <ion-col size="12" size-md="4">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>Find Contractors</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-item>
-                  <ion-select label="What are you intested in? " label-placement="floating">
-                    <ion-select-option value="lawn care">lawn care</ion-select-option>
-                    <ion-select-option value="pesticides">pesticides</ion-select-option>
-                    <ion-select-option value="weed & feed
-                    ">weed & feed
-                    </ion-select-option>
-                    <ion-select-option value="pool maintenance">pool maintenance</ion-select-option>
-                    <ion-select-option value="Heating & cooling filters">Heating & cooling filters</ion-select-option>
-                    <ion-select-option value="pet grooming
-                    ">pet grooming
-                    </ion-select-option>
-                    <ion-select-option value="poop scoop">poop scoop</ion-select-option>
-                    <ion-select-option value="gutter cleaning ">gutter cleaning </ion-select-option>
-                    <ion-select-option value="power washing
-                    ">power washing
-                    </ion-select-option>
-                    <ion-select-option value="window cleaning">window cleaning</ion-select-option>
-                    <ion-select-option value="chimney sweeping">chimney sweeping</ion-select-option>
-                    <ion-select-option value="automotive: oil change, tire rotation, battery, other">automotive: oil change, tire rotation, battery, other</ion-select-option>
-                    <ion-select-option value="car detailing">car detailing</ion-select-option>
-                    <ion-select-option value="massage">massage</ion-select-option>
-                    <ion-select-option value="Haircuts and styling memberships
-                    ">Haircuts and styling memberships
-                    </ion-select-option>
-                    <ion-select-option value="Nail care (manicures, pedicures)">Nail care (manicures, pedicures)</ion-select-option>
-                    <ion-select-option value="Skincare treatments (e.g., facials)">Skincare treatments (e.g., facials)</ion-select-option>
-                  </ion-select>
-                </ion-item>
-                <p>
-
-                </p>
+          <ion-col>
+            Our plan is to <b>lower contractors costs</b> enabling <b>price savings for the consumer</b>. For example,
+            <ul>
+              <li>Contractors offer <i>proximity incentives</i> reducing costs related to:</li>
                 <ul>
-                  <li>View contractors servicing your area.</li>
-                  <li>Review discounts and benifits offered for  prices and services</li>
-                  <li>Read reviews and ratings from other consumers</li>
-                  <li>Contact contractors directly through the platform</li>
+                  <li>travel (time/fuel/etc)</li>
+                  <li>equipment handling (unloading/loading equipment)</li>
+                  <li>payment services (setup reocurring payment services)</li>
                 </ul>
-                <ion-button expand="full" routerLink="/tabs/tab1">Let's Get Started</ion-button>
-                <ion-img src="assets\mapEg.gif"></ion-img>
-              
-                
-                
-              </ion-card-content>
-            </ion-card>
+            </ul>
+            Other benefits include,  
+            <ul>
+              <li>Consistent level of service</li>
+              <li>Contractor reviews & ratings</li>
+            </ul>
           </ion-col>
-          <ion-col size="12" size-md="4">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>List Services</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                Contractors can list their services and promotions to attract more customers.
-              </ion-card-content>
-            </ion-card>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-md="4" >              
+            <ion-select label="What are you interested in? " label-placement="floating">
+              <ion-select-option value="lawn care">lawn care</ion-select-option>
+              <ion-select-option value="pesticides">pesticides</ion-select-option>
+              <ion-select-option value="weed & feed">weed & feed</ion-select-option>
+              <ion-select-option value="pool maintenance">pool maintenance</ion-select-option>
+              <ion-select-option value="Heating & cooling filters">Heating & cooling filters</ion-select-option>
+              <ion-select-option value="pet grooming">pet grooming</ion-select-option>
+              <ion-select-option value="poop scoop">poop scoop</ion-select-option>
+              <ion-select-option value="gutter cleaning ">gutter cleaning </ion-select-option>
+              <ion-select-option value="power washing">power washing</ion-select-option>
+              <ion-select-option value="window cleaning">window cleaning</ion-select-option>
+              <ion-select-option value="chimney sweeping">chimney sweeping</ion-select-option>
+              <ion-select-option value="automotive: oil change, tire rotation, battery, other">automotive: oil change, tire rotation, battery, other</ion-select-option>
+              <ion-select-option value="car detailing">car detailing</ion-select-option>
+              <ion-select-option value="massage">massage</ion-select-option>
+              <ion-select-option value="Haircuts and styling memberships">Haircuts and styling memberships</ion-select-option>
+              <ion-select-option value="Nail care (manicures, pedicures)">Nail care (manicures, pedicures)</ion-select-option>
+              <ion-select-option value="Skincare treatments (e.g., facials)">Skincare treatments (e.g., facials)</ion-select-option>
+            </ion-select>             
+            <ion-button expand="full" routerLink="/tabs/tab1">Let's Get Started</ion-button>
+            <ion-img src="assets/mapEg.gif"></ion-img>                             
           </ion-col>
-          <ion-col size="12" size-md="4">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>General Information</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                General information about the site and its features.
-              </ion-card-content>
-            </ion-card>
+          <ion-col size="12" size-md="4" >            
+           
+              Contractors can list their services and promotions to attract more customers.
+          
+          </ion-col>
+          <ion-col size="12" size-md="4" >
+           
+              General information about the site and its features.
+           
           </ion-col>
         </ion-row>
       </ion-grid>

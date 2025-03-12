@@ -35,3 +35,107 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+// Override the default styles for various Ionic components
+ion-card-subtitle {
+  text-transform: none; /* Remove the all caps transformation */
+  font-size: 0.9rem; /* Adjust the font size as needed */
+}
+
+ion-card-title {
+  font-size: 1.1rem; /* Adjust the font size as needed */
+}
+
+h3 {
+  font-size: 1rem; /* Adjust the font size as needed */
+}
+
+ion-button.small-button {
+  font-size: 0.8rem; /* Adjust the font size as needed */
+}
+
+ul li {
+  font-size: 0.9rem; /* Adjust the font size as needed */
+}
+
+// Ensure all columns have equal height
+.equal-height {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.equal-height > ion-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+// Apply scaling for mobile devices
+@media (max-width: 600px) {
+  ion-content {
+    font-size: 0.5rem; /* Reduce font size by 50% */
+  }
+  ion-title,
+  ion-card-subtitle,
+  ion-card-title,
+  ion-col,
+  h3,
+  ion-button,
+  ul li {
+    font-size: 0.5rem; /* Reduce font size by 50% */
+  }
+
+  ion-input,
+  ion-select,
+  ion-button,
+  ion-card,
+  ion-item,
+  ion-col {
+    --padding-start: 4px; /* Reduce padding by 50% */
+    --padding-end: 4px;
+    --padding-top: 2px;
+    --padding-bottom: 2px;
+    --inner-padding-start: 4px;
+    --inner-padding-end: 4px;
+    --inner-padding-top: 2px;
+    --inner-padding-bottom: 2px;
+    --border-radius: 2px; /* Reduce border radius by 50% */
+  }
+
+  ion-card {
+    --padding-start: 6px; /* Reduce padding by 50% */
+    --padding-end: 6px;
+    --padding-top: 4px;
+    --padding-bottom: 4px;
+  }
+
+  ion-item {
+    --padding-start: 4px; /* Reduce padding by 50% */
+    --padding-end: 4px;
+    --inner-padding-start: 4px;
+    --inner-padding-end: 4px;
+  }
+
+  ion-button {
+    --padding-start: 6px; /* Reduce padding by 50% */
+    --padding-end: 6px;
+    --padding-top: 3px;
+    --padding-bottom: 3px;
+    --border-radius: 2px; /* Reduce border radius by 50% */
+  }
+
+  ion-select {
+    --padding-start: 4px; /* Reduce padding by 50% */
+    --padding-end: 4px;
+    --padding-top: 2px;
+    --padding-bottom: 2px;
+  }
+
+  ion-input {
+    --padding-start: 4px; /* Reduce padding by 50% */
+    --padding-end: 4px;
+    --padding-top: 2px;
+    --padding-bottom: 2px;
+    --border-radius: 2px; /* Reduce border radius by 50% */
+  }
+}

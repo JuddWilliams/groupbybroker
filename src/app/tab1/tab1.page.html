@@ -1,70 +1,28 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Search 
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <ion-header collapse="condense">
+  <ion-header >
     <ion-toolbar>
-      <ion-title size="large">Search </ion-title>
+      <ion-title>Search </ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>I should ask if service provider or a consumer</ion-card-subtitle>
-      <ion-card-title>
-
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-item>
-                <ion-select label="What are you intested in? " label-placement="floating">
-                  <ion-select-option value="apple">Find a service provider</ion-select-option>
-                  <ion-select-option value="banana">Buy, sell, or trade</ion-select-option>
-                  <ion-select-option value="orange">Rate another</ion-select-option>
-                </ion-select>
-              </ion-item>
-            
-             </ion-col>
-            <ion-col>
-              Lookup range (miles)
-              <ion-input #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>
-          
-           
-            </ion-col>
-            <ion-col>
-              
-            </ion-col>
-          
-          </ion-row>
-
-        </ion-grid>
-    
-      </ion-card-title>
-    </ion-card-header>
     <ion-card-content>
-
       <ion-grid>
         <ion-row>
-          <ion-col>
-          tbd
-          
+          <ion-col size="12" size-md="4">          
+            <ion-select label="What are you intested in? " label-placement="floating">
+              <ion-select-option value="apple">Find a service provider</ion-select-option>
+              <ion-select-option value="banana">Buy, sell, or trade</ion-select-option>
+              <ion-select-option value="orange">Rate another</ion-select-option>
+            </ion-select>                 
            </ion-col>
           <ion-col>
-          
-         
-          </ion-col>
-          <ion-col>
-            
-          </ion-col>
-        
+            Lookup range (miles)
+            <ion-input #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>          
+          </ion-col>       
         </ion-row>
         <ion-row>
-          <ion-col>
-             <h3>Addresses Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button></h3>
+          <ion-col size="12" >
+             <h3>Address(s) Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button></h3>
               <ion-alert
               trigger="present-alert"
               header="Please enter address"
@@ -74,7 +32,7 @@
           </ion-col>
         </ion-row>
         <ion-row>      
-          <ion-col>                  
+          <ion-col size="12" size-md="4">                  
             <div class="map-container">
               <google-map [options]="mapOptions">
                 <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
@@ -82,17 +40,13 @@
               </google-map>
             </div>
           </ion-col>  
-          <ion-col>            
-          
+          <ion-col size="12" size-md="4">            
             <ul>
               <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
             </ul>
           </ion-col>
-   
         </ion-row>
       </ion-grid>
-
-
     </ion-card-content>
   </ion-card>
 </ion-content>
