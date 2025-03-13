@@ -1,5 +1,34 @@
 <div id="container">
   <strong>{{ name }}</strong>
- <!-- https://therightsw.com/ionic-stripe-integration/ -->
-  
+ <!-- https://therightsw.com/ionic-stripe-integration/ 
+  got to Step 3: Create a Payment Form 
+  https://dashboard.stripe.com/test/dashboard 
+
+  NEXT: setup payment node.js server? or api???
+  -->
+
+  <ion-content [fullscreen]="true">
+    <div id="container">
+      <ion-img src="https://therightsw.com/wp-content/uploads/2023/10/TRSLogo.png" class="ion-margin-bottom"></ion-img>
+      <ion-label class="ion-text-center">Ionic Stripe Integration</ion-label>
+      <ion-list lines="none" class="ion-padding ion-margin-top">
+        <ion-item lines="none" class="ion-margin-bottom">
+          <ion-input type="text" label="Enter Name" labelPlacement="floating" fill="solid" placeholder="Enter Name"
+            [(ngModel)]="name"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="ion-margin-bottom">
+          <ion-input type="email" label="Enter Email" labelPlacement="floating" fill="solid" placeholder="Enter Email"
+            [(ngModel)]="email"></ion-input>
+        </ion-item>
+        <ion-item lines="none" class="ion-margin-bottom">
+          <ion-input type="number" label="Enter Amount" labelPlacement="floating" fill="solid" placeholder="Enter Amount"
+            [(ngModel)]="amount"></ion-input>
+        </ion-item>
+        <ion-item class="button">
+          <ion-button size="medium" [disabled]="!name || !email || !amount" (click)="paymentSheet()">Pay Now</ion-button>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-content>
+
 </div>
