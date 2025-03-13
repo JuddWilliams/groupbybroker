@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+import { Stripe } from '@capacitor-community/stripe';
+import { environment } from 'src/environments/environment';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -7,6 +11,11 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
-  constructor() {}
+  constructor() {
+    // Stripe.initialize({
+    //   publishableKey: environment.publishableKey,
+    // });
+    
+  }
 }
 
