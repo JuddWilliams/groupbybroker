@@ -58,20 +58,11 @@ ul li {
   font-size: 0.9rem; /* Adjust the font size as needed */
 }
 
-// Ensure all columns have equal height
-.equal-height {
-  display: flex;
-  flex-wrap: wrap;
-}
 
-.equal-height > ion-col {
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-}
 
 // Apply scaling for mobile devices
 @media (max-width: 600px) {
+
   ion-content {
     font-size: 0.5rem; /* Reduce font size by 50% */
   }
@@ -79,10 +70,16 @@ ul li {
   ion-card-subtitle,
   ion-card-title,
   ion-col,
-  h3,
   ion-button,
   ul li {
     font-size: 0.5rem; /* Reduce font size by 50% */
+  }
+
+  ion-card {
+    --margin-left: 2px; 
+    --margin-right: 2px; 
+    --margin-top: 2px; 
+    --margin-bottom: 2px; 
   }
 
   ion-input,

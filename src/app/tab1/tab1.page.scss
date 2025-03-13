@@ -1,11 +1,11 @@
 
 ion-input {
   --padding-start: 10px;
-  border: 1px solid #ccc; /* Add a border */
+  //border: 1px solid #ccc; /* Add a border */
   border-radius: 4px; /* Optional: Add rounded corners */
   width: 130px; /* Optional: Make the input take the full width */
   box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
-  font-size: 1rem; /* Adjust the font size as needed */
+  //font-size: 1rem; /* Adjust the font size as needed */
 }
 
 .small-button {
@@ -29,3 +29,5 @@ google-map {
   height: 100%; /* Ensure the google-map component takes the full height of the container */
   width: 100%; /* Ensure the google-map component takes the full width of the container */
 }
+
+
