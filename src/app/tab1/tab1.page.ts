@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, AlertInput, IonInput, ToastController } from '@ionic/angular';
+import { AlertController, AlertInput, IonInput, ToastController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -13,6 +13,7 @@ export class Tab1Page implements OnInit {
 
   targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
   errorMessage: string | null = null;
+  isSmallViewport: boolean = false; // Flag to track if the viewport is small
 
   public alertButtons = [
     {
@@ -68,14 +69,21 @@ export class Tab1Page implements OnInit {
   mapOptions: google.maps.MapOptions = {
     center: { lat: 0, lng: 0 },
     zoom: 15,
-    mapTypeControl: false,
+    mapTypeControl: true,
   };
 
-  constructor(private alertController: AlertController, private toastController: ToastController) {}
+  constructor(
+    private alertController: AlertController,
+    private toastController: ToastController,
+    private platform: Platform
+  ) {}
 
   ngOnInit() {
-    this.refreshMap();
-    this.onRadiusChange(); // Ensure addresses within range are displayed by default
+    this.platform.ready().then(() => {
+      this.checkViewportSize(); // Check the viewport size after the platform is ready
+      this.refreshMap();
+      this.onRadiusChange(); // Ensure addresses within range are displayed by default
+    });
   }
 
   async presentAlert() {
@@ -98,12 +106,27 @@ export class Tab1Page implements OnInit {
     await toast.present();
   }
 
+  checkViewportSize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    console.log(`Viewport size: ${width}x${height}`);
+    this.isSmallViewport = width < 600; // Example: Treat viewports smaller than 600px as "small"
+    if (this.isSmallViewport) {
+      console.log('Rendering for a small viewport');
+      // Apply logic for small viewports
+    } else {
+      console.log('Rendering for a large viewport');
+      // Apply logic for large viewports
+    }
+  }
+
   refreshMap() {
     this.geocodeAddress(this.targetAddress, (location) => {
       this.targetLocation = location;
       this.mapOptions = {
         center: location,
-        zoom: 15 // Adjust the zoom level as needed
+        zoom: this.isSmallViewport ? 12 : 15, // Adjust zoom level based on viewport size
+        mapTypeControl: !this.isSmallViewport,
       };
       this.checkAddressesWithinRange();
     });
