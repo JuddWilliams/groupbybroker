@@ -67,7 +67,8 @@ export class Tab1Page implements OnInit {
 
   mapOptions: google.maps.MapOptions = {
     center: { lat: 0, lng: 0 },
-    zoom: 15
+    zoom: 15,
+    mapTypeControl: false,
   };
 
   constructor(private alertController: AlertController, private toastController: ToastController) {}
