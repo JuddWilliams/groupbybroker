@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, AlertInput, IonInput, ToastController, Platform } from '@ionic/angular';
 
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss'],
+  selector: 'app-tabSearch',
+  templateUrl: 'tabSearch.page.html',
+  styleUrls: ['tabSearch.page.scss'],
   standalone: false,
 })
-export class Tab1Page implements OnInit {
+export class TabSearchPage implements OnInit {
 
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
 

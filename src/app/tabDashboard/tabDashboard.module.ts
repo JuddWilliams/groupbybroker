@@ -2,11 +2,10 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab1Page } from './tab1.page';
+import { TabDashboardPage } from './tabDashboard.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
-import { Tab1PageRoutingModule } from './tab1-routing.module';
 
-import { GoogleMapsModule } from '@angular/google-maps'
+import { TabDashboardPageRoutingModule } from './tabDashboard-routing.module';
 
 @NgModule({
   imports: [
@@ -14,9 +13,8 @@ import { GoogleMapsModule } from '@angular/google-maps'
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab1PageRoutingModule,
-    GoogleMapsModule
+    TabDashboardPageRoutingModule
   ],
-  declarations: [Tab1Page]
+  declarations: [TabDashboardPage]
 })
-export class Tab1PageModule {}
+export class TabDashboardPageModule {}

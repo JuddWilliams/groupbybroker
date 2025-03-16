@@ -4,16 +4,16 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 declare var paypal: any; // Declare the paypal object
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
+  selector: 'app-tabDashboard',
+  templateUrl: 'tabDashboard.page.html',
+  styleUrls: ['tabDashboard.page.scss'],
   standalone: false,
 })
-export class Tab2Page implements OnInit, AfterViewInit {
+export class TabDashboardPage implements OnInit, AfterViewInit {
 
   constructor() {}
   ngOnInit(): void {
-    console.log('Tab2Page initialized');
+    console.log('TabDashboardPage initialized');
   }
 
   
