@@ -58,18 +58,27 @@ ul li {
   font-size: 0.9rem; /* Adjust the font size as needed */
 }
 
+ion-button {
+  text-transform: none; /* Prevent text from being displayed in uppercase */
+}
+
+ion-content ul li {
+  margin-bottom: 4px; /* Add space between list items */
+}
+
 // Apply scaling for mobile devices
 @media (max-width: 600px) {
   ion-content {
-    font-size: 0.5rem; /* Reduce font size by 50% */
+    font-size: calc(100% * 0.8); /* Reduce font size by % */
   }
   ion-title,
   ion-card-subtitle,
   ion-card-title,
   ion-col,
   ion-button,
+  h1,h2,h3,h4,h5,h6,
   ul li {
-    font-size: 0.5rem; /* Reduce font size by 50% */
+    font-size: calc(100% * 0.8); /* Reduce font size by % */
   }
 
   ion-input,
@@ -119,5 +128,8 @@ ul li {
     --border-radius: 2px; /* Reduce border radius by 50% */
   }
 
-
+  ion-chip {
+    font-size: calc(100% * 0.9);  
+  }
 }
+

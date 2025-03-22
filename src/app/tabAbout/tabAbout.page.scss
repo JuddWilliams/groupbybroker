@@ -6,4 +6,19 @@ ion-card {
     padding: 1px !important; /* Adjust the margin as needed and add !important */
   }
 
- 
+// ion-modal {
+//   // --width: 90%;
+//   --height: auto;
+//   --border-radius: 10px;
+// }
+
+// Apply scaling for small devices
+@media (max-width: 600px) {
+  .sizer-modal{
+    max-width: 90%; /* Set max-width to 90% for small devices */
+  }
+}
+
+
+
+

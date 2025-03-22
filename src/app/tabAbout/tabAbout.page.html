@@ -2,21 +2,46 @@
   <ion-card> 
         <ion-grid>
           <ion-row>
-            <ion-col>
-              Our plan is to <b>lower contractors costs</b> enabling <b>price savings for the consumer</b>. For example,
-              <ul>
-                <li>Contractors offer <i>proximity incentives</i> reducing costs related to:</li>
-                  <ul>
-                    <li>travel (time/fuel/etc)</li>
-                    <li>equipment handling (unloading/loading equipment)</li>
-                    <li>payment services (setup reocurring payment services)</li>
-                  </ul>
+            <ion-col size="12" size-md="8">
+              <h2>groupBuyology...</h2>
+              <ion-icon name="star-outline"></ion-icon> Consumers can find Contractors by close <i>Proximity</i> for significant savings & other incentives.
+              <sub>eg.</sub><ul> 
+                    <li> from reduced travel (time/fuel/other)</li>
+                    <li> preparation time (eg. loading & unloading equipment)</li>
               </ul>
-              Other benefits include,  
-              <ul>
-                <li>Consistent level of service</li>
-                <li>Contractor reviews & ratings</li>
-              </ul>
+              <ion-icon name="star-outline"></ion-icon> Contractors can broker their existing accounts by <i>Proximity</i>. (buy, sell, & trade)   
+              <ion-icon
+                name="help-circle-outline"
+                (click)="openPopup()"
+                title="Click for more information"
+                style="cursor: pointer;"
+                ></ion-icon>
+               <p><ion-icon name="star-outline"></ion-icon> Simplify collection using <a title="Click for more information" (click)="openPopup()">payment services</a>, powered by payPal. 
+              </p>
+              <p>
+                <ion-icon name="star-outline"></ion-icon> Easy to use <a title="Click for more information" (click)="openPopup()">referrals</a> programs
+              </p>
+                               <!-- 
+               <ion-icon name="star-outline"></ion-icon> Build partnerships with communities and HOAs <br><br>
+
+                    <ul>                
+                <li>Promote based on consumer needs, eg. top rated or value. </li>
+                               
+                <li>Conduct evaluations in addition to user ratings</li>             
+                <li>Consumer search features.</li>
+                   <ul>
+                      <li>sort & filter options</li>
+                      <li>most popular</li>
+                      <li>ratings </li>
+                      <li>best value & incentives</li>
+                    </ul>
+               
+              </ul>              -->             
+            </ion-col> 
+            <ion-col size="12" size-md="4" style="padding-left: 30px;">
+              <h2>What's it cost</h2>
+              <p style="font-size: large;">Free for consumers</p>         
+              <p>Contractors pay $35 annually to have their jobs listed. <sup>*</sup>If they are the <sup>1st</sup> in the area, that $35 is good for a lifetime subscription.  </p>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -26,27 +51,13 @@
                   <ion-grid>
                     <ion-row>
                       <ion-col>
-                        <ion-select label="What are you interested in? " label-placement="floating">
-                          <ion-select-option value="Lawn care">Landscaping & Lawn care</ion-select-option>
-                          <ion-select-option value="Pesticides">Pesticides</ion-select-option>
-                          <ion-select-option value="Pool maintenance">Pool maintenance</ion-select-option>  
-                          <ion-select-option value="Poop scoop">Poop scoop</ion-select-option>
-                          <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
-                          <!--  potentials        
-                            <ion-select-option value="Heating & cooling filters">Heating & cooling filters</ion-select-option>
-                            <ion-select-option value="gutter cleaning ">gutter cleaning </ion-select-option>      
-                            <ion-select-option value="pet grooming">pet grooming</ion-select-option>
-                            <ion-select-option value="power washing">power washing</ion-select-option>
-                            <ion-select-option value="window cleaning">window cleaning</ion-select-option>
-                            <ion-select-option value="chimney sweeping">chimney sweeping</ion-select-option>
-                            <ion-select-option value="automotive: oil change, tire rotation, battery, other">automotive: oil change, tire rotation, battery, other</ion-select-option>
-                            <ion-select-option value="car detailing">car detailing</ion-select-option>
-                            <ion-select-option value="massage">massage</ion-select-option>
-                            <ion-select-option value="Haircuts and styling memberships">Haircuts and styling memberships</ion-select-option>
-                            <ion-select-option value="Nail care (manicures, pedicures)">Nail care (manicures, pedicures)</ion-select-option>
-                            <ion-select-option value="Skincare treatments (e.g., facials)">Skincare treatments (e.g., facials)</ion-select-option> -->
-                        </ion-select>             
-                        <ion-button  routerLink="/tabs/tabSearch">Get Started</ion-button>
+                        <h3>Consumer Information</h3>
+                        <ul>
+                          <li>Find a contractor by proximity as they offer significant savings</li>
+                          <li>Pick the best contractor for your needs </li>
+                          <li>Earn referrals from us and your contractor... </li>
+                        </ul>
+                        <ion-button routerLink="/tabs/tabSearch">Find near me</ion-button>
                         <ion-img src="assets/mapEg.gif"></ion-img>          
                       </ion-col>
                     </ion-row>
@@ -57,8 +68,48 @@
               <ion-card> 
                 <ion-grid>
                   <ion-row>
-                    <ion-col>
-                      Contractors can list their services and promotions to attract more customers.      
+                      <ion-col>
+                        <h3>Contractor Details</h3>
+                        <ion-chip>Landscaping & Lawn care</ion-chip>
+                        <ion-chip color="primary">Pesticides</ion-chip>
+                        <ion-chip color="secondary">Weed & Feed</ion-chip>
+                        <ion-chip color="tertiary">Pool maintenance</ion-chip>
+                        <ion-chip color="success">Poop scooper</ion-chip>
+                        <p>We welcome you to join our service.  Here are a few benefits...</p>    
+                        <ul> <!-- <sup>Proximity benefits</sup> -->
+                          <li>Cost savings from reduced travel (time/fuel/etc)</li>
+                          <li>Preparation time (eg. loading & unloading equipment)</li>             
+                        </ul>
+                       <ul>  <sup>Also,</sup>
+                          <li>Buy, Sell,Trading accounts  
+                            <ion-icon
+                              name="help-circle-outline"
+                              (click)="openPopup()"
+                              title="Click for more information"
+                              style="cursor: pointer;"
+                          ></ion-icon>
+                        </li>     
+                        <li>Simple <u>payment services</u>.  <ion-icon
+                          name="help-circle-outline"
+                          (click)="openPopup()"
+                          title="Click for more information"
+                          style="cursor: pointer;"
+                      ></ion-icon></li>  
+                        <li>Coverage while on medical leave, vacation, other   <ion-icon
+                          name="help-circle-outline"
+                          (click)="openPopup()"
+                          title="Click for more information"
+                          style="cursor: pointer;"
+                      ></ion-icon></li>        
+                      <li>Facilitate referral programs  <ion-icon 
+                        name="help-circle-outline"
+                        (click)="openPopup()"
+                        title="Click for more information"
+                        style="cursor: pointer;"
+                    ></ion-icon></li>     
+                      
+                    </ul>
+                                    
                     </ion-col>
                   </ion-row>
                 </ion-grid>     
@@ -70,7 +121,16 @@
                 <ion-grid>
                   <ion-row>
                     <ion-col>
-                      General information about the site and its features.   
+                      Other services   
+                      <ul>
+                        <li>All users, Consumers and Contractors can post and review ratings.</li>
+                        <li><i>Broadcast</i> 1x service(s) eg. In area tree for trimming   <ion-icon
+                          name="help-circle-outline"
+                          (click)="openPopup()"
+                          title="Click for more information"
+                          style="cursor: pointer;"
+                      ></ion-icon></li>   
+                      </ul>
                     </ion-col>
                   </ion-row>
                 </ion-grid>     
@@ -79,6 +139,25 @@
           </ion-row>
         </ion-grid>
     </ion-card>
+
+
+
+  <!-- Popup Modal -->
+  <ion-modal class="sizer-modal" [isOpen]="isPopupOpen" (ionModalDidDismiss)="closePopup()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Information</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closePopup()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <p style="padding: 16px;">This is how it works!</p>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
 
 

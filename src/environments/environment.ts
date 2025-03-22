@@ -13,7 +13,9 @@ export const environment = {
     storageBucket: "groupbybroker.firebasestorage.app",
     messagingSenderId: "367280671691",
     appId: "1:367280671691:web:6c50167d5a7d1f98a6c44e",
-     measurementId: "G-EVDZ08C41E"
+     measurementId: "G-EVDZ08C41E",
+    //  vapidKey: ???
+    //  "BG0mbTkivMJdySKlF2TD17VwqieQKZ0n0OCWzahjFXYt2u3VeaQsgnbMqxx7TMpX8PpQZYNWp9N3UP5b2KCx_Jg",
   }
 };
 

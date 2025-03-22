@@ -5,12 +5,34 @@
           <ion-col size-md="3" size-lg="1">
             <ion-input label="Lookup range (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>          
           </ion-col>   
-          <ion-col size-md="3" size-lg="3">          
+          <ion-col size-md="3" size-lg="3">      
+            <ion-select label="Industry? " label-placement="floating">
+              <ion-select-option value="Lawn care">Landscaping & Lawn care</ion-select-option>
+              <ion-select-option value="Pesticides">Pesticides</ion-select-option>
+              <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
+              <ion-select-option value="Pool maintenance">Pool maintenance</ion-select-option>  
+              <ion-select-option value="Poop scoop">Poop scoop</ion-select-option>
+          
+              <!--  potentials        
+                <ion-select-option value="Heating & cooling filters">Heating & cooling filters</ion-select-option>
+                <ion-select-option value="gutter cleaning ">gutter cleaning </ion-select-option>      
+                <ion-select-option value="pet grooming">pet grooming</ion-select-option>
+                <ion-select-option value="power washing">power washing</ion-select-option>
+                <ion-select-option value="window cleaning">window cleaning</ion-select-option>
+                <ion-select-option value="chimney sweeping">chimney sweeping</ion-select-option>
+                <ion-select-option value="automotive: oil change, tire rotation, battery, other">automotive: oil change, tire rotation, battery, other</ion-select-option>
+                <ion-select-option value="car detailing">car detailing</ion-select-option>
+                <ion-select-option value="massage">massage</ion-select-option>
+                <ion-select-option value="Haircuts and styling memberships">Haircuts and styling memberships</ion-select-option>
+                <ion-select-option value="Nail care (manicures, pedicures)">Nail care (manicures, pedicures)</ion-select-option>
+                <ion-select-option value="Skincare treatments (e.g., facials)">Skincare treatments (e.g., facials)</ion-select-option> -->
+            </ion-select>        
+            <!-- other options
             <ion-select label="What are you intested in? " label-placement="floating">
               <ion-select-option value="apple">Find a service provider</ion-select-option>
               <ion-select-option value="banana">Buy, sell, or trade</ion-select-option>
               <ion-select-option value="orange">Rate another</ion-select-option>
-            </ion-select>                 
+            </ion-select>                  -->
            </ion-col>            
         </ion-row>
         <ion-row>
