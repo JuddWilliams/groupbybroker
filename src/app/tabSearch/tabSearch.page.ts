@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, AlertInput, IonInput, ToastController, Platform } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
+import { LocationService } from '../services/location.service';
 
 @Component({
   selector: 'app-tabSearch',
@@ -76,7 +77,8 @@ export class TabSearchPage implements OnInit {
   constructor(
     private alertController: AlertController,
     private toastController: ToastController,
-    private platform: Platform
+    private platform: Platform,
+    private locationService: LocationService
   ) {}
 
   async ngOnInit() {
@@ -84,8 +86,25 @@ export class TabSearchPage implements OnInit {
       this.checkViewportSize(); // Check the viewport size after the platform is ready
       this.refreshMap();
       this.onRadiusChange(); // Ensure addresses within range are displayed by default
-      this.getUserLocation(); // Get user's location on page load
+      //this.getUserLocation(); // Get user's location on page load
+      this.getUserLocationAndCheckPostalCode();
     });
+  }
+
+  async getUserLocationAndCheckPostalCode() {
+    const location = await this.locationService.getUserLocation();
+    if (location) {
+      const postalCode = await this.locationService.getPostalCodeFromCoordinates(
+        location.latitude,
+        location.longitude
+      );
+
+      console.log(`Postal Code: ${postalCode}`);
+
+      if (postalCode.startsWith('322')) {
+        this.locationService.showFreeAlert();
+      }
+    }
   }
 
   async presentAlert() {
@@ -150,20 +169,45 @@ export class TabSearchPage implements OnInit {
     });
   }
 
-  checkAddressesWithinRange() {
+  async checkAddressesWithinRange() {
     this.withinRangeAddresses = []; // Clear previous results
-    this.addresses.forEach(address => {
-      this.geocodeAddress(address, (location) => {
-        if (this.targetLocation) {
-          const targetLocation = new google.maps.LatLng(this.targetLocation);
-          const addressLocation = new google.maps.LatLng(location);
-          const distance = google.maps.geometry.spherical.computeDistanceBetween(targetLocation, addressLocation) / 1609.34; // Convert meters to miles
-          if (distance <= this.findRadius) {
-            this.withinRangeAddresses.push({ address, location });
+    const processedAddresses = new Set<string>(); // Use a Set to track processed addresses
+
+    const geocodePromises = this.addresses.map((address) =>
+      new Promise<void>((resolve) => {
+        this.geocodeAddress(address, (location) => {
+          if (this.targetLocation) {
+            const targetLocation = new google.maps.LatLng(this.targetLocation);
+            const addressLocation = new google.maps.LatLng(location);
+            const distance =
+              google.maps.geometry.spherical.computeDistanceBetween(
+                targetLocation,
+                addressLocation
+              ) / 1609.34; // Convert meters to miles
+
+            if (distance <= this.findRadius) {
+              // Check if the address is already in the Set
+              if (!processedAddresses.has(address)) {
+                this.withinRangeAddresses.push({ address, location });
+                processedAddresses.add(address); // Add the address to the Set
+              }
+            }
           }
-        }
-      });
-    });
+          resolve(); // Resolve the promise when geocoding is complete
+        });
+      })
+    );
+
+    // Wait for all geocoding operations to complete
+    await Promise.all(geocodePromises);
+
+    // Remove duplicates from withinRangeAddresses (if any)
+    this.withinRangeAddresses = this.withinRangeAddresses.filter(
+      (value, index, self) =>
+        index === self.findIndex((t) => t.address === value.address)
+    );
+
+    console.log('Final withinRangeAddresses:', this.withinRangeAddresses);
   }
 
   onRadiusChange() {
@@ -178,58 +222,58 @@ export class TabSearchPage implements OnInit {
     this.findRadiusInput.getInputElement().then(input => input.select());
   }
 
-  async getUserLocation() {
-    try {
-      // Get the user's current position
-      const position = await Geolocation.getCurrentPosition();
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
+  // async getUserLocation() {
+  //   try {
+  //     // Get the user's current position
+  //     const position = await Geolocation.getCurrentPosition();
+  //     const latitude = position.coords.latitude;
+  //     const longitude = position.coords.longitude;
 
-      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+  //     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
-      // Get the postal code from the coordinates
-      const postalCode = await this.getPostalCodeFromCoordinates(latitude, longitude);
+  //     // Get the postal code from the coordinates
+  //     const postalCode = await this.getPostalCodeFromCoordinates(latitude, longitude);
 
-      console.log(`Postal Code: ${postalCode}`);
+  //     console.log(`Postal Code: ${postalCode}`);
 
-      // Check if the postal code starts with "322"
-      if (postalCode.startsWith('322')) {
-        this.showFreeAlert();
-        console.log('This service is free in your area!');
-      }
-    } catch (error) {
-      console.error('Error getting location:', error);
-      this.presentToast('Unable to retrieve location. Please enable location services.');
-    }
-  }
+  //     // Check if the postal code starts with "322"
+  //     if (postalCode.startsWith('322')) {
+  //       this.showFreeAlert();
+  //       console.log('This service is free in your area!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error getting location:', error);
+  //     this.presentToast('Unable to retrieve location. Please enable location services.');
+  //   }
+  // }
 
-  async getPostalCodeFromCoordinates(latitude: number, longitude: number): Promise<string> {
-    // Use a geocoding API to get the postal code from coordinates
-    const apiKey = 'AIzaSyCkX46SX8MpXB0cBsNgTLov1-xe19I0Q4s'; // Replace with your Google Maps API key
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+  // async getPostalCodeFromCoordinates(latitude: number, longitude: number): Promise<string> {
+  //   // Use a geocoding API to get the postal code from coordinates
+  //   const apiKey = 'AIzaSyCkX46SX8MpXB0cBsNgTLov1-xe19I0Q4s'; // Replace with your Google Maps API key
+  //   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
+  //   const response = await fetch(url);
+  //   const data = await response.json();
 
-    if (data.results && data.results.length > 0) {
-      const addressComponents = data.results[0].address_components;
-      const postalCodeComponent = addressComponents.find((component: any) =>
-        component.types.includes('postal_code')
-      );
+  //   if (data.results && data.results.length > 0) {
+  //     const addressComponents = data.results[0].address_components;
+  //     const postalCodeComponent = addressComponents.find((component: any) =>
+  //       component.types.includes('postal_code')
+  //     );
 
-      return postalCodeComponent ? postalCodeComponent.long_name : '';
-    }
+  //     return postalCodeComponent ? postalCodeComponent.long_name : '';
+  //   }
 
-    return '';
-  }
+  //   return '';
+  // }
 
-  async showFreeAlert() {
-    const alert = await this.alertController.create({
-      header: 'Free Service!',
-      message: 'This service is free in your area!',
-      buttons: ['OK'],
-    });
+  // async showFreeAlert() {
+  //   const alert = await this.alertController.create({
+  //     header: 'Free Service!',
+  //     message: 'This service is free in your area!',
+  //     buttons: ['OK'],
+  //   });
 
-    await alert.present();
-  }
+  //   await alert.present();
+  // }
 }
