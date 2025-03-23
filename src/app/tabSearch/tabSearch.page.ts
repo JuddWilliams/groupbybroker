@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, AlertInput, IonInput, ToastController, Platform } from '@ionic/angular';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-tabSearch',
@@ -78,11 +79,12 @@ export class TabSearchPage implements OnInit {
     private platform: Platform
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.platform.ready().then(() => {
       this.checkViewportSize(); // Check the viewport size after the platform is ready
       this.refreshMap();
       this.onRadiusChange(); // Ensure addresses within range are displayed by default
+      this.getUserLocation(); // Get user's location on page load
     });
   }
 
@@ -174,5 +176,60 @@ export class TabSearchPage implements OnInit {
 
   selectText() {
     this.findRadiusInput.getInputElement().then(input => input.select());
+  }
+
+  async getUserLocation() {
+    try {
+      // Get the user's current position
+      const position = await Geolocation.getCurrentPosition();
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+      // Get the postal code from the coordinates
+      const postalCode = await this.getPostalCodeFromCoordinates(latitude, longitude);
+
+      console.log(`Postal Code: ${postalCode}`);
+
+      // Check if the postal code starts with "322"
+      if (postalCode.startsWith('322')) {
+        this.showFreeAlert();
+        console.log('This service is free in your area!');
+      }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      this.presentToast('Unable to retrieve location. Please enable location services.');
+    }
+  }
+
+  async getPostalCodeFromCoordinates(latitude: number, longitude: number): Promise<string> {
+    // Use a geocoding API to get the postal code from coordinates
+    const apiKey = 'AIzaSyCkX46SX8MpXB0cBsNgTLov1-xe19I0Q4s'; // Replace with your Google Maps API key
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.results && data.results.length > 0) {
+      const addressComponents = data.results[0].address_components;
+      const postalCodeComponent = addressComponents.find((component: any) =>
+        component.types.includes('postal_code')
+      );
+
+      return postalCodeComponent ? postalCodeComponent.long_name : '';
+    }
+
+    return '';
+  }
+
+  async showFreeAlert() {
+    const alert = await this.alertController.create({
+      header: 'Free Service!',
+      message: 'This service is free in your area!',
+      buttons: ['OK'],
+    });
+
+    await alert.present();
   }
 }
