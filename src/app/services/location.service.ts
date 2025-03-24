@@ -50,4 +50,5 @@ export class LocationService {
 
     await alert.present();
   }
+
 }

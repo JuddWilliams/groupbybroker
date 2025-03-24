@@ -42,10 +42,10 @@
               <h2>What's it cost</h2>
               <p style="font-size: large;">Free for consumers</p>         
               <p>Contractors pay $35 annually to have their jobs listed. 
-              <sup>*</sup>As we expand to new markets it may be <b>free</b>.               
+              <!-- <p *ngIf="numberOfContractorsInArea < 5"><sup>*</sup>As we expand to new markets it may be <b>free</b>. </p>            -->
             
-            </p>
-            <p style="font-weight: bolder;">{{buttonText}}</p>
+            <!-- </p> -->
+            <p style="font-weight: bolder;"><i>{{locationNote}}</i></p>
             <ion-button size="small" fill="outline">Click to try</ion-button>
             </ion-col>
           </ion-row>

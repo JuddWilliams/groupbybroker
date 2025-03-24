@@ -16,6 +16,9 @@ export class TabSearchPage implements OnInit {
   targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
   errorMessage: string | null = null;
   isSmallViewport: boolean = false; // Flag to track if the viewport is small
+  numberOfContractorsInArea: number = 5; 
+  readonly numberOfContractorsInAreaThreshold: number = 5;
+  locationNote: string = ''; 
 
   public alertButtons = [
     {
@@ -101,8 +104,40 @@ export class TabSearchPage implements OnInit {
 
       console.log(`Postal Code: ${postalCode}`);
 
-      if (postalCode.startsWith('322')) {
-        this.locationService.showFreeAlert();
+      // if (postalCode.startsWith('322') && this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
+      //   this.locationService.showFreeAlert();
+      // } else if (postalCode.startsWith('322') && this.numberOfContractorsInArea >= this.numberOfContractorsInAreaThreshold){
+      //   this.locationNote = ""; 
+      // }
+      // else {
+      //   this.locationNote = "Note: We were unable to determine your location."; 
+      // }
+      if (postalCode && /^\d+$/.test(postalCode)) {    
+
+        if (postalCode.startsWith('322') ) {// if postal code AND if below threshold
+          if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold)
+          { 
+            this.locationNote = `Good news, as we expand to new markets it's free for your postal code ${postalCode}.`; // Update button text
+            console.error(this.locationNote);
+            this.locationService.showFreeAlert();
+          }
+          else 
+          {            
+            this.locationNote = `*There are ${this.numberOfContractorsInArea} other Contractors using our service in this area.`; 
+            console.error(this.locationNote);
+          }         
+        }
+        else // if postal code AND if below threshold
+        {
+            this.locationNote = `Good news, as we expand to new markets it's free for your postal code ${postalCode}.`; // Update button text
+            console.error(this.locationNote);
+            this.locationService.showFreeAlert();
+        }
+      } else {
+        // Handle invalid or non-numeric postal code
+        
+        this.locationNote = 'Invalid postal code.', postalCode;
+        console.error(this.locationNote);        
       }
     }
   }
@@ -222,58 +257,4 @@ export class TabSearchPage implements OnInit {
     this.findRadiusInput.getInputElement().then(input => input.select());
   }
 
-  // async getUserLocation() {
-  //   try {
-  //     // Get the user's current position
-  //     const position = await Geolocation.getCurrentPosition();
-  //     const latitude = position.coords.latitude;
-  //     const longitude = position.coords.longitude;
-
-  //     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-
-  //     // Get the postal code from the coordinates
-  //     const postalCode = await this.getPostalCodeFromCoordinates(latitude, longitude);
-
-  //     console.log(`Postal Code: ${postalCode}`);
-
-  //     // Check if the postal code starts with "322"
-  //     if (postalCode.startsWith('322')) {
-  //       this.showFreeAlert();
-  //       console.log('This service is free in your area!');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error getting location:', error);
-  //     this.presentToast('Unable to retrieve location. Please enable location services.');
-  //   }
-  // }
-
-  // async getPostalCodeFromCoordinates(latitude: number, longitude: number): Promise<string> {
-  //   // Use a geocoding API to get the postal code from coordinates
-  //   const apiKey = 'AIzaSyCkX46SX8MpXB0cBsNgTLov1-xe19I0Q4s'; // Replace with your Google Maps API key
-  //   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
-
-  //   const response = await fetch(url);
-  //   const data = await response.json();
-
-  //   if (data.results && data.results.length > 0) {
-  //     const addressComponents = data.results[0].address_components;
-  //     const postalCodeComponent = addressComponents.find((component: any) =>
-  //       component.types.includes('postal_code')
-  //     );
-
-  //     return postalCodeComponent ? postalCodeComponent.long_name : '';
-  //   }
-
-  //   return '';
-  // }
-
-  // async showFreeAlert() {
-  //   const alert = await this.alertController.create({
-  //     header: 'Free Service!',
-  //     message: 'This service is free in your area!',
-  //     buttons: ['OK'],
-  //   });
-
-  //   await alert.present();
-  // }
 }
