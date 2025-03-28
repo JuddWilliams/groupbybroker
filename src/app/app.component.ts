@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
-
-
-import { environment } from 'src/environments/environment';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-root',
@@ -12,9 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
-  constructor(public authService: AuthService, private router: Router) {
-       
+export class AppComponent { 
+  constructor(public authService: AuthService, private router: Router) {}
+
+  get loggedInEmail(): string | null {
+    return this.authService.getLoggedInEmail(); // Get the logged-in email
   }
 
   onLogout() {

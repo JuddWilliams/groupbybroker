@@ -11,22 +11,19 @@ import { AuthService } from '../services/auth.service';
 export class LoginPage {
   email = '';
   password = '';
-  rememberMe = false;
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
-    this.authService.login(this.email, this.password).subscribe(
-      (response) => {
-        if (this.rememberMe) {
-          this.authService.rememberUser(response.token, response.userId);
-        }
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        this.authService.saveLogin(response.token, response.userId); // Pass the email
         this.router.navigate(['/tabs/tabSearch']);
       },
-      (error) => {
+      error: (error) => {
         this.errorMessage = 'Invalid credentials. Please try again.';
-      }
-    );
+      },
+    });
   }
 }

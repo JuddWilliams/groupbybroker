@@ -19,11 +19,13 @@ const routes: Routes = [
       },
       {
         path: 'tabDashboard',
-        loadChildren: () => import('../tabDashboard/tabDashboard.module').then(m => m.TabDashboardPageModule)
+        loadChildren: () => import('../tabDashboard/tabDashboard.module').then(m => m.TabDashboardPageModule),
+        canActivate: [AuthGuard] // Protected route
       },
       {
         path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule),
+        canActivate: [AuthGuard] // Protected route
       },
       {
         path: '',

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>Login</ion-title>  
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -13,11 +13,10 @@
       <ion-label position="floating">Password</ion-label>
       <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label>Remember Me</ion-label>
-      <ion-checkbox [(ngModel)]="rememberMe" name="rememberMe"></ion-checkbox>
-    </ion-item>
     <ion-button type="submit" expand="block">Login</ion-button>
+    <ion-button fill="clear" expand="block" routerLink="/tabs/tabAbout"><u>back to about page</u></ion-button>
   </form>
   <ion-text *ngIf="errorMessage" color="danger">{{ errorMessage }}</ion-text>
+  
+
 </ion-content>

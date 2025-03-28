@@ -23,6 +23,7 @@ export class AuthService {
   private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';
 
   private apiKey = environment.apiKey; // Your API key
+  private loggedInEmail: string | null = null; // Store the logged-in user's email
 
   constructor(private http: HttpClient) {}
 
@@ -45,14 +46,23 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    this.loggedInEmail = null; // Clear the email
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('token'); // Check if the user is logged in
   }
 
-  rememberUser(token: string, userId: string): void {
+  saveLogin(token: string, userId: string): void {
     localStorage.setItem('token', token);
-    localStorage.setItem('userId', userId);
+    localStorage.setItem('userId', userId);    
+    this.loggedInEmail = userId; // Save the email
+  }
+
+  getLoggedInEmail(): string | null {
+    if (!this.loggedInEmail) {
+      this.loggedInEmail = localStorage.getItem('userId'); // Retrieve email from localStorage
+    }
+    return this.loggedInEmail; // Return the logged-in email
   }
 }
