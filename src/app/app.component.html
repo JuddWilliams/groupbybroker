@@ -1,3 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Group Buyology</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!authService.isLoggedIn()" routerLink="/login">Login</ion-button>
+      <ion-button *ngIf="authService.isLoggedIn()" (click)="onLogout()">Logout</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>

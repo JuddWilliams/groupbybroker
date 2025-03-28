@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { AuthGuard } from '../auth.guard';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
       },
       {
         path: 'tabSearch',
-        loadChildren: () => import('../tabSearch/tabSearch.module').then(m => m.TabSearchPageModule)
+        loadChildren: () => import('../tabSearch/tabSearch.module').then(m => m.TabSearchPageModule),
+        canActivate: [AuthGuard] // Protected route
       },
       {
         path: 'tabDashboard',

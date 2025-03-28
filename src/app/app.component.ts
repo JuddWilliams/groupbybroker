@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 
 import { environment } from 'src/environments/environment';
+import { AuthService } from './services/auth.service';
 
 
 @Component({
@@ -11,8 +12,12 @@ import { environment } from 'src/environments/environment';
   standalone: false,
 })
 export class AppComponent {
-  constructor() {
+  constructor(public authService: AuthService) {
        
+  }
+
+  onLogout() {
+    this.authService.logout(); // Call the logout method from AuthService
   }
 }
 
