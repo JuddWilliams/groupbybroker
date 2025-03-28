@@ -1,0 +1,12 @@
+.button-custom-padding {
+    padding: 10px 25px 0 25px; /* Top, Right, Bottom, Left */
+  }
+
+.button-underline-only {
+   
+    text-decoration: underline; /* Add an underline */
+    background: transparent; /* Make the background transparent */
+    color: var(--ion-color-primary); /* Optional: Set the text color */
+    font-size: inherit; /* Optional: Inherit font size */   
+    box-shadow: none; /* Remove any shadow */
+  }

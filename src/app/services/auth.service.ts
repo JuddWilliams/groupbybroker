@@ -35,6 +35,10 @@ export class AuthService {
     return this.http.get<WeatherForecast[]>(this.apiWeatherUrl, { headers });
   }
 
+  createUser(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create-user`, userData);
+  }
+
   login(email: string, password: string): Observable<LoginResponse> {
     const headers = new HttpHeaders({
       'x-api-key': this.apiKey, // Add the API key to the headers
@@ -64,5 +68,9 @@ export class AuthService {
       this.loggedInEmail = localStorage.getItem('userId'); // Retrieve email from localStorage
     }
     return this.loggedInEmail; // Return the logged-in email
+  }
+
+  resetPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, { email });
   }
 }

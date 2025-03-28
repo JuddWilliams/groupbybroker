@@ -1,0 +1,52 @@
+.disclaimer {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    text-align: center;
+}
+
+ion-item ion-input {
+  input {
+    text-align: left; /* Ensure text is left-aligned */
+  }
+
+  /* Remove spinner controls for text inputs */
+  input[type="text"]::-webkit-inner-spin-button,
+  input[type="text"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Ensure spinner controls are right-aligned for numeric inputs */
+  input[type="text"] {
+    direction: ltr; /* Ensure left-to-right alignment */
+  }
+}
+
+/* Add spacing between City, State, and Postal Code fields */
+ion-grid {
+  ion-row {
+    ion-col {
+      margin-bottom: 10px; /* Add spacing between rows */
+    }
+  }
+}
+
+/* Ensure the State dropdown and Postal Code input are properly aligned */
+ion-item {
+  --inner-padding-end: 0; /* Remove extra padding on the right */
+}
+
+/* Ensure the floating label and dropdown arrows are properly aligned */
+ion-item ion-select {
+  --padding-end: 10px; /* Add padding to the right of the dropdown */
+  text-align: left; /* Ensure text is left-aligned */
+}
+
+ion-select {
+  /* Adjust the dropdown arrow placement */
+  --padding-end: 20px; /* Add space between the dropdown arrow and the text */
+}
+
+ion-select::part(icon) {
+  right: 10px; /* Adjust the position of the dropdown arrow */
+}

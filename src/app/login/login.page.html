@@ -1,22 +1,42 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>  
+    <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <form (ngSubmit)="onLogin()">
+    <!-- Email -->
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+      <ion-input
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        required
+      ></ion-input>
     </ion-item>
+
+    <!-- Password -->
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+      <ion-input
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        required
+      ></ion-input>
     </ion-item>
-    <ion-button type="submit" expand="block">Login</ion-button>
-    <ion-button fill="clear" expand="block" routerLink="/tabs/tabAbout"><u>back to about page</u></ion-button>
-  </form>
-  <ion-text *ngIf="errorMessage" color="danger">{{ errorMessage }}</ion-text>
-  
 
+    <ion-button type="submit" expand="block">Login</ion-button>
+    <ion-button fill="clear" expand="block" routerLink="/create-user">
+      Create New User
+    </ion-button>
+    <ion-button fill="clear" expand="block" routerLink="/reset-password">
+      Forgot Password?
+    </ion-button>
+  </form>
+
+  <!-- Error Message -->
+  <ion-text *ngIf="errorMessage" color="danger">{{ errorMessage }}</ion-text>
 </ion-content>

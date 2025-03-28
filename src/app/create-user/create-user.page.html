@@ -1,0 +1,148 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Create New User</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="onCreateUser()">
+    <!-- Email -->
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        required
+        #emailInput="ngModel"
+      ></ion-input>
+    </ion-item>
+    <ion-text *ngIf="emailInput.invalid && emailInput.touched" color="danger">
+      Please enter a valid email address.
+    </ion-text>
+
+    <!-- Password -->
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <!-- Full Name -->
+    <ion-item>
+      <ion-label position="floating">Full Name</ion-label>
+      <ion-input
+        type="text"
+        [(ngModel)]="fullName"
+        name="fullName"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <!-- Phone Number -->
+    <ion-item>
+      <ion-label position="floating">Phone Number</ion-label>
+      <ion-input
+        type="tel"
+        [(ngModel)]="phoneNumber"
+        name="phoneNumber"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <!-- Street Address -->
+    <ion-item>
+      <ion-label position="floating">Street</ion-label>
+      <ion-input
+        type="text"
+        [(ngModel)]="street"
+        name="street"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <!-- City -->
+    <ion-item>
+      <ion-label position="floating">City</ion-label>
+      <ion-input
+        type="text"
+        [(ngModel)]="city"
+        name="city"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <!-- State and Postal Code -->
+    <ion-grid>
+      <ion-row>
+        <!-- State Dropdown -->
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">State</ion-label>
+            <ion-select [(ngModel)]="state" name="state" required>
+              <ion-select-option
+                *ngFor="let state of states"
+                [value]="state"
+                >{{ state }}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <!-- Postal Code -->
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Postal Code</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="postalCode"
+              name="postalCode"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Checkbox for Business or Consumer -->
+    <ion-item>
+      <ion-label>Are you a Business?</ion-label>
+      <ion-checkbox
+        slot="start"
+        [(ngModel)]="isBusiness"
+        name="isBusiness"
+      ></ion-checkbox>
+    </ion-item>
+
+    <!-- Business Name (conditionally displayed) -->
+    <ion-item *ngIf="isBusiness">
+      <ion-label position="floating">Business Name</ion-label>
+      <ion-input
+        type="text"
+        [(ngModel)]="businessName"
+        name="businessName"
+      ></ion-input>
+    </ion-item>
+
+    <!-- Disclaimer -->
+    <ion-text color="medium" class="disclaimer">
+      <p>
+        Disclaimer: No information will be displayed or shared without prior
+        consent, nor will it be shared or sold at any time.
+      </p>
+    </ion-text>
+
+    <!-- Buttons -->
+    <ion-button type="submit" expand="block">Create User</ion-button>
+    <ion-button fill="clear" expand="block" routerLink="/login"
+      >Back to Login</ion-button
+    >
+  </form>
+
+  <!-- Error Message -->
+  <ion-text *ngIf="errorMessage" color="danger">{{ errorMessage }}</ion-text>
+</ion-content>
