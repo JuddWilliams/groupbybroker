@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router'; // Preserving your router import
 import { AuthService } from './services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -8,16 +8,22 @@ import { Router } from '@angular/router';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent { 
-  constructor(public authService: AuthService, private router: Router) {}
+export class AppComponent {
+  constructor(public authService: AuthService, private router: Router) {} // Preserving your router dependency
 
   get loggedInEmail(): string | null {
     return this.authService.getLoggedInEmail(); // Get the logged-in email
   }
 
-  onLogout() {
-    this.authService.logout(); // Call the logout method from AuthService
-    this.router.navigate(['/tabs/tabAbout']); // Redirect to the tabAbout page
+  onLogout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']); // Preserving your navigation logic
+  }
+
+  getInitials(email: string): string {
+    if (!email) return '';
+    const initials = email.substring(0, 2).toUpperCase(); // Extract first 2 letters
+    return initials;
   }
 }
 

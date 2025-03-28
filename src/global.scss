@@ -66,19 +66,23 @@ ion-content ul li {
   margin-bottom: 4px; /* Add space between list items */
 }
 
+
+
 // Apply scaling for mobile devices
 @media (max-width: 600px) {
   ion-content {
-    font-size: calc(100% * 0.8); /* Reduce font size by % */
+    font-size: calc(100% * 0.8); /* Reduce font size by 20% */
   }
+
   ion-title,
   ion-card-subtitle,
   ion-card-title,
   ion-col,
   ion-button,
-  h1,h2,h3,h4,h5,h6,
+  ion-label,
+  h1, h2, h3, h4, h5, h6,
   ul li {
-    font-size: calc(100% * 0.8); /* Reduce font size by % */
+    font-size: calc(100% * 0.8); /* Reduce font size by 20% */
   }
 
   ion-input,
@@ -129,7 +133,35 @@ ion-content ul li {
   }
 
   ion-chip {
-    font-size: calc(100% * 0.9);  
+    font-size: calc(100% * 0.9); /* Slightly reduce font size */
   }
+
+  /* Add scaling for additional components */
+  ion-header,
+  ion-toolbar {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 4px;
+    --padding-bottom: 4px;
+  }
+
+  // ion-avatar {
+  //   width: 32px; /* Reduce avatar size */
+  //   height: 32px;
+  // }
+
+  // .user-circle {
+  //   width: 18px; /* Reduce circle size */
+  //   height: 18px;
+  //   font-size: 10px; /* Adjust font size for initials */
+  // }
+
+  // ion-label {
+  //   font-size: calc(100% * 0.8); /* Reduce label font size */
+  // }
+
+  // ion-text {
+  //   font-size: calc(100% * 0.8); /* Reduce text font size */
+  // }
 }
 

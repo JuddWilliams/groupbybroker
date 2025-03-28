@@ -1,0 +1,24 @@
+.user-circle {
+    width: 25px; /* Circle width */
+    height: 25px; /* Circle height */
+    border-radius: 50%; /* Make it a circle */
+    background-color: var(--ion-color-primary); /* Use primary color */
+    color: white; /* Text color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px; /* Font size for initials */
+    font-weight: bold; /* Bold text */
+    text-transform: uppercase; /* Ensure text is uppercase */
+    //margin-right: 18px; /* Add spacing to the right */
+  }
+
+  ion-toolbar {
+    display: flex; /* Ensure the toolbar uses flexbox */
+    justify-content: flex-start; /* Align all content to the left */
+    ion-title {
+      text-align: left; /* Ensure the title is always left-aligned */
+      flex: none; /* Prevent the title from stretching */
+      margin-left: 1px; /* Optional: Add some spacing from the left edge */
+    }
+  }
