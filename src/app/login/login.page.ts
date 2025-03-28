@@ -22,7 +22,7 @@ export class LoginPage {
         if (this.rememberMe) {
           this.authService.rememberUser(response.token, response.userId);
         }
-        this.router.navigate(['/tabs/tabHome']);
+        this.router.navigate(['/tabs/tabSearch']);
       },
       (error) => {
         this.errorMessage = 'Invalid credentials. Please try again.';

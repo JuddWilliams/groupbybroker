@@ -35,7 +35,11 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password });
+    const headers = new HttpHeaders({
+      'x-api-key': this.apiKey, // Add the API key to the headers
+    });
+
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }, { headers });
   }
 
   logout(): void {
