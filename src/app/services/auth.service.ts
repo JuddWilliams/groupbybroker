@@ -20,7 +20,9 @@ export interface LoginResponse {
 })
 export class AuthService {
   private apiWeatherUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/WeatherForecast';
-  private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';
+  private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';   
+  //private apiUrl = 'https://localhost:7005/api/auth';
+
 
   private apiKey = environment.apiKey; // Your API key
   private loggedInEmail: string | null = null; // Store the logged-in user's email
@@ -41,7 +43,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<LoginResponse> {
     const headers = new HttpHeaders({
-      'x-api-key': this.apiKey, // Add the API key to the headers
+      'x-api-key': this.apiKey,
     });
 
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }, { headers });
@@ -73,4 +75,6 @@ export class AuthService {
   resetPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/reset-password`, { email });
   }
+
+
 }
