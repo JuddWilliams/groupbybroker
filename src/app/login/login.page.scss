@@ -10,3 +10,10 @@
     font-size: inherit; /* Optional: Inherit font size */   
     box-shadow: none; /* Remove any shadow */
   }
+
+.center-text {
+  text-align: center; /* Center the text horizontally */
+  margin-top: 16px; /* Optional: Add some spacing above the text */
+  font-size: 14px; /* Optional: Adjust the font size */
+  color: var(--ion-color-medium); /* Optional: Use a neutral color */
+}

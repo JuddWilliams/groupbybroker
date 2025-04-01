@@ -8,7 +8,7 @@ import { LocationService } from '../services/location.service';
   standalone: false,
 })
 export class TabAboutPage implements OnInit {
-  numberOfContractorsInArea: number = 11; 
+  numberOfContractorsInArea: number = 0; 
   readonly numberOfContractorsInAreaThreshold: number = 5;
   isPopupOpen = false; 
   locationNote: string = ''; 

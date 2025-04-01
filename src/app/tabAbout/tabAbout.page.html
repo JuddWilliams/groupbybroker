@@ -8,15 +8,10 @@
         <ion-grid>
           <ion-row>
             <ion-col size="12" size-md="8">
-              <h4><sup>*</sup><i> Our mission is to promote savings by leveraging proximity</i></h4>
+              <h4><sup>*</sup><i> Our mission is to promote savings by leveraging proximity </i></h4>
               <p><ion-icon name="star-outline"></ion-icon> <i> Consumers</i> can search for contractors by close proximity, list a job for hire, or even open for bidding.</p>
               <ion-icon name="star-outline"></ion-icon> <i> Contractors</i> can respond to consumers <i>and</i> broker their individual accounts by leveraging close Proximity as well. 
-              <!-- <ion-icon
-                name="help-circle-outline"
-                (click)="openPopup()"
-                title="Click for more information"
-                style="cursor: pointer;"
-                ></ion-icon> -->
+      
                <p><ion-icon name="star-outline"></ion-icon> Offer simplified collection using <a title="Click for more information" (click)="openPopup()">payment services.</a> <sup>powered by</sup>payPal. 
               </p>
               <p>
@@ -25,18 +20,22 @@
               <p>
                 <ion-icon name="star-outline"></ion-icon> Company <a title="Click for more information" (click)="openPopup()">reviews</a> and individual <a title="Click for more information" (click)="openPopup()">user ratings</a>.
               </p>    
-              <h1>NEXT. work on below individual sections</h1>
+              <p> 
+                <sup>Currently supported services: </sup> <br>
+                <ion-chip>Landscaping & Lawn care</ion-chip>
+                <ion-chip color="primary">Pesticides</ion-chip>
+                <ion-chip color="secondary">Weed & Feed</ion-chip>
+                <ion-chip color="tertiary">Pool maintenance</ion-chip>
+                <ion-chip color="success">Poop scooper</ion-chip></p>
+              <h1>NEXT. work on below CONTRACTOR section</h1>
              
             </ion-col> 
             <ion-col size="12" size-md="4" style="padding-left: 30px;">
               <h4>What it cost</h4>                    
               <p>Contractors can pay $35 annually to list all their accounts. </p>
-              <p>...or pay $5 per account to list.</p>              
-              <!-- <p *ngIf="numberOfContractorsInArea < 5"><sup>*</sup>As we expand to new markets it may be <b>free</b>. </p>            -->
-            
-            <!-- </p> -->
+              <p>...or pay $5 per account to list.</p>      
             <p style="font-weight: bolder;"><i>{{locationNote}}</i></p>
-            <ion-button size="small" fill="outline">Click to try</ion-button>
+            <ion-button size="small" fill="outline">Create account</ion-button>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -47,12 +46,14 @@
                     <ion-row>
                       <ion-col>
                         <h6>Consumer Information</h6>
-                        <ul>
-                          <li>Consumers can list a job for hire or open for bidding.</li>
-                          <li>Consumers can find Contractors by close <i>Proximity</i> for significant savings & other incentives </li>
-                          <li>Earn referrals from us and your contractor... </li>
-                        </ul>
-                        <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Find near me</ion-button>
+                        <p>
+                          We all benefit from cost savings as contractors look to service accounts in close proximity.  
+                          Customer satisfaction also improves as contractors work towards better reviews and higher user ratings.  
+                          Many also offer referrals for your participation.
+                        </p>            
+                        <p>Search for a contractor in near proximity to you <i>or</i> post job for hire or bid.</p>          
+                        <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Search</ion-button>
+                        <ion-button size="small" fill="outline" routerLink="/tabs/tabConsumerPost">Post / Request Bids</ion-button>                        
                         <ion-img src="assets/mapEg.gif"></ion-img>          
                       </ion-col>
                     </ion-row>
@@ -66,11 +67,7 @@
                     <ion-col>
                       <h6>Contractor Details</h6>
                       <div>
-                        <ion-chip>Landscaping & Lawn care</ion-chip>
-                        <ion-chip color="primary">Pesticides</ion-chip>
-                        <ion-chip color="secondary">Weed & Feed</ion-chip>
-                        <ion-chip color="tertiary">Pool maintenance</ion-chip>
-                        <ion-chip color="success">Poop scooper</ion-chip>
+                       
                         <p>We welcome you to join our service.  Here are a few benefits...</p>    
                         <ul> <!-- <sup>Proximity benefits</sup> -->
                           <li>Cost savings from reduced travel (time/fuel/etc)</li>
