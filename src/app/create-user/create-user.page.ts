@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'app-create-user',
@@ -9,15 +10,8 @@ import { AuthService } from '../services/auth.service';
   standalone: false,
 })
 export class CreateUserPage {
-  fullName = '';
-  email = '';
-  phoneNumber = '';
-  street = '';
-  city = '';
-  state = '';
-  postalCode = '';
-  isBusiness = false;
-  businessName = '';
+  nickName = '';
+  email = ''; 
   password = '';
   errorMessage = '';
 
@@ -38,28 +32,25 @@ export class CreateUserPage {
       return; // Stop execution if the email is invalid
     }
 
+    const hashedPassword = bcrypt.hashSync(this.password, 10); // Cost factor of 10
+    
     const userData = {
-      fullName: this.fullName,
-      email: this.email,
-      phoneNumber: this.phoneNumber,
-      address: {
-        street: this.street,
-        city: this.city,
-        state: this.state,
-        postalCode: this.postalCode,
-      },
-      isBusiness: this.isBusiness,
-      businessName: this.isBusiness ? this.businessName : null,
-      password: this.password,
+      nickName: this.nickName,
+      email: this.email,            
+      password: hashedPassword, 
     };
+
+    console.log('User data before sending to API:', userData); // Debugging line
 
     this.authService.createUser(userData).subscribe({
       next: (response) => {
+        console.log('User created successfully:', response); // Debugging line
         // Automatically log in the user after successful registration
         this.authService.saveLogin(response.token, response.userId);
         this.router.navigate(['/tabs/tabSearch']); // Redirect to the dashboard or another page
       },
       error: (error) => {
+        console.log('Failed to create user. Please try again: ', error); // Debugging line
         this.errorMessage = 'Failed to create user. Please try again.';
       },
     });
