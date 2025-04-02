@@ -1,18 +1,21 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Group Buyology</ion-title>
-    <ion-buttons slot="end">
-      <!-- Circle with User's Initials -->
-  
-      <ion-button title="{{ loggedInEmail }}" *ngIf="!authService.isLoggedIn()" routerLink="/login"><u>Login</u></ion-button>
-      <ion-button title="{{ loggedInEmail }}" *ngIf="authService.isLoggedIn()" (click)="onLogout()"><u>Logout</u></ion-button>
-      <div *ngIf="loggedInEmail" class="user-circle">
-        {{ getInitials(loggedInEmail) }}
-      </div>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+
 
 <ion-app>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Group Buyology</ion-title>
+      <ion-buttons slot="end">
+        <!-- Circle with User's Initials -->
+    
+        <ion-button title="{{ loggedInEmail }}" *ngIf="!authService.isLoggedIn()" routerLink="/login"><u>Login</u></ion-button>
+        <ion-button title="{{ loggedInEmail }}" *ngIf="authService.isLoggedIn()" (click)="onLogout()"><u>Logout</u></ion-button>
+        <div *ngIf="loggedInEmail" class="user-circle">
+          {{ getInitials(loggedInEmail) }}
+        </div>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>  
+  <ion-content >
+  </ion-content>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>

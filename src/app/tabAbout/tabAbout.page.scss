@@ -1,10 +1,10 @@
 ion-card {
     margin: 4px !important; /* Adjust the margin as needed and add !important */
-  }
+}
 
-  ion-grid {
+ion-grid {
     padding: 1px !important; /* Adjust the margin as needed and add !important */
-  }
+}
 
 // ion-modal {
 //   // --width: 90%;
@@ -14,9 +14,135 @@ ion-card {
 
 // Apply scaling for small devices
 @media (max-width: 600px) {
-  .sizer-modal{
+  .sizer-modal {
     max-width: 90%; /* Set max-width to 90% for small devices */
   }
+}
+
+#WhyUse {
+  .review-list {
+    max-height: 200px; /* Set the height of the scrolling area */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 8px;
+  }
+
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    margin-bottom: 8px;
+  }
+
+  .review-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* Match the size of the header avatar */
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--ion-color-primary);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  ion-label h3 {
+    font-size: 12px;
+    // font-weight: bold;
+    margin: 0;
+  }
+
+  ion-label p {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+/* Responsive styles for smaller viewports */
+@media (max-width: 600px) {
+  #WhyUse {
+    .review-avatar {
+      width: 32px; /* Reduce avatar size for smaller screens */
+      height: 32px;
+      font-size: 10px; /* Adjust font size */
+    }
+
+    ion-label h3 {
+      font-size: 12px; /* Reduce font size for names */
+    }
+
+    ion-label p {
+      font-size: 10px; /* Reduce font size for feedback */
+    }
+  }
+}
+
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feedback-header h6 {
+  margin: 0;
+  // font-size: 18px;
+  // font-weight: bold;
+}
+
+.review-list {
+  max-height: 200px; /* Set the height of the scrolling area */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 8px;
+}
+
+.review-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--ion-color-primary);
+  color: white;
+  // font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+ion-label h3 {
+  font-size: 12px;
+  //font-weight: bold;
+  margin: 0;
+}
+
+ion-label p {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+.feedback-textarea {
+  --background: var(--ion-color-light); /* Light background for better visibility */
+  --padding-start: 12px; /* Add padding inside the textarea */
+  --padding-end: 12px;
+  --padding-top: 16px; /* Increase padding to avoid overlap with the label */
+  --padding-bottom: 8px;
+  border: 1px solid var(--ion-color-medium); /* Add a border for better visibility */
+ 
+  font-size: 14px; /* Adjust font size for readability */
+  color: var(--ion-color-dark); /* Text color */
+}
+
+ion-item {
+  --inner-padding-top: 8px; /* Add padding to the top of the ion-item */
+  --inner-padding-bottom: 8px; /* Add padding to the bottom of the ion-item */
+  --highlight-height: 0; /* Remove the highlight bar height */
+}
+
+.feedback-textarea::placeholder {
+  color: var(--ion-color-medium); /* Placeholder text color */
+  font-style: italic; /* Italicize placeholder text */
 }
 
 

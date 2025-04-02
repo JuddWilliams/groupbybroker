@@ -106,22 +106,33 @@
                   
             </ion-col>
             <ion-col size="12" size-md="4" > 
-              <ion-card > 
+              <ion-card id="WhyUse">
                 <ion-grid>
                   <ion-row>
                     <ion-col>
-                      <h6>Why use groupBuyology? </h6>
-                  
+                      <div class="feedback-header">
+                        <h6>What do you think?...</h6>
+                        <ion-button fill="clear" size="small" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
+                      </div>
+                      <div class="review-list">
+                        <ion-item *ngFor="let review of reviews" lines="none">
+                          <ion-avatar slot="start" class="review-avatar">
+                            <div class="avatar-circle">{{ review.initials }}</div>
+                          </ion-avatar>
+                          <ion-label>
+                            <h3>{{ review.name }}</h3>
+                            <p>"{{ review.feedback }}" on {{ review.date }}</p>
+                          </ion-label>
+                        </ion-item>
+                      </div>
                     </ion-col>
                   </ion-row>
-                </ion-grid>     
+                </ion-grid>
               </ion-card>     
             </ion-col>
           </ion-row>
         </ion-grid>
     </ion-card>
-
-
 
   <!-- Popup Modal -->
   <ion-modal class="sizer-modal" [isOpen]="isPopupOpen" (ionModalDidDismiss)="closePopup()">
@@ -136,6 +147,34 @@
       </ion-header>
       <ion-content>
         <p style="padding: 16px;">This is how it works!</p>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Feedback Modal -->
+  <ion-modal  [isOpen]="isFeedbackPopupOpen" (ionModalDidDismiss)="closeFeedbackPopup()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>GroupBuyology</ion-title> <!-- Custom title -->
+          <ion-buttons slot="end">
+            <ion-button (click)="closeFeedbackPopup()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div style="padding: 16px;">         
+          <ion-item>
+            <ion-label position="floating">Your Feedback</ion-label>
+            <ion-textarea
+              [(ngModel)]="newFeedback"
+              rows="4"
+              placeholder="Write your feedback here..."
+              class="feedback-textarea"
+            ></ion-textarea>
+          </ion-item>
+          <ion-button expand="block" (click)="submitFeedback()">Submit</ion-button>
+        </div>
       </ion-content>
     </ng-template>
   </ion-modal>

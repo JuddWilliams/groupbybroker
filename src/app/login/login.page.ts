@@ -21,11 +21,12 @@ export class LoginPage {
     this.router.navigate(['/tabs/tabAbout']); // Navigate to the previous screen
   }
 
-  onLogin(): void {    
+  onLogin(): void {       
     this.errorMessage = '';
     this.authService.login(this.email, this.password).subscribe({    
       next: (response) => {
-        this.authService.saveLogin(response.token, response.userId); // Pass the email
+        console.log('Login successful:', response);
+        this.authService.saveLogin(response.token, response.userId); // Pass the email        
         this.router.navigate(['/tabs/tabSearch']);
       },
       error: (error) => {
