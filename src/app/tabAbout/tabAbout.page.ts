@@ -93,7 +93,7 @@ export class TabAboutPage implements OnInit {
     return `${month}/${day}`;
   }
 
-  async getUserLocationAndCheckPostalCode() {
+  async getUserLocationAndCheckPostalCode() { 
     const location = await this.locationService.getUserLocation();
     if (location) {
       const postalCode = await this.locationService.getPostalCodeFromCoordinates(
@@ -125,6 +125,16 @@ export class TabAboutPage implements OnInit {
         console.error('Invalid postal code:', postalCode);
         this.locationNote = 'Note: We were unable to determine your location.';
       }
+    }
+    else {
+      alert( `We're unable to determine your locaton.  You may have disabled location access for groupBuyology.com.\n
+        To enable location access, please go to your browser settings:\n
+        - In Chrome: Go to Settings > Privacy and Security > Site Settings > Permissions > Location: Under 'Customized behaviors' then delete. Return to page and refresh.\n
+        - In Safari: Go to Settings > Safari > Location, and allow location access.\n
+        - In Firefox: Click the shield icon in the address bar, then manage location permissions.`
+     );
+      console.error('Unable to retrieve location.');
+      this.locationNote = 'Note: We were unable to determine your location.';
     }
   }
 }
