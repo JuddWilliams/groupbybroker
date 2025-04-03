@@ -76,10 +76,20 @@ export class TabAboutPage implements OnInit {
     return parts.substring(0, 2).toUpperCase(); // Extract the first 2 letters
   }
 
-  getCurrentDate(): string {
+  getCurrentDate(offsetDays: number = 0): string {
     const now = new Date();
+    now.setDate(now.getDate() + offsetDays); 
     const month = (now.getMonth() + 1).toString();
     const day = now.getDate().toString();
+    return `${month}/${day}`;
+  }
+
+  getFirstDayOfNextMonth(): string { 
+    const now = new Date();
+    const nextMonth = now.getMonth() + 2; // Move to the next month
+    const year = nextMonth > 11 ? now.getFullYear() + 1 : now.getFullYear(); // Handle year rollover
+    const month = (nextMonth % 12) === 0 ? '12' : (nextMonth % 12).toString(); // Ensure month is zero-padded
+    const day = '1'; // Always the 1st day of the month
     return `${month}/${day}`;
   }
 
@@ -95,17 +105,19 @@ export class TabAboutPage implements OnInit {
 
       // Validate that postalCode is a numeric value
       if (postalCode && /^\d+$/.test(postalCode)) {
+        let dateExpiring = this.getFirstDayOfNextMonth();
         if (postalCode.startsWith('322')) {
           // if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
-            this.locationNote = `Good news, as we expand to new markets it's free for your postal code ${postalCode}.`; // Update button text
+            this.locationNote = `Good news, as we expand to new markets for a limited time it's free for your postal code ${postalCode}. Expires ${dateExpiring}`; // Update button text
             this.locationService.showFreeAlert();
           } else {
             this.locationNote = `*There are ${this.numberOfContractorsInArea} other Contractors using our service in this area.`;
           }
         } else {
           // if postal code AND if below threshold
-          this.locationNote = `Good news, as we expand to new markets it's free for your postal code ${postalCode}.`; // Update button text
+          this.locationNote = `Good news, as we expand to new markets for a limited time 
+          it's free for your postal code ${postalCode}. Expires ${dateExpiring}`; // Update button text
           this.locationService.showFreeAlert();
         }
       } else {

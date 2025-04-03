@@ -10,7 +10,7 @@
             <ion-col size="12" size-md="8">
               <h4><sup>*</sup><i> Our mission is to promote savings by leveraging proximity </i></h4>
               <p><ion-icon name="star-outline"></ion-icon> <i> Consumers</i> can search for contractors by close proximity, list a job for hire, or even open for bidding.</p>
-              <ion-icon name="star-outline"></ion-icon> <i> Contractors</i> can respond to consumers <i>and</i> broker their individual accounts by leveraging close Proximity as well. 
+              <ion-icon name="star-outline"></ion-icon> <i> Contractors</i> can respond to consumers <i>and</i> broker their individual accounts by also leveraging close Proximity. 
       
                <p><ion-icon name="star-outline"></ion-icon> Offer simplified collection using <a title="Click for more information" (click)="openPopup()">payment services.</a> <sup>powered by</sup>payPal. 
               </p>
@@ -66,11 +66,16 @@
                   <ion-row>
                     <ion-col>
                       <h6>Contractors</h6>
-                      <div>
-                       
+                      <div>                       
                         <p>We welcome you to join our service. </p>    
                         <ul> <!-- <sup>Proximity benefits</sup> -->
-                          <li>Reduced travel & preparation (time/fuel/loading equipment, etc)</li>             
+                          <li>Reduced travel & preparation (time/fuel/loading equipment, etc)   
+                            <ion-icon 
+                            name="help-circle-outline"
+                            (click)="openPopup()"
+                            title="Click for more information"
+                            style="cursor: pointer;"
+                            ></ion-icon></li>             
                         </ul>
                         <ul>  
                           <sup>Also,</sup>
@@ -88,8 +93,16 @@
                             (click)="openPopup()"
                             title="Click for more information"
                             style="cursor: pointer;"
-                            ></ion-icon></li>        
-                        <li>Offer/facilitate referral programs  
+                            ></ion-icon></li>     
+                          <li>Offer simpler payment services to your customers  
+                            <ion-icon 
+                            name="help-circle-outline"
+                            (click)="openPopup()"
+                            title="Click for more information"
+                            style="cursor: pointer;"
+                            ></ion-icon>
+                          </li>      
+                        <li>Facilitate referral programs  
                           <ion-icon 
                           name="help-circle-outline"
                           (click)="openPopup()"
@@ -111,7 +124,7 @@
                   <ion-row>
                     <ion-col>
                       <div class="feedback-header">
-                        <h6>What do you think?...</h6>
+                        
                         <ion-button fill="clear" size="small" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
                       </div>
                       <div class="review-list">
