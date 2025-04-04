@@ -34,7 +34,12 @@
               <p>Contractors can pay $35 annually to list all their accounts. </p>
               <p>...or pay $5 per account to list.</p>      
             <p style="font-weight: bolder;"><i>{{locationNote}}</i></p>
-            <ion-button size="small" fill="outline" routerLink="/tabs/tabDashboard">
+            <ion-button
+              size="small"
+              fill="outline"
+              [routerLink]="['/login']"
+              [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
+            >
               Create account
             </ion-button>
             </ion-col>
@@ -54,7 +59,15 @@
                         </p>            
                         <p>Search for a contractor in near proximity to you <i>or</i> post job for hire or bid.</p>          
                         <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Search</ion-button>
-                        <ion-button size="small" fill="outline" routerLink="/tabs/tabConsumerPost">Post / Request Bids</ion-button>                        
+                        <!-- <ion-button size="small" fill="outline" routerLink="/tabs/tabConsumerPost">Post / Request Bids</ion-button>     -->                    
+                        <ion-button
+                        size="small"
+                        fill="outline"
+                        [routerLink]="['/login']"
+                        [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
+                      >
+                      Post / Request Bids
+                      </ion-button>
                         <ion-img src="assets/mapEg.gif"></ion-img>          
                       </ion-col>
                     </ion-row>

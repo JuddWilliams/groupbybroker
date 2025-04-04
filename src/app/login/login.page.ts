@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Location } from '@angular/common'; // Import Location service
-import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +13,20 @@ export class LoginPage {
   password = '';
   errorMessage = '';
   loading = false; // Track loading state
+  returnUrl: string = '/'; // Default redirect URL
 
-  constructor(private authService: AuthService, private router: Router, private location: Location) {} // Inject Location service
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
+  ngOnInit(): void {
+    // Get the returnUrl from the query parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+
+  
   onCancel(): void {
     this.router.navigate(['/tabs/tabAbout']); // Navigate to the previous screen
   }
@@ -30,8 +39,8 @@ export class LoginPage {
       next: (response) => {
         this.loading = false; // Hide spinner
         console.log('Login successful:', response);
-        this.authService.saveLogin(response.token, response.userId); // Pass the email
-        this.router.navigate(['/tabs/tabSearch']);
+        this.authService.saveLogin(response.token, response.userId); // Save login details
+        this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
       },
       error: (error) => {
         this.loading = false; // Hide spinner
