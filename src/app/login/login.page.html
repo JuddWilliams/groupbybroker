@@ -5,6 +5,11 @@
 </ion-header>
 
 <ion-content>
+  <!-- Full-page overlay spinner -->
+  <div *ngIf="loading" class="overlay">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
   <form (ngSubmit)="onLogin()">
     <!-- Email -->
     <ion-item>
@@ -28,17 +33,20 @@
       ></ion-input>
     </ion-item>
 
-    <ion-button type="submit" expand="block">Login</ion-button>
-    <ion-button expand="block" color="secondary" (click)="onCancel()">Cancel</ion-button>
-    <ion-button fill="clear" expand="block" routerLink="/reset-password">
+    <!-- Buttons -->
+    <ion-button type="submit" expand="block" [disabled]="loading">Login</ion-button>
+    <ion-button expand="block" color="secondary" (click)="onCancel()" [disabled]="loading">Cancel</ion-button>
+    <ion-button fill="clear" expand="block" routerLink="/reset-password" [disabled]="loading">
       Forgot Password?
     </ion-button>
-    <ion-button fill="clear" expand="block" routerLink="/create-user">
+    <ion-button fill="clear" expand="block" routerLink="/create-user" [disabled]="loading">
       Create New User
     </ion-button>
-    <p class="center-text">*Login is require to participate but only used internally to support use of the application.   <br>
-      We will <i>never</i> share your information.</p>
-  
+
+    <p class="center-text">
+      *Login is required to participate but only used internally to support use of the application. <br>
+      We will <i>never</i> share your information.
+    </p>
   </form>
 
   <!-- Error Message -->

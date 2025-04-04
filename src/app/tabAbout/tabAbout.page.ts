@@ -15,11 +15,11 @@ export class TabAboutPage implements OnInit {
   isPopupOpen = false;
   locationNote: string = '';
   reviews = [
-    { initials: 'JW', name: 'Joe', feedback: 'I love this website. It’s the best!', date: '12/4' },
-    { initials: 'HR', name: 'Henry', feedback: 'I use this site every day.', date: '12/4' },
-    { initials: 'AB', name: 'Alice', feedback: 'Great platform for finding contractors!', date: '12/4' },
-    { initials: 'MK', name: 'Mike', feedback: 'Saved me so much time and money!', date: '12/4' },
-    { initials: 'LS', name: 'Lisa', feedback: 'Highly recommend this to everyone.', date: '12/4' },
+    { initials: 'JW', name: 'Joe', feedback: 'In these uncertain times, I needed a way to further my business and improve the bottom line.', date: '4/4' },
+    { initials: 'HR', name: 'Henry', feedback: 'As a homeowner I\'ve found a contractor with great reviews and offered me a great deal as he was in the neighborhood!', date: '5/20' },
+    { initials: 'AB', name: 'Alice', feedback: 'Great platform for finding contractors!', date: '6/17' },
+    { initials: 'MK', name: 'Lisa', feedback: 'I\'m saving.. and my contractor loves it too as he\'s doing better as well.', date: '7/2' },
+    { initials: 'LS', name: 'Mike', feedback: 'As a contractor, I have not only increased my revenue but I\'m doing it in less time.  Thank you Group Buyology!!!', date: '6/8' },
   ];
 
   isFeedbackPopupOpen = false; // Track whether the feedback modal is open
@@ -109,7 +109,7 @@ export class TabAboutPage implements OnInit {
         if (postalCode.startsWith('322')) {
           // if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
-            this.locationNote = `Good news, as we expand to new markets for a limited time it's free for your postal code ${postalCode}. Expires ${dateExpiring}`; // Update button text
+            this.locationNote = `Good news, as we expand to new markets for a limited time it's free for your postal code ${postalCode}. *Expires ${dateExpiring}*`; // Update button text
             this.locationService.showFreeAlert();
           } else {
             this.locationNote = `*There are ${this.numberOfContractorsInArea} other Contractors using our service in this area.`;

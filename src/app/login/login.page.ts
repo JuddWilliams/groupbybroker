@@ -14,6 +14,7 @@ export class LoginPage {
   email = '';
   password = '';
   errorMessage = '';
+  loading = false; // Track loading state
 
   constructor(private authService: AuthService, private router: Router, private location: Location) {} // Inject Location service
 
@@ -21,15 +22,19 @@ export class LoginPage {
     this.router.navigate(['/tabs/tabAbout']); // Navigate to the previous screen
   }
 
-  onLogin(): void {       
+  onLogin(): void {
+    this.loading = true; // Show spinner
     this.errorMessage = '';
-    this.authService.login(this.email, this.password).subscribe({    
+
+    this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
+        this.loading = false; // Hide spinner
         console.log('Login successful:', response);
-        this.authService.saveLogin(response.token, response.userId); // Pass the email        
+        this.authService.saveLogin(response.token, response.userId); // Pass the email
         this.router.navigate(['/tabs/tabSearch']);
       },
       error: (error) => {
+        this.loading = false; // Hide spinner
         this.errorMessage = 'Invalid credentials. Please try again.';
       },
     });

@@ -27,7 +27,6 @@
                 <ion-chip color="secondary">Weed & Feed</ion-chip>
                 <ion-chip color="tertiary">Pool maintenance</ion-chip>
                 <ion-chip color="success">Poop scooper</ion-chip></p>
-              <h1>NEXT. work on below CONTRACTOR section</h1>
              
             </ion-col> 
             <ion-col size="12" size-md="4" style="padding-left: 30px;">
@@ -35,7 +34,9 @@
               <p>Contractors can pay $35 annually to list all their accounts. </p>
               <p>...or pay $5 per account to list.</p>      
             <p style="font-weight: bolder;"><i>{{locationNote}}</i></p>
-            <ion-button size="small" fill="outline">Create account</ion-button>
+            <ion-button size="small" fill="outline" routerLink="/tabs/tabDashboard">
+              Create account
+            </ion-button>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -134,7 +135,7 @@
                           </ion-avatar>
                           <ion-label>
                             <h3>{{ review.name }}</h3>
-                            <p>"{{ review.feedback }}" on {{ review.date }}</p>
+                            <p>"{{ review.date }} - {{ review.feedback }}" </p>
                           </ion-label>
                         </ion-item>
                       </div>

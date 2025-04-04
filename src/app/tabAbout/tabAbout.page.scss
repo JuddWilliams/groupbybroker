@@ -21,16 +21,16 @@ ion-grid {
 
 #WhyUse {
   .review-list {
-    max-height: 200px; /* Set the height of the scrolling area */
+    max-height: 300px; /* Set the height of the scrolling area */
     overflow-y: auto; /* Enable vertical scrolling */
     padding: 8px;
   }
 
-  ion-item {
-    --padding-start: 0;
-    --inner-padding-end: 0;
-    margin-bottom: 8px;
-  }
+  // ion-item {
+  //   --padding-start: 0;
+  //   --inner-padding-end: 0;
+  //   margin-bottom: 8px;
+  // }
 
   .review-avatar {
     display: flex;
@@ -136,7 +136,7 @@ ion-label p {
 
 ion-item {
   --inner-padding-top: 8px; /* Add padding to the top of the ion-item */
-  --inner-padding-bottom: 8px; /* Add padding to the bottom of the ion-item */
+  --inner-padding-bottom: 1px; /* Add padding to the bottom of the ion-item */
   --highlight-height: 0; /* Remove the highlight bar height */
 }
 
