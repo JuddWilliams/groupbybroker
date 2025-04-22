@@ -46,7 +46,7 @@ export class CreateUserPage {
       next: (response) => {
         console.log('User created successfully:', response); // Debugging line
         // Automatically log in the user after successful registration
-        this.authService.saveLogin(response.token, response.userId);
+        this.authService.saveLogin(response.token, response.userId, response.nickName);
         this.router.navigate(['/tabs/tabSearch']); // Redirect to the dashboard or another page
       },
       error: (error) => {

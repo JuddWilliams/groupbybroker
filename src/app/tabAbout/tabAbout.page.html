@@ -34,14 +34,7 @@
               <p>Contractors can pay $35 annually to list all their accounts. </p>
               <p>...or pay $5 per account to list.</p>      
             <p style="font-weight: bolder;"><i>{{locationNote}}</i></p>
-            <ion-button
-              size="small"
-              fill="outline"
-              [routerLink]="['/login']"
-              [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
-            >
-              Create account
-            </ion-button>
+           
             </ion-col>
           </ion-row>
           <ion-row>
@@ -59,13 +52,11 @@
                         </p>            
                         <p>Search for a contractor in near proximity to you <i>or</i> post job for hire or bid.</p>          
                         <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Search</ion-button>
-                        <!-- <ion-button size="small" fill="outline" routerLink="/tabs/tabConsumerPost">Post / Request Bids</ion-button>     -->                    
                         <ion-button
                         size="small"
                         fill="outline"
                         [routerLink]="['/login']"
-                        [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
-                      >
+                        [queryParams]="{ returnUrl: '/tabs/tabDashboard' }">
                       Post / Request Bids
                       </ion-button>
                         <ion-img src="assets/mapEg.gif"></ion-img>          
@@ -81,19 +72,26 @@
                     <ion-col>
                       <h6>Contractors</h6>
                       <div>                       
-                        <p>We welcome you to join our service. </p>    
-                        <ul> <!-- <sup>Proximity benefits</sup> -->
-                          <li>Reduced travel & preparation (time/fuel/loading equipment, etc)   
-                            <ion-icon 
-                            name="help-circle-outline"
-                            (click)="openPopup()"
-                            title="Click for more information"
-                            style="cursor: pointer;"
-                            ></ion-icon></li>             
-                        </ul>
+                        <p>We welcome you to join our service and reduced costs associated with travel & preparation (time/fuel/loading equipment, etc)    </p>    
+                        <ion-button
+                        size="small"
+                        fill="outline"
+                        [routerLink]="['/login']"
+                        [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
+                      >
+                        Create account
+                      </ion-button>
                         <ul>  
-                          <sup>Also,</sup>
-                            <li>Buy, Sell,Trading accounts  
+                          <sup>Features</sup>
+                          <li>Buy, Sell,Trade accounts (Business to business)  
+                            <ion-icon
+                              name="help-circle-outline"
+                              (click)="openPopup()"
+                              title="Click for more information"
+                              style="cursor: pointer;"
+                          ></ion-icon>
+                        </li> 
+                            <li>Gain new accounts by offering proximity incentives 
                               <ion-icon
                                 name="help-circle-outline"
                                 (click)="openPopup()"

@@ -15,14 +15,18 @@ export class AppComponent {
     return this.authService.getLoggedInEmail(); // Get the logged-in email
   }
 
+  get loggedInUser(): string | null {
+    return this.authService.getLoggedInUser(); // Get the logged-in user nickname
+  }
+
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']); // Preserving your navigation logic
   }
 
-  getInitials(email: string): string {
-    if (!email) return '';
-    const initials = email.substring(0, 2).toUpperCase(); // Extract first 2 letters
+  getInitials(nickName: string): string {
+    if (!nickName) return '';
+    const initials = nickName.substring(0, 2).toUpperCase(); // Extract first 2 letters
     return initials;
   }
 }

@@ -39,7 +39,7 @@ export class LoginPage {
       next: (response) => {
         this.loading = false; // Hide spinner
         console.log('Login successful:', response);
-        this.authService.saveLogin(response.token, response.userId); // Save login details
+        this.authService.saveLogin(response.token, response.userId, response.nickName); // Save login details
         this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
       },
       error: (error) => {

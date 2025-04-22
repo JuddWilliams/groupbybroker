@@ -13,6 +13,7 @@ export interface WeatherForecast {
 export interface LoginResponse {
   userId: string;
   token: string;
+  nickName: string;
 }
 
 @Injectable({
@@ -20,12 +21,13 @@ export interface LoginResponse {
 })
 export class AuthService {
   private apiWeatherUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/WeatherForecast';
-  private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';   
-  //private apiUrl = 'https://localhost:7005/api/auth';
+  //private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';   
+  private apiUrl = 'https://localhost:7005/api/auth';
 
 
   private apiKey = environment.apiKey; // Your API key
   private loggedInEmail: string | null = null; // Store the logged-in user's email
+  private loggedInUser: string | null = null; // Store the logged-in user's email
 
   constructor(private http: HttpClient) {}
 
@@ -56,17 +58,21 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('nickName');
     this.loggedInEmail = null; // Clear the email
+    this.loggedInUser = null; // Clear the user
   }
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token'); // Check if the user is logged in
   }
 
-  saveLogin(token: string, userId: string): void {
+  saveLogin(token: string, userId: string, nickName: string): void {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);    
+    localStorage.setItem('nickName', nickName); 
     this.loggedInEmail = userId; // Save the email
+    this.loggedInUser = nickName;
   }
 
   getLoggedInEmail(): string | null {
@@ -74,6 +80,13 @@ export class AuthService {
       this.loggedInEmail = localStorage.getItem('userId'); // Retrieve email from localStorage
     }
     return this.loggedInEmail; // Return the logged-in email
+  }
+
+  getLoggedInUser(): string | null {
+    if (!this.loggedInUser) {
+      this.loggedInUser = localStorage.getItem('nickName'); // Retrieve user from localStorage
+    }
+    return this.loggedInUser; // Return the logged-in user
   }
 
   resetPassword(email: string): Observable<any> {
