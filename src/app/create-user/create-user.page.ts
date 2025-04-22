@@ -32,6 +32,19 @@ export class CreateUserPage {
       return; // Stop execution if the email is invalid
     }
 
+     // Validate password
+    if (!this.isValidPassword(this.password)) {
+      this.errorMessage =
+        'Password must be at least 8 characters long, include at least one uppercase letter, one number, and one special character[eg. @$!%*?&].';
+      return; // Stop execution if the password is invalid
+    }
+
+    if (!this.isValidNickName(this.nickName)) {
+      this.errorMessage =
+        'Please enter at least 2 characters for the nickname.';
+      return; // Stop execution if the password is invalid
+    }
+
     const hashedPassword = bcrypt.hashSync(this.password, 10); // Cost factor of 10
     
     const userData = {
@@ -47,7 +60,7 @@ export class CreateUserPage {
         console.log('User created successfully:', response); // Debugging line
         // Automatically log in the user after successful registration
         this.authService.saveLogin(response.token, response.userId, response.nickName);
-        this.router.navigate(['/tabs/tabSearch']); // Redirect to the dashboard or another page
+        this.router.navigate(['/login']); // Redirect to the dashboard or another page
       },
       error: (error) => {
         console.log('Failed to create user. Please try again: ', error); // Debugging line
@@ -56,8 +69,19 @@ export class CreateUserPage {
     });
   }
 
+  // Helper method to validate the password
+  private isValidPassword(password: string): boolean {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  }
+
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  }
+
+  private isValidNickName(nickName: string): boolean {
+    const nickNameRegex = /^.{2,}$/;
+    return nickNameRegex.test(nickName);
   }
 }

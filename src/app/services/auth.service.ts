@@ -16,13 +16,18 @@ export interface LoginResponse {
   nickName: string;
 }
 
+export interface ResetPasswordResponse {
+  email: string;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiWeatherUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/WeatherForecast';
-  //private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';   
-  private apiUrl = 'https://localhost:7005/api/auth';
+  private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';   
+  //private apiUrl = 'https://localhost:7005/api/auth';
 
 
   private apiKey = environment.apiKey; // Your API key
@@ -90,8 +95,19 @@ export class AuthService {
   }
 
   resetPassword(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password`, { email });
-  }
+    const headers = new HttpHeaders({
+      'x-api-key': this.apiKey,
+    });
 
+    const body = {
+      email,
+      password: '', // Replace with the new password
+      // twoFactorCode,
+      // twoFactorRecoveryCode,
+    };
+
+    console.log('Resetting password for email:', email); // Log the email being reset
+    return this.http.post<LoginResponse>(`${this.apiUrl}/resetPassword`, body, { headers });
+  }
 
 }
