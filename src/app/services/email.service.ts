@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EmailService {
-  private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/email';  
+  private apiUrl = environment.apiUrl + '/email';  
   //private apiUrl = 'https://localhost:7005/api/email';
   
   private apiKey = environment.apiKey; // Your API key

@@ -25,24 +25,13 @@ export interface ResetPasswordResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiWeatherUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/WeatherForecast';
-  private apiUrl = 'https://groupbuyology-api-h4eve4dmgkafbbbt.eastus2-01.azurewebsites.net/api/Auth';   
-  //private apiUrl = 'https://localhost:7005/api/auth';
-
-
+ 
+  private apiUrl = environment.apiUrl + '/auth';  
   private apiKey = environment.apiKey; // Your API key
   private loggedInEmail: string | null = null; // Store the logged-in user's email
   private loggedInUser: string | null = null; // Store the logged-in user's email
 
   constructor(private http: HttpClient) {}
-
-  getWeatherForecast(): Observable<WeatherForecast[]> {
-    const headers = new HttpHeaders({
-      'x-api-key': this.apiKey, // Add the API key to the headers
-    });
-
-    return this.http.get<WeatherForecast[]>(this.apiWeatherUrl, { headers });
-  }
 
   createUser(userData: any): Observable<any> {
     const headers = new HttpHeaders({
