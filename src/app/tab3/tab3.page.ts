@@ -11,13 +11,5 @@ export class Tab3Page implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.getWeatherForecast().subscribe(
-      (data: WeatherForecast[]) => {
-        console.log('Weather Forecast:', data);
-      },
-      (error: any) => {
-        console.error('Error fetching weather data:', error);
-      }
-    );
   }
 }
