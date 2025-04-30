@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { AuthService } from '../services/auth.service';
+import { ContractorListingsService } from '../services/contractor-listings.service';
 
 @Component({
   selector: 'app-tabAbout',
@@ -25,7 +26,7 @@ export class TabAboutPage implements OnInit {
   isFeedbackPopupOpen = false; // Track whether the feedback modal is open
   newFeedback = ''; // Store the user's feedback
 
-  constructor(private locationService: LocationService, private authService: AuthService) {}
+  constructor(private locationService: LocationService, private authService: AuthService, private contractorListingsService: ContractorListingsService) {}
 
   async ngOnInit() {
     this.getUserLocationAndCheckPostalCode();
@@ -41,6 +42,19 @@ export class TabAboutPage implements OnInit {
 
   openFeedbackPopup(): void {
     this.isFeedbackPopupOpen = true; // Open the feedback modal
+  }
+
+  test(): void {
+    /* 
+ this.contractorListingsService.ContractorListings(undefined, 'FL', undefined, 'electrical').subscribe({
+      next: (response) => console.log('Response:', response),
+      error: (error) => console.error('Error:', error),
+    });
+     */
+    this.contractorListingsService.ContractorListings('Jacksonville', 'FL', '322', 'Lawn Care').subscribe({
+      next: (response) => console.log('Response:', response),
+      error: (error) => console.error('Error:', error),
+    });
   }
 
   closeFeedbackPopup(): void {
