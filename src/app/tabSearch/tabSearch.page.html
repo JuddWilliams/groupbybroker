@@ -17,20 +17,6 @@
               <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
               <ion-select-option value="Pool maintenance">Pool maintenance</ion-select-option>  
               <ion-select-option value="Poop scoop">Poop scoop</ion-select-option>
-          
-              <!--  potentials        
-                <ion-select-option value="Heating & cooling filters">Heating & cooling filters</ion-select-option>
-                <ion-select-option value="gutter cleaning ">gutter cleaning </ion-select-option>      
-                <ion-select-option value="pet grooming">pet grooming</ion-select-option>
-                <ion-select-option value="power washing">power washing</ion-select-option>
-                <ion-select-option value="window cleaning">window cleaning</ion-select-option>
-                <ion-select-option value="chimney sweeping">chimney sweeping</ion-select-option>
-                <ion-select-option value="automotive: oil change, tire rotation, battery, other">automotive: oil change, tire rotation, battery, other</ion-select-option>
-                <ion-select-option value="car detailing">car detailing</ion-select-option>
-                <ion-select-option value="massage">massage</ion-select-option>
-                <ion-select-option value="Haircuts and styling memberships">Haircuts and styling memberships</ion-select-option>
-                <ion-select-option value="Nail care (manicures, pedicures)">Nail care (manicures, pedicures)</ion-select-option>
-                <ion-select-option value="Skincare treatments (e.g., facials)">Skincare treatments (e.g., facials)</ion-select-option> -->
             </ion-select>        
             <!-- other options
             <ion-select label="What are you intested in? " label-placement="floating">
@@ -42,7 +28,7 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" >
-             Address(s) Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button>
+             Address(s) Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress.street }}, {{ targetAddress.city }}, {{ targetAddress.state }} {{ targetAddress.postalCode }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button>
               <ion-alert
               trigger="present-alert"
               header="Please enter address"
@@ -52,17 +38,17 @@
           </ion-col>
         </ion-row>
         <ion-row>      
-          <ion-col size="12" size-md="6" size-lg="4">                  
+          <ion-col size="12" size-md="6" size-lg="8">                  
             <div class="map-container">
               <google-map [options]="mapOptions">
-                <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
-                <map-marker *ngFor="let addressObj of withinRangeAddresses" [position]="getLatLng(addressObj)"></map-marker>
+                <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"  ></map-marker>
+                <map-marker *ngFor="let addressObj of withinRangeAddresses" label="{{addressObj.address.street}}" [position]="getLatLng(addressObj)" [icon]="rangeIcon"></map-marker>
               </google-map>
             </div>
           </ion-col>  
-          <ion-col size="12" size-md="4">            
+          <ion-col size="12" size-md="4" size-lg="3">            
             <ul>
-              <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address }}</li>
+              <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address.street }}, {{ addressObj.address.city }}, {{ addressObj.address.state }} {{ addressObj.address.postalCode }}</li>
             </ul>
           </ion-col>
         </ion-row>

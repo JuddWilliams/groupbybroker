@@ -51,7 +51,7 @@ export class TabAboutPage implements OnInit {
       error: (error) => console.error('Error:', error),
     });
      */
-    this.contractorListingsService.ContractorListings('Jacksonville', 'FL', '322', 'Lawn Care').subscribe({
+    this.contractorListingsService.ContractorListings(undefined, 'FL', '32', 'Lawn Care').subscribe({
       next: (response) => console.log('Response:', response),
       error: (error) => console.error('Error:', error),
     });

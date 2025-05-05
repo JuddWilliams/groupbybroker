@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, AlertInput, IonInput, ToastController, Platform } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocationService } from '../services/location.service';
+import { ContractorListingsService } from '../services/contractor-listings.service';
+import { state } from '@angular/animations';
+import { Address } from '../models/address';
 
 @Component({
   selector: 'app-tabSearch',
@@ -12,8 +15,7 @@ import { LocationService } from '../services/location.service';
 export class TabSearchPage implements OnInit {
 
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
-
-  targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
+  
   errorMessage: string | null = null;
   isSmallViewport: boolean = false; // Flag to track if the viewport is small
   numberOfContractorsInArea: number = 5; 
@@ -29,7 +31,14 @@ export class TabSearchPage implements OnInit {
       text: 'OK',
       handler: (data: any) => {
         if (data.zipCode && data.zipCode.length === 5) {
-          this.targetAddress = data.streetAddress ? `${data.streetAddress}, ${data.zipCode}` : `${data.zipCode}`;
+          //this.targetAddress = data.streetAddress ? `${data.streetAddress}, ${data.zipCode}` : `${data.zipCode}`;
+          // during conversion to object, i did this. may have broken. 
+          this.targetAddress = {
+            street: data.streetAddress || '',
+            city: '',
+            state: '',
+            postalCode: data.zipCode
+          };
           this.refreshMap(); 
           return true; // Allow the alert to be dismissed
         } else {
@@ -61,15 +70,8 @@ export class TabSearchPage implements OnInit {
 
   findRadius: number = 0.5; // In miles
 
-  addresses = [
-    '4225 Harbour Island Drive, Jacksonville, FL 32225',
-    '4325 Harbour Island Drive, Jacksonville, FL 32225',
-    '11269 Island Club Ln, Jacksonville, FL 32225',
-    '1794 Girvin Rd, Jacksonville, FL 32225'
-  ];
-
   targetLocation: google.maps.LatLngLiteral | undefined;
-  withinRangeAddresses: { address: string, location: google.maps.LatLngLiteral }[] = [];
+  withinRangeAddresses: {  address: Address, location: google.maps.LatLngLiteral }[] = [];
 
   mapOptions: google.maps.MapOptions = {
     center: { lat: 0, lng: 0 },
@@ -77,14 +79,52 @@ export class TabSearchPage implements OnInit {
     mapTypeControl: true,
   };
 
+  //targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
+  targetAddress: Address = { street: '4322 Harbour Island Drive', city: 'Jacksonville', state: 'FL', postalCode: '32225' };
+  // const exampleAddress: Address = {
+  //   street: '11269 Island Club Ln',
+  //   city: 'Jacksonville',
+  //   state: 'FL',
+  //   postalCode: '32225',
+  // };
+  addresses: Address[] = [
+    { street: '11269 Island Club Ln', city: 'Jacksonville', state: 'FL', postalCode: '32225' },
+    { street: '9 Harbor View Lane', city: 'Toms River', state: 'NJ', postalCode: '08753' }
+  ];
+
+  // Custom icons for markers
+  targetIcon = {
+    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red marker for the target
+    scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
+  };
+
+  rangeIcon = {
+    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Blue marker for withinRangeAddresses
+    scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
+  };
+
+
   constructor(
     private alertController: AlertController,
     private toastController: ToastController,
     private platform: Platform,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private contractorListingsService: ContractorListingsService
   ) {}
 
   async ngOnInit() {
+    this.contractorListingsService.ContractorListings(undefined, 'FL', '32', 'Lawn Care').subscribe({
+      next: (response) => 
+        {
+          console.log('ContractorListings Response:', response);
+          this.addresses = response.map((contractor: any) => {;        
+            return { street: contractor.street, city: contractor.city, state: contractor.state, postalCode: contractor.postalCode  };
+          });
+          console.log('ContractorListings Addresses:', this.addresses);
+        },
+      error: (error) => console.error('ContractorListings Error:', error),
+    });
+
     this.platform.ready().then(() => {
       this.checkViewportSize(); // Check the viewport size after the platform is ready
       this.refreshMap();
@@ -198,11 +238,24 @@ export class TabSearchPage implements OnInit {
     });
   }
 
-  geocodeAddress(address: string, callback: (location: google.maps.LatLngLiteral) => void) {
+  geocodeAddress(address: Address, callback: (location: google.maps.LatLngLiteral) => void) {
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address }, (results, status) => {
-      if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
-        const location = results[0].geometry.location;
+    
+    //geocoder.geocode({ address }, (results, status) => {
+      geocoder.geocode( 
+      {
+        componentRestrictions: {
+          route: address.street, // Street name
+          locality: address.city, // City
+          administrativeArea: address.state, // State
+          postalCode: address.postalCode, // ZIP code
+          country: 'US', // Restrict to the United States (optional)
+        },
+      }, 
+      
+      (results, status) => {
+      if (status === google.maps.GeocoderStatus.OK && results && results[0]) {        
+        const location = results[0].geometry.location;        
         const lat = location.lat();
         const lng = location.lng();
         callback({ lat, lng });
@@ -211,15 +264,16 @@ export class TabSearchPage implements OnInit {
         console.error('Geocode was not successful for the following reason: ' + status);
         this.presentToast('Geocode was not successful for the following reason: ' + status);
       }
-    });
+      }
+    );
   }
 
   async checkAddressesWithinRange() {
     this.withinRangeAddresses = []; // Clear previous results
-    const processedAddresses = new Set<string>(); // Use a Set to track processed addresses
-
+  
     const geocodePromises = this.addresses.map((address) =>
       new Promise<void>((resolve) => {
+        const addressString = `${address.street}, ${address.city}, ${address.state} ${address.postalCode}`;
         this.geocodeAddress(address, (location) => {
           if (this.targetLocation) {
             const targetLocation = new google.maps.LatLng(this.targetLocation);
@@ -230,12 +284,9 @@ export class TabSearchPage implements OnInit {
                 addressLocation
               ) / 1609.34; // Convert meters to miles
 
-            if (distance <= this.findRadius) {
-              // Check if the address is already in the Set
-              if (!processedAddresses.has(address)) {
-                this.withinRangeAddresses.push({ address, location });
-                processedAddresses.add(address); // Add the address to the Set
-              }
+            if (distance <= this.findRadius) {      
+              console.log('TBD street:', address);       
+              this.withinRangeAddresses.push({ address, location });             
             }
           }
           resolve(); // Resolve the promise when geocoding is complete
@@ -259,7 +310,7 @@ export class TabSearchPage implements OnInit {
     this.checkAddressesWithinRange();
   }
 
-  getLatLng(addressObj: { address: string, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
+  getLatLng(addressObj: { address: any, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
     return addressObj.location;
   }
 
