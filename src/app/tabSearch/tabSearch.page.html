@@ -28,7 +28,14 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" >
-             Address(s) Within <b>{{ findRadius }}</b> Miles of <b>{{ targetAddress.street }}, {{ targetAddress.city }}, {{ targetAddress.state }} {{ targetAddress.postalCode }}</b> <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button>
+             Address(s) Within <b>{{ findRadius }}</b> Miles of <b>
+              {{ targetAddress.street }}
+              <span *ngIf="targetAddress.city">, {{ targetAddress.city }}</span>
+              <span *ngIf="targetAddress.state">, {{ targetAddress.state }}</span>          
+              <span *ngIf="!targetAddress.city && !targetAddress.state">, </span>    
+              {{ targetAddress.postalCode }}
+            </b> 
+              <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button>
               <ion-alert
               trigger="present-alert"
               header="Please enter address"
@@ -38,7 +45,7 @@
           </ion-col>
         </ion-row>
         <ion-row>      
-          <ion-col size="12" size-md="6" size-lg="8">                  
+          <ion-col size="12" size-md="8" size-lg="6">                  
             <div class="map-container">
               <google-map [options]="mapOptions">
                 <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"  ></map-marker>
@@ -46,7 +53,7 @@
               </google-map>
             </div>
           </ion-col>  
-          <ion-col size="12" size-md="4" size-lg="3">            
+          <ion-col size="12" size-md="4" size-lg="6">            
             <ul>
               <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address.street }}, {{ addressObj.address.city }}, {{ addressObj.address.state }} {{ addressObj.address.postalCode }}</li>
             </ul>

@@ -113,7 +113,7 @@ export class TabSearchPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.contractorListingsService.ContractorListings(undefined, 'FL', '32', 'Lawn Care').subscribe({
+    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, 'Lawn Care').subscribe({
       next: (response) => 
         {
           console.log('ContractorListings Response:', response);
@@ -203,7 +203,7 @@ export class TabSearchPage implements OnInit {
   }
 
   async presentToast(message: string) {
-    const toast = await this.toastController.create({
+    const toast = await this.toastController.create({    
       message: message,
       duration: 3000,
       position: 'top',
@@ -229,7 +229,7 @@ export class TabSearchPage implements OnInit {
   refreshMap() {
     this.geocodeAddress(this.targetAddress, (location) => {
       this.targetLocation = location;
-      this.mapOptions = {
+      this.mapOptions = {       
         center: location,
         zoom: this.isSmallViewport ? 12 : 15, // Adjust zoom level based on viewport size
         mapTypeControl: !this.isSmallViewport,
@@ -242,12 +242,14 @@ export class TabSearchPage implements OnInit {
     const geocoder = new google.maps.Geocoder();
     
     //geocoder.geocode({ address }, (results, status) => {
+    console.log('xxxxxGeocoding address:', address); // Log the address being geocoded
       geocoder.geocode( 
       {
         componentRestrictions: {
           route: address.street, // Street name
-          locality: address.city, // City
-          administrativeArea: address.state, // State
+          // c!!!  ant be empty .. so o remmoved for now until i improve dlg. 
+          // locality: address.city, // City
+          // administrativeArea: address.state, // State
           postalCode: address.postalCode, // ZIP code
           country: 'US', // Restrict to the United States (optional)
         },
