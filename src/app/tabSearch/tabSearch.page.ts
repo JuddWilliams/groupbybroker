@@ -4,7 +4,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { LocationService } from '../services/location.service';
 import { ContractorListingsService } from '../services/contractor-listings.service';
 import { state } from '@angular/animations';
-import { Address } from '../models/address';
+import { Address, ContractorListing } from '../models/address';
 
 @Component({
   selector: 'app-tabSearch',
@@ -71,7 +71,7 @@ export class TabSearchPage implements OnInit {
   findRadius: number = 0.5; // In miles
 
   targetLocation: google.maps.LatLngLiteral | undefined;
-  withinRangeAddresses: {  address: Address, location: google.maps.LatLngLiteral }[] = [];
+  withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
 
   mapOptions: google.maps.MapOptions = {
     center: { lat: 0, lng: 0 },
@@ -87,10 +87,11 @@ export class TabSearchPage implements OnInit {
   //   state: 'FL',
   //   postalCode: '32225',
   // };
-  addresses: Address[] = [
-    { street: '11269 Island Club Ln', city: 'Jacksonville', state: 'FL', postalCode: '32225' },
-    { street: '9 Harbor View Lane', city: 'Toms River', state: 'NJ', postalCode: '08753' }
-  ];
+  
+  contractorListings: ContractorListing[] = [];
+  //   { street: '11269 Island Club Ln', city: 'Jacksonville', state: 'FL', postalCode: '32225' },
+  //   { street: '9 Harbor View Lane', city: 'Toms River', state: 'NJ', postalCode: '08753' }
+  // ];
 
   // Custom icons for markers
   targetIcon = {
@@ -99,7 +100,7 @@ export class TabSearchPage implements OnInit {
   };
 
   rangeIcon = {
-    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Blue marker for withinRangeAddresses
+    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Blue marker for withinRangeContractorListings
     scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
   };
 
@@ -117,10 +118,31 @@ export class TabSearchPage implements OnInit {
       next: (response) => 
         {
           console.log('ContractorListings Response:', response);
-          this.addresses = response.map((contractor: any) => {;        
-            return { street: contractor.street, city: contractor.city, state: contractor.state, postalCode: contractor.postalCode  };
+          // this.contractorListings = response.map((contractorListing: any) => {        
+          //   return { street: contractorListing.street, city: contractorListing.city, state: contractorListing.state, postalCode: contractorListing.postalCode  };
+          // });
+          // this.contractorListings = response.map((contractorListing: ContractorListing) => {        
+          //   return { street: contractorListing.address.street, city: contractorListing.address.city, state: contractorListing.address.state, postalCode: contractorListing.address.postalCode  };
+          // });
+         
+          this.contractorListings = response.map((contractorListing: any) => {
+            return {
+              address: {
+                street: contractorListing.street || '',
+                city: contractorListing.city || '',
+                state: contractorListing.state || '',
+                postalCode: contractorListing.postalCode || '',
+              },
+              company: {
+                id:  -1,
+                companyName: contractorListing.businessName || '',               
+              },
+              type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
+              private: contractorListing.private || false, // Assuming 'private' is a property in the response
+            } as ContractorListing;
           });
-          console.log('ContractorListings Addresses:', this.addresses);
+
+          console.log('ContractorListings contractorListings:', this.contractorListings);
         },
       error: (error) => console.error('ContractorListings Error:', error),
     });
@@ -128,7 +150,7 @@ export class TabSearchPage implements OnInit {
     this.platform.ready().then(() => {
       this.checkViewportSize(); // Check the viewport size after the platform is ready
       this.refreshMap();
-      this.onRadiusChange(); // Ensure addresses within range are displayed by default
+      this.onRadiusChange(); // Ensure contractorListings within range are displayed by default
       //this.getUserLocation(); // Get user's location on page load
       this.getUserLocationAndCheckPostalCode();
     });
@@ -242,12 +264,12 @@ export class TabSearchPage implements OnInit {
     const geocoder = new google.maps.Geocoder();
     
     //geocoder.geocode({ address }, (results, status) => {
-    console.log('xxxxxGeocoding address:', address); // Log the address being geocoded
+    console.log('Geocoding address:', address); // Log the address being geocoded
       geocoder.geocode( 
       {
         componentRestrictions: {
           route: address.street, // Street name
-          // c!!!  ant be empty .. so o remmoved for now until i improve dlg. 
+          // cant be empty .. so o remmoved for now until i improve dlg. 
           // locality: address.city, // City
           // administrativeArea: address.state, // State
           postalCode: address.postalCode, // ZIP code
@@ -271,12 +293,13 @@ export class TabSearchPage implements OnInit {
   }
 
   async checkAddressesWithinRange() {
-    this.withinRangeAddresses = []; // Clear previous results
+    this.withinRangeContractorListings = []; // Clear previous results
   
-    const geocodePromises = this.addresses.map((address) =>
+    const geocodePromises = this.contractorListings.map((contractorListing) =>
       new Promise<void>((resolve) => {
-        const addressString = `${address.street}, ${address.city}, ${address.state} ${address.postalCode}`;
-        this.geocodeAddress(address, (location) => {
+        console.log('xxxxGeocoding contractor address:', contractorListing); // Log the address being geocoded
+        const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
+        this.geocodeAddress(contractorListing.address, (location) => {
           if (this.targetLocation) {
             const targetLocation = new google.maps.LatLng(this.targetLocation);
             const addressLocation = new google.maps.LatLng(location);
@@ -287,8 +310,8 @@ export class TabSearchPage implements OnInit {
               ) / 1609.34; // Convert meters to miles
 
             if (distance <= this.findRadius) {      
-              console.log('TBD street:', address);       
-              this.withinRangeAddresses.push({ address, location });             
+              console.log('TBD street:', contractorListing);       
+              this.withinRangeContractorListings.push({ contractorListing, location });             
             }
           }
           resolve(); // Resolve the promise when geocoding is complete
@@ -300,19 +323,19 @@ export class TabSearchPage implements OnInit {
     await Promise.all(geocodePromises);
 
     // Remove duplicates from withinRangeAddresses (if any)
-    this.withinRangeAddresses = this.withinRangeAddresses.filter(
+    this.withinRangeContractorListings = this.withinRangeContractorListings.filter(
       (value, index, self) =>
-        index === self.findIndex((t) => t.address === value.address)
+        index === self.findIndex((t) => t.contractorListing === value.contractorListing)
     );
 
-    console.log('Final withinRangeAddresses:', this.withinRangeAddresses);
+    console.log('Final withinRangeContractorListings:', this.withinRangeContractorListings);
   }
 
   onRadiusChange() {
     this.checkAddressesWithinRange();
   }
 
-  getLatLng(addressObj: { address: any, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
+  getLatLng(addressObj: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
     return addressObj.location;
   }
 

@@ -28,7 +28,7 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" >
-             Address(s) Within <b>{{ findRadius }}</b> Miles of <b>
+             Accounts within <b>{{ findRadius }}</b> Miles of target address:<b>
               {{ targetAddress.street }}
               <span *ngIf="targetAddress.city">, {{ targetAddress.city }}</span>
               <span *ngIf="targetAddress.state">, {{ targetAddress.state }}</span>          
@@ -49,13 +49,30 @@
             <div class="map-container">
               <google-map [options]="mapOptions">
                 <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"  ></map-marker>
-                <map-marker *ngFor="let addressObj of withinRangeAddresses" label="{{addressObj.address.street}}" [position]="getLatLng(addressObj)" [icon]="rangeIcon"></map-marker>
+                <map-marker
+                  *ngFor="let addressObj of withinRangeContractorListings"
+                  [position]="getLatLng(addressObj)"
+                  [icon]="rangeIcon"
+                  [label]="{
+                    text: 
+                          addressObj.contractorListing.company.companyName, 
+                    color: 'black',
+                    fontSize: '12px'
+                  }"
+                ></map-marker>
               </google-map>
             </div>
           </ion-col>  
           <ion-col size="12" size-md="4" size-lg="6">            
             <ul>
-              <li *ngFor="let addressObj of withinRangeAddresses">{{ addressObj.address.street }}, {{ addressObj.address.city }}, {{ addressObj.address.state }} {{ addressObj.address.postalCode }}</li>
+              <li style="padding-bottom: 7px;"  *ngFor="let addressObj of withinRangeContractorListings">{{addressObj.contractorListing.type}} Services by {{addressObj.contractorListing.company.companyName}}<br> 
+                <sup> at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{ addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }}</sup>
+                <div style="font-size: small;" >
+                  phone: <a href="tel:904-386-6129">904-386-6129</a><br>
+                  email: <a href="mailto:juddsurfs@gmail.com">juddsurfs&#64;gmail.com</a><br>
+                  website: <a target="_blank" href="https://www.google.com">website: www.google.com</a>
+                </div>
+              </li>
             </ul>
           </ion-col>
         </ion-row>
