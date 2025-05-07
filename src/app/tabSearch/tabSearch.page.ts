@@ -16,6 +16,7 @@ export class TabSearchPage implements OnInit {
 
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
   
+  selectedIndustry: string = 'Lawn care'; 
   errorMessage: string | null = null;
   isSmallViewport: boolean = false; // Flag to track if the viewport is small
   numberOfContractorsInArea: number = 5; 
@@ -68,15 +69,17 @@ export class TabSearchPage implements OnInit {
     },
   ];
 
-  findRadius: number = 0.5; // In miles
+  findRadius: number = 2;//0.5; // In miles
 
   targetLocation: google.maps.LatLngLiteral | undefined;
   withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
 
   mapOptions: google.maps.MapOptions = {
-    center: { lat: 0, lng: 0 },
-    zoom: 15,
-    mapTypeControl: true,
+    // see refreshMap() function
+
+    // center: { lat: 0, lng: 0 },
+    // zoom: 15,
+    // mapTypeControl: true,
   };
 
   //targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
@@ -114,7 +117,7 @@ export class TabSearchPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, 'Lawn Care').subscribe({
+    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
       next: (response) => 
         {
           console.log('ContractorListings Response:', response);
@@ -142,11 +145,44 @@ export class TabSearchPage implements OnInit {
             } as ContractorListing;
           });
 
+          this.platFormReady();
+
           console.log('ContractorListings contractorListings:', this.contractorListings);
         },
       error: (error) => console.error('ContractorListings Error:', error),
     });
+    
+  }
 
+  onIndustryChange() {
+    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
+      next: (response) => {
+        console.log('ContractorListings Response:', response);
+        this.contractorListings = response.map((contractorListing: any) => {
+          return {
+            address: {
+              street: contractorListing.street || '',
+              city: contractorListing.city || '',
+              state: contractorListing.state || '',
+              postalCode: contractorListing.postalCode || '',
+            },
+            company: {
+              id:  -1,
+              companyName: contractorListing.businessName || '',               
+            },
+            type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
+            private: contractorListing.private || false, // Assuming 'private' is a property in the response
+          } as ContractorListing;
+        });
+
+        this.platFormReady();
+      },
+      error: (error) => console.error('ContractorListings Error:', error),
+    });
+    
+  }
+
+  async platFormReady() {
     this.platform.ready().then(() => {
       this.checkViewportSize(); // Check the viewport size after the platform is ready
       this.refreshMap();
@@ -179,7 +215,7 @@ export class TabSearchPage implements OnInit {
         if (postalCode.startsWith('322') ) {// if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold)
           { 
-            this.locationNote = `Good news, as we expand to new markets it's free for your postal code ${postalCode}.`; // Update button text
+            this.locationNote = `*As we expand to new markets it's free for your area ${postalCode}.`; // Update button text
             console.error(this.locationNote);
             this.locationService.showFreeAlert();
           }
@@ -191,7 +227,7 @@ export class TabSearchPage implements OnInit {
         }
         else // if postal code AND if below threshold
         {
-            this.locationNote = `Good news, as we expand to new markets it's free for your postal code ${postalCode}.`; // Update button text
+            this.locationNote = `*As we expand to new markets it's free for your area ${postalCode}.`; // Update button text
             console.error(this.locationNote);
             this.locationService.showFreeAlert();
         }
@@ -253,8 +289,9 @@ export class TabSearchPage implements OnInit {
       this.targetLocation = location;
       this.mapOptions = {       
         center: location,
-        zoom: this.isSmallViewport ? 12 : 15, // Adjust zoom level based on viewport size
+        zoom: this.isSmallViewport ? 15 : 15, // Adjust zoom level based on viewport size
         mapTypeControl: !this.isSmallViewport,
+        //mapTypeId: 'satellite', // Set the map type to satellite       
       };
       this.checkAddressesWithinRange();
     });
@@ -342,5 +379,8 @@ export class TabSearchPage implements OnInit {
   selectText() {
     this.findRadiusInput.getInputElement().then(input => input.select());
   }
+
+ 
+  
 
 }

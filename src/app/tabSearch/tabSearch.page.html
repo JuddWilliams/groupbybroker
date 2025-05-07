@@ -7,11 +7,11 @@
   <ion-card>    
       <ion-grid>
         <ion-row>
-          <ion-col size-md="3" size-lg="1">
+          <ion-col size-md="3" size-lg="2">
             <ion-input label="Lookup range (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>          
           </ion-col>   
-          <ion-col size-md="3" size-lg="3">      
-            <ion-select label="Industry? " label-placement="floating">
+          <ion-col>      
+            <ion-select label="Industry? " label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
               <ion-select-option value="Lawn care">Landscaping & Lawn care</ion-select-option>
               <ion-select-option value="Pesticides">Pesticides</ion-select-option>
               <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>

@@ -12,7 +12,7 @@ import { ContractorListingsService } from '../services/contractor-listings.servi
 export class TabAboutPage implements OnInit {
   
   numberOfContractorsInArea: number = 0;
-  readonly numberOfContractorsInAreaThreshold: number = 5;
+  readonly numberOfContractorsInAreaThreshold: number = 500;
   isPopupOpen = false;
   locationNote: string = '';
   reviews = [
@@ -123,15 +123,14 @@ export class TabAboutPage implements OnInit {
         if (postalCode.startsWith('322')) {
           // if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
-            this.locationNote = `Good news, as we expand to new markets for a limited time it's free for your postal code ${postalCode}. *Expires ${dateExpiring}*`; // Update button text
+            this.locationNote = `*The service is free as we expand to new markets area ${postalCode}. `; // Update button text
             this.locationService.showFreeAlert();
           } else {
             this.locationNote = `*There are ${this.numberOfContractorsInArea} other Contractors using our service in this area.`;
           }
         } else {
           // if postal code AND if below threshold
-          this.locationNote = `Good news, as we expand to new markets for a limited time 
-          it's free for your postal code ${postalCode}. Expires ${dateExpiring}`; // Update button text
+          this.locationNote = `*The service is free as we expand to new markets in area ${postalCode}.`; // Update button text
           this.locationService.showFreeAlert();
         }
       } else {
