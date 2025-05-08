@@ -114,20 +114,24 @@ export class TabAboutPage implements OnInit {
   async getUserLocationAndCheckPostalCode() { 
     const location = await this.locationService.getUserLocation();
     if (location) {
-      const postalCode = await this.locationService.getPostalCodeFromCoordinates(
+      // const postalCode = await this.locationService.getPostalCodeFromCoordinates(
+      //   location.latitude,
+      //   location.longitude
+      // );
+      const address = await this.locationService.getPostalCodeFromCoordinates(
         location.latitude,
         location.longitude
       );
 
-      console.log(`Postal Code: ${postalCode}`);
+      console.log(`Postal Code: ${address.postalCode}`);
 
       // Validate that postalCode is a numeric value
-      if (postalCode && /^\d+$/.test(postalCode)) {
+      if (address.postalCode && /^\d+$/.test(address.postalCode)) {
         let dateExpiring = this.getFirstDayOfNextMonth();
-        if (postalCode.startsWith('322')) {
+        if (address.postalCode.startsWith('322')) {
           // if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
-            this.locationNote = `*The service is free as we expand to new markets the area ${postalCode}. `; // Update button text
+            this.locationNote = `*The service is free as we expand to new markets the area ${address.postalCode}. `; // Update button text
             //this.locationService.showFreeAlert();
             this.presentToast(this.locationNote, 'success', 4000);
           } else {
@@ -135,13 +139,13 @@ export class TabAboutPage implements OnInit {
           }
         } else {
           // if postal code AND if below threshold
-          this.locationNote = `*The service is free as we expand to new markets in the area ${postalCode}.`; // Update button text
+          this.locationNote = `*The service is free as we expand to new markets in the area ${address.postalCode}.`; // Update button text
           //this.locationService.showFreeAlert();
           this.presentToast(this.locationNote, 'success', 4000);
         }
       } else {
         // Handle invalid or non-numeric postal code
-        console.error('Invalid postal code:', postalCode);
+        console.error('Invalid postal code:', address.postalCode);
         this.locationNote = 'Note: We were unable to determine your location.';
       }
     }

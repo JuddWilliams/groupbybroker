@@ -81,15 +81,9 @@ export class TabSearchPage implements OnInit {
     // zoom: 15,
     // mapTypeControl: true,
   };
-
-  //targetAddress = '4322 Harbour Island Drive, Jacksonville, FL 32225';
-  targetAddress: Address = { street: '4322 Harbour Island Drive', city: 'Jacksonville', state: 'FL', postalCode: '32225' };
-  // const exampleAddress: Address = {
-  //   street: '11269 Island Club Ln',
-  //   city: 'Jacksonville',
-  //   state: 'FL',
-  //   postalCode: '32225',
-  // };
+  
+  //targetAddress: Address = { street: '4322 Harbour Island Drive', city: 'Jacksonville', state: 'FL', postalCode: '32225' };
+  targetAddress: Address = { street: '', city: '', state: '', postalCode: '' };
   
   contractorListings: ContractorListing[] = [];
   //   { street: '11269 Island Club Ln', city: 'Jacksonville', state: 'FL', postalCode: '32225' },
@@ -182,14 +176,32 @@ export class TabSearchPage implements OnInit {
     
   }
 
+  // async platFormReady() {
+  //   this.platform.ready().then(() => {
+  //     this.getUserLocationAndCheckPostalCode();
+  //     this.checkViewportSize(); // Check the viewport size after the platform is ready
+  //     this.refreshMap();        
+  //   });
+  // }
+
   async platFormReady() {
-    this.platform.ready().then(() => {
-      this.getUserLocationAndCheckPostalCode();
-      this.checkViewportSize(); // Check the viewport size after the platform is ready
-      this.refreshMap();
-      this.onRadiusChange(); // Ensure contractorListings within range are displayed by default
-      //this.getUserLocation(); // Get user's location on page load
-      
+    await this.platform.ready(); // Wait for the platform to be ready
+    await this.getUserLocationAndCheckPostalCode(); // Wait for location and postal code check
+    this.checkViewportSize(); // Execute viewport size check
+    await this.refreshMap(); // Wait for the map to refresh
+  }
+
+
+  refreshMap() {
+    this.geocodeAddress(this.targetAddress, (location) => {
+      this.targetLocation = location;
+      this.mapOptions = {       
+        center: location,
+        zoom: this.isSmallViewport ? 15 : 15, // Adjust zoom level based on viewport size
+        mapTypeControl: !this.isSmallViewport,
+        //mapTypeId: 'satellite', // Set the map type to satellite       
+      };
+      this.checkAddressesWithinRange();
     });
   }
 
@@ -197,12 +209,16 @@ export class TabSearchPage implements OnInit {
     const location = await this.locationService.getUserLocation();
     console.log('XXXUser location:', location); // Log the retrieved location
     if (location) {
-      const postalCode = await this.locationService.getPostalCodeFromCoordinates(
+      // const postalCode = await this.locationService.getPostalCodeFromCoordinates(
+      //   location.latitude,
+      //   location.longitude
+      // );
+      this.targetAddress = await this.locationService.getPostalCodeFromCoordinates(
         location.latitude,
         location.longitude
       );
 
-      console.log(`Postal Code: ${postalCode}`);
+      console.log(`Postal Code: ${this.targetAddress.postalCode}`);
 
       // if (postalCode.startsWith('322') && this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
       //   this.locationService.showFreeAlert();
@@ -212,12 +228,12 @@ export class TabSearchPage implements OnInit {
       // else {
       //   this.locationNote = "Note: We were unable to determine your location."; 
       // }
-      if (postalCode && /^\d+$/.test(postalCode)) {    
+      if (this.targetAddress.postalCode && /^\d+$/.test(this.targetAddress.postalCode)) {    
 
-        if (postalCode.startsWith('322') ) {// if postal code AND if below threshold
+        if (this.targetAddress.postalCode.startsWith('322') ) {// if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold)
           { 
-            this.locationNote = `*As we expand to new markets it's free for your area ${postalCode}.`; // Update button text
+            this.locationNote = `*As we expand to new markets it's free for your area ${this.targetAddress.postalCode}.`; // Update button text
             console.error(this.locationNote);
             this.locationService.showFreeAlert();
           }
@@ -229,14 +245,14 @@ export class TabSearchPage implements OnInit {
         }
         else // if postal code AND if below threshold
         {
-            this.locationNote = `*As we expand to new markets it's free for your area ${postalCode}.`; // Update button text
+            this.locationNote = `*As we expand to new markets it's free for your area ${this.targetAddress.postalCode}.`; // Update button text
             console.error(this.locationNote);
             this.locationService.showFreeAlert();
         }
       } else {
         // Handle invalid or non-numeric postal code
         
-        this.locationNote = 'Invalid postal code.', postalCode;
+        this.locationNote = 'Invalid postal code.', this.targetAddress.postalCode;
         console.error(this.locationNote);        
       }
     }
@@ -286,37 +302,23 @@ export class TabSearchPage implements OnInit {
     }
   }
 
-  refreshMap() {
-    this.geocodeAddress(this.targetAddress, (location) => {
-      this.targetLocation = location;
-      this.mapOptions = {       
-        center: location,
-        zoom: this.isSmallViewport ? 15 : 15, // Adjust zoom level based on viewport size
-        mapTypeControl: !this.isSmallViewport,
-        //mapTypeId: 'satellite', // Set the map type to satellite       
-      };
-      this.checkAddressesWithinRange();
-    });
-  }
-
   geocodeAddress(address: Address, callback: (location: google.maps.LatLngLiteral) => void) {
     const geocoder = new google.maps.Geocoder();
     
     //geocoder.geocode({ address }, (results, status) => {
-    console.log('Geocoding address:', address); // Log the address being geocoded
-      geocoder.geocode( 
-      {
-        componentRestrictions: {
-          route: address.street, // Street name
-          // cant be empty .. so o remmoved for now until i improve dlg. 
-          // locality: address.city, // City
-          // administrativeArea: address.state, // State
-          postalCode: address.postalCode, // ZIP code
-          country: 'US', // Restrict to the United States (optional)
-        },
-      }, 
-      
-      (results, status) => {
+    console.log('GeocodingAddress:', address); // Log the address being geocoded
+    geocoder.geocode( 
+    {
+      componentRestrictions: {
+        route: address.street, // Street name
+        // cant be empty .. so o remmoved for now until i improve dlg. 
+        // locality: address.city, // City
+        // administrativeArea: address.state, // State
+        postalCode: address.postalCode, // ZIP code
+        country: 'US', // Restrict to the United States (optional)
+      },
+    },       
+    (results, status) => {
       if (status === google.maps.GeocoderStatus.OK && results && results[0]) {        
         const location = results[0].geometry.location;        
         const lat = location.lat();
@@ -327,8 +329,7 @@ export class TabSearchPage implements OnInit {
         console.error('Geocode was not successful for the following reason: ' + status);
         this.presentToast('Geocode was not successful for the following reason: ' + status);
       }
-      }
-    );
+    });
   }
 
   async checkAddressesWithinRange() {

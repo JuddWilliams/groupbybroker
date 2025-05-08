@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
+import { Address } from '../models/address';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,10 @@ export class LocationService {
 
   async getUserLocation(): Promise<{ latitude: number; longitude: number } | null> {
     try {
-      const position = await Geolocation.getCurrentPosition();
+      //const position = await Geolocation.getCurrentPosition();
+      const position = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true, // Request high accuracy
+      });
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
 
@@ -22,7 +26,7 @@ export class LocationService {
     }
   }
 
-  async getPostalCodeFromCoordinates(latitude: number, longitude: number): Promise<string> {
+  async getPostalCodeFromCoordinates(latitude: number, longitude: number): Promise<Address> {
     const apiKey = 'AIzaSyCkX46SX8MpXB0cBsNgTLov1-xe19I0Q4s'; // Replace with your Google Maps API key
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
@@ -31,14 +35,38 @@ export class LocationService {
 
     if (data.results && data.results.length > 0) {
       const addressComponents = data.results[0].address_components;
+      console.log('Address Components:', addressComponents); // Log the address components for debugging
+
+
+      const streetNumberComponent = addressComponents.find((component: any) =>
+        component.types.includes('street_number')
+      );
+      console.log('Street Number Component:', streetNumberComponent); // Log the street number component for debugging     
+
+      const routeComponent = addressComponents.find((component: any) =>
+        component.types.includes('route')
+      );
+      console.log('Route Component:', routeComponent); // Log the street route component for debugging
+      
       const postalCodeComponent = addressComponents.find((component: any) =>
         component.types.includes('postal_code')
       );
+      console.log('Postal Code Component:', postalCodeComponent);
 
-      return postalCodeComponent ? postalCodeComponent.long_name : '';
+      let streetAddress =  (streetNumberComponent ? streetNumberComponent.long_name : '') + ' ' + (routeComponent ? routeComponent.long_name : ''); // Concatenate street number and route for full address
+      console.log('Street Address:', streetAddress); // Log the full street address for debugging
+      let address: Address = {
+        street: streetAddress,
+        postalCode: postalCodeComponent ? postalCodeComponent.long_name : '',        
+      };
+
+      return address;
     }
 
-    return '';
+    return {
+      street: '',
+      postalCode: ''
+    };
   }
 
   async showFreeAlert() {
