@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { AuthService } from '../services/auth.service';
 import { ContractorListingsService } from '../services/contractor-listings.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabAbout',
@@ -26,7 +27,10 @@ export class TabAboutPage implements OnInit {
   isFeedbackPopupOpen = false; // Track whether the feedback modal is open
   newFeedback = ''; // Store the user's feedback
 
-  constructor(private locationService: LocationService, private authService: AuthService, private contractorListingsService: ContractorListingsService) {}
+  constructor(private locationService: LocationService, 
+    private authService: AuthService, 
+    private contractorListingsService: ContractorListingsService,
+     private toastController: ToastController ) {}
 
   async ngOnInit() {
     this.getUserLocationAndCheckPostalCode();
@@ -123,15 +127,17 @@ export class TabAboutPage implements OnInit {
         if (postalCode.startsWith('322')) {
           // if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
-            this.locationNote = `*The service is free as we expand to new markets area ${postalCode}. `; // Update button text
-            this.locationService.showFreeAlert();
+            this.locationNote = `*The service is free as we expand to new markets the area ${postalCode}. `; // Update button text
+            //this.locationService.showFreeAlert();
+            this.presentToast(this.locationNote, 'success', 4000);
           } else {
             this.locationNote = `*There are ${this.numberOfContractorsInArea} other Contractors using our service in this area.`;
           }
         } else {
           // if postal code AND if below threshold
-          this.locationNote = `*The service is free as we expand to new markets in area ${postalCode}.`; // Update button text
-          this.locationService.showFreeAlert();
+          this.locationNote = `*The service is free as we expand to new markets in the area ${postalCode}.`; // Update button text
+          //this.locationService.showFreeAlert();
+          this.presentToast(this.locationNote, 'success', 4000);
         }
       } else {
         // Handle invalid or non-numeric postal code
@@ -149,5 +155,15 @@ export class TabAboutPage implements OnInit {
       console.error('Unable to retrieve location.');
       this.locationNote = 'Note: We were unable to determine your location.';
     }
+  }
+
+  async presentToast(message: string, color: string = 'success', duration: number = 3000, position: 'top' | 'bottom' = 'top') {
+    const toast = await this.toastController.create({    
+      message: message,
+      duration: duration,
+      position: position,
+      color: color
+    });
+    await toast.present();
   }
 }

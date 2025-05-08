@@ -184,16 +184,18 @@ export class TabSearchPage implements OnInit {
 
   async platFormReady() {
     this.platform.ready().then(() => {
+      this.getUserLocationAndCheckPostalCode();
       this.checkViewportSize(); // Check the viewport size after the platform is ready
       this.refreshMap();
       this.onRadiusChange(); // Ensure contractorListings within range are displayed by default
       //this.getUserLocation(); // Get user's location on page load
-      this.getUserLocationAndCheckPostalCode();
+      
     });
   }
 
   async getUserLocationAndCheckPostalCode() {
     const location = await this.locationService.getUserLocation();
+    console.log('XXXUser location:', location); // Log the retrieved location
     if (location) {
       const postalCode = await this.locationService.getPostalCodeFromCoordinates(
         location.latitude,
@@ -334,7 +336,7 @@ export class TabSearchPage implements OnInit {
   
     const geocodePromises = this.contractorListings.map((contractorListing) =>
       new Promise<void>((resolve) => {
-        console.log('xxxxGeocoding contractor address:', contractorListing); // Log the address being geocoded
+        console.log('Geocoding contractor address:', contractorListing); // Log the address being geocoded
         const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
         this.geocodeAddress(contractorListing.address, (location) => {
           if (this.targetLocation) {

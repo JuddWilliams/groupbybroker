@@ -105,15 +105,6 @@ export class AuthService {
     });
   
     return this.http.post(`${this.apiUrl}/newPassword`, request, { headers });
-  }
-  /*
-    login(email: string, password: string): Observable<LoginResponse> {
-    const headers = new HttpHeaders({
-      'x-api-key': this.apiKey,
-    });
-
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }, { headers });
-  }
-    */
+  } 
 
 }

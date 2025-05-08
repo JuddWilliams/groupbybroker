@@ -44,7 +44,8 @@ export class LoginPage {
       },
       error: (error) => {
         this.loading = false; // Hide spinner
-        this.errorMessage = 'Invalid credentials. Please try again.';
+        this.errorMessage = error.error;//'Invalid credentials. Please try again.';
+        console.error('Login error:', error);
       },
     });
   }
