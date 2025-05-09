@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'; // Preserving your router import
 import { AuthService } from './services/auth.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ToastController } from '@ionic/angular';
 
@@ -22,20 +22,26 @@ export class AppComponent implements OnInit {
   }
 
   checkApiHealth(): void {
+    const apiKey = environment.apiKey; // Your API key
+     const headers = new HttpHeaders({
+            'x-api-key': apiKey, // Add API key to headers
+            'Content-Type': 'application/json', // Specify JSON content type
+          });
+
     let apiUrl = environment.apiUrl + '/auth/dbhealthcheck';  
-    this.http.get(apiUrl).subscribe({
+    this.http.get(apiUrl, { headers }).subscribe({
       next: (response) => {
         console.log('API is healthy:', response);
       },
       error: (error) => {
         console.error('API health check failed:', error);
         //alert('The API is currently unavailable. Please try again later.');
-        this.presentToast('The API is currently unavailable. Please allow 30 seconds before refreshing page.', 'warning', 4000);
+        this.presentToast('The API is currently unavailable. Please allow 30 seconds before refreshing page.', 'warning', 6000, 'bottom');
       },
     });
   }
 
-  async presentToast(message: string, color: string = 'success', duration: number = 3000, position: 'top' | 'bottom' = 'top') {
+  async presentToast(message: string, color: string = 'success', duration: number = 3000, position: 'top' | 'bottom' | 'middle' = 'top' ) {
     const toast = await this.toastController.create({    
       message: message,
       duration: duration,

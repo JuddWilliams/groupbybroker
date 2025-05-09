@@ -133,7 +133,7 @@ export class TabAboutPage implements OnInit {
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
             this.locationNote = `*The service is free as we expand to new markets the area ${address.postalCode}. `; // Update button text
             //this.locationService.showFreeAlert();
-            this.presentToast(this.locationNote, 'success', 4000);
+            this.presentToast(this.locationNote, 'success', 3000);
           } else {
             this.locationNote = `*There are ${this.numberOfContractorsInArea} other Contractors using our service in this area.`;
           }
@@ -141,7 +141,7 @@ export class TabAboutPage implements OnInit {
           // if postal code AND if below threshold
           this.locationNote = `*The service is free as we expand to new markets in the area ${address.postalCode}.`; // Update button text
           //this.locationService.showFreeAlert();
-          this.presentToast(this.locationNote, 'success', 4000);
+          this.presentToast(this.locationNote, 'success', 3000);
         }
       } else {
         // Handle invalid or non-numeric postal code
