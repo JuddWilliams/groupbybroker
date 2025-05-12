@@ -8,13 +8,12 @@
         <ion-grid>
           <ion-row>
             <ion-col size="12" size-md="8">
-              <h4><i> About us. </i></h4>
-              <h3>We work to connect Customers with Service Providers in close proximity.  ~Imagine the benefits </h3>
+              <h4> How it works.</h4>
+              <h3>Using Ai, we've learned the benefits of connecting Customers with Service Providers in close proximity.</h3>
 
-              <p><ion-icon name="star-outline"></ion-icon> <i> Contractors promoted by the number of accounts in close proximity and also incentives they offer new clients. 
-                Pluse <a title="Click for more information" (click)="openPopup()">reviews</a> and  <a title="Click for more information" (click)="openPopup()">user ratings</a>.</i></p>
-              <p><ion-icon name="star-outline"></ion-icon> <i> Consumers can quickly visually compare services & incentives in the area 
-                ...or post a job for bid.  </i></p>
+              <p><ion-icon name="star-outline"></ion-icon> <i> Recognizing the cost savings when servicing an area.</i></p>               
+              <p><ion-icon name="star-outline"></ion-icon> <i> Comparing services & incentives in the area   
+                including <a title="Click for more information" (click)="openPopup()"> reviews</a>/<a title="Click for more information" (click)="openPopup()">user ratings</a>, and other factors. </i></p>
              
               
               <p> 
@@ -48,12 +47,15 @@
                     <ion-row>
                       <ion-col>
                         <h6>Consumers</h6>
-                        <p>
+                         <p>
+                          We help you find the best contractors in your area based on your needs. Whether that's pricing, level of service, or other factors.
+                                </p>   
+                        <!-- <p>
                           We all benefit from cost savings as contractors look to service accounts in close proximity.  
                           Customer satisfaction also improves as contractors work towards better reviews and higher user ratings.  
                           Many also offer referrals for your participation.
-                        </p>            
-                        <p>Search for a contractor in near proximity to you <i>or</i> post job for hire or bid.</p>          
+                        </p>             -->
+                        <p>Or just post your job for hire.</p>          
                         <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Search</ion-button>
                         <ion-button
                         size="small"
@@ -75,14 +77,14 @@
                     <ion-col>
                       <h6>Contractors</h6>
                       <div>                       
-                        <p>We welcome you to join our service and reduced costs associated with travel & preparation (time/fuel/loading equipment, etc)    </p>    
+                        <p>Grow your business while reducing costs associated with travel & preparation (time/fuel/loading equipment, etc)    </p>    
                         <ion-button
                         size="small"
                         fill="outline"
                         [routerLink]="['/login']"
                         [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
                       >
-                        Create account
+                        Start
                       </ion-button>
                         <ul>  
                           <sup>Features</sup>
@@ -140,7 +142,7 @@
                     <ion-col>
                       <div class="feedback-header">
                         
-                        <ion-button fill="clear" size="small" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
+                        What are others saying?  <ion-button fill="clear" size="small" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
                       </div>
                       <div class="review-list">
                         <ion-item *ngFor="let review of reviews" lines="none">

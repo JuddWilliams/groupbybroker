@@ -131,7 +131,7 @@ export class TabAboutPage implements OnInit {
         if (address.postalCode.startsWith('322')) {
           // if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
-            this.locationNote = `*The service is free as we expand to new markets the area ${address.postalCode}. `; // Update button text
+            this.locationNote = `*The service is free as we expand to new markets the area.`;// ${address.postalCode}. `; // Update button text
             //this.locationService.showFreeAlert();
             this.presentToast(this.locationNote, 'success', 3000);
           } else {
@@ -139,7 +139,7 @@ export class TabAboutPage implements OnInit {
           }
         } else {
           // if postal code AND if below threshold
-          this.locationNote = `*The service is free as we expand to new markets in the area ${address.postalCode}.`; // Update button text
+          this.locationNote = `*The service is free as we expand to new markets in the area.`// ${address.postalCode}.`; // Update button text
           //this.locationService.showFreeAlert();
           this.presentToast(this.locationNote, 'success', 3000);
         }
