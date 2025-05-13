@@ -8,6 +8,26 @@ ion-input {
   //font-size: 1rem; /* Adjust the font size as needed */
 }
 
+.radio-group {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  //gap: 5px; /* Add spacing between items */
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* Add spacing between the radio button and the label text */
+  cursor: pointer; /* Change the cursor to indicate it's clickable */
+  padding: 8px; /* Add padding for better touch targets on mobile */
+  //border-radius: 4px; /* Optional: Add rounded corners for better UI */
+  transition: background-color 0.2s ease; /* Optional: Add hover effect */
+}
+
+.radio-label:hover {
+  background-color: #f0f0f0; /* Optional: Highlight on hover */
+}
+
 .small-button {
   --padding-start: 4px;
   --padding-end: 4px;
@@ -20,7 +40,7 @@ ion-input {
 
 .map-container {
   height: 100%; /* Set the desired height */
-  width: calc(100% - 1%); /* Ensure the container takes the full width of the parent */
+  width: calc(100% - 2%); /* Ensure the container takes the full width of the parent */
   overflow: hidden; /* Ensure the content does not overflow */
   position: relative; /* Ensure the container has a position context */
 

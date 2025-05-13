@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router'; // Preserving your router import
 import { AuthService } from './services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -11,7 +11,9 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private healthCheckInterval: any; // Store the interval ID
+
   constructor(private http: HttpClient, 
     public authService: AuthService, 
     private router: Router,
@@ -19,6 +21,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkApiHealth();
+
+    this.healthCheckInterval = setInterval(() => {
+      this.checkApiHealth();
+    }, 29 * 60 * 1000);
+  }
+
+  ngOnDestroy(): void {
+    // Clear the interval when the component is destroyed
+    if (this.healthCheckInterval) {
+      clearInterval(this.healthCheckInterval);
+    }
   }
 
   checkApiHealth(): void {

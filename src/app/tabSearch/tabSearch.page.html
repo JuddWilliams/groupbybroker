@@ -10,7 +10,7 @@
           <ion-col size-md="3" size-lg="2">
             <ion-input label="Lookup range (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>          
           </ion-col>   
-          <ion-col>      
+          <ion-col size-md="3" size-lg="3">      
             <ion-select label="Industry? " label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
               <ion-select-option value="Lawn care">Landscaping & Lawn care</ion-select-option>
               <ion-select-option value="Pesticides">Pesticides</ion-select-option>
@@ -45,7 +45,8 @@
           </ion-col>
         </ion-row>
         <ion-row>      
-          <ion-col size="12" size-md="8" size-lg="6">                  
+           <ion-col size="12" size-md="8" size-lg="6">                   
+            <!-- <ion-col style="width: 510px;"> -->
             <div class="map-container">
               <google-map [options]="mapOptions">
                 <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"  ></map-marker>
@@ -63,7 +64,50 @@
               </google-map>
             </div>
           </ion-col>  
-          <ion-col size="12" size-md="4" size-lg="6">            
+          <ion-col size="12" size-md="4" size-lg="6">    
+            <div style="padding-bottom: 5px;">Override ordering preference</div>        
+            <!-- <ion-radio-group value="overall" style="display: flex; gap: 10px;"> -->
+          <ion-radio-group [(ngModel)]="sortingValue" class="radio-group">
+            <div class="radio-label">
+              <ion-radio slot="start" value="useAi"></ion-radio>
+              <span (click)="selectRadio('useAi')">Use Ai</span>
+            </div>
+            <div class="radio-label">
+              <ion-radio slot="start" value="proximity"></ion-radio>
+              <span (click)="selectRadio('proximity')">Nearest me</span>
+            </div>
+            <div class="radio-label">
+              <ion-radio slot="start" value="Popularity"></ion-radio>
+              <span (click)="selectRadio('Popularity')">Popularity by Area</span>
+            </div>
+            <div class="radio-label">
+              <ion-radio slot="start" value="cost"></ion-radio>
+              <span (click)="selectRadio('cost')">Cost</span>
+            </div>
+            <div class="radio-label">
+              <ion-radio slot="start" value="Quality"></ion-radio>
+              <span (click)="selectRadio('Quality')">Quality</span>
+            </div>
+            <div class="radio-label">
+              <ion-radio slot="start" value="Dependability"></ion-radio>
+              <span (click)="selectRadio('Dependability')">Dependability</span>
+            </div>
+            <div class="radio-label">
+              <ion-radio slot="start" value="Professionalism"></ion-radio>
+              <span (click)="selectRadio('Professionalism')">Professionalism</span>
+            </div>
+          </ion-radio-group>
+            
+            <!-- <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
+              @for (item of items; track item) {
+              <ion-item>
+                <ion-label> {{ item }} </ion-label>
+                <ion-reorder slot="end"></ion-reorder>
+              </ion-item>
+              }
+            </ion-reorder-group> -->
+
+
             <ul>
               <li style="padding-bottom: 7px;"  *ngFor="let addressObj of withinRangeContractorListings">{{addressObj.contractorListing.type}} Services by {{addressObj.contractorListing.company.companyName}}<br> 
                 <sup> at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{ addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }}</sup>

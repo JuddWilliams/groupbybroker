@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, AlertInput, IonInput, ToastController, Platform } from '@ionic/angular';
+import { AlertController, AlertInput, IonInput, ToastController, Platform, ItemReorderEventDetail } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocationService } from '../services/location.service';
 import { ContractorListingsService } from '../services/contractor-listings.service';
@@ -101,6 +101,9 @@ export class TabSearchPage implements OnInit {
     scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
   };
 
+  items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
+  //sorting: string = 'useAi'; // Default sorting option
+  sortingValue: string = 'useAi'; // Default selected value
 
   constructor(
     private alertController: AlertController,
@@ -110,6 +113,30 @@ export class TabSearchPage implements OnInit {
     private contractorListingsService: ContractorListingsService
   ) {}
 
+  
+
+selectRadio(value: string): void {
+  this.sortingValue = value;
+}
+
+  //  handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
+  //   // The `from` and `to` properties contain the index of the item
+  //   // when the drag started and ended, respectively
+  //   console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+
+  //    // Before complete is called with the items they will remain in the
+  //   // order before the drag
+  //   console.log('Before complete', this.items);
+
+  //   // Finish the reorder and position the item in the DOM based on
+  //   // where the gesture ended. Update the items variable to the
+  //   // new order of items
+  //   this.items = event.detail.complete(this.items);
+
+  //   // After complete is called the items will be in the new order
+  //   console.log('After complete', this.items);   
+  // }
+  
   async ngOnInit() {
     this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
       next: (response) => 
