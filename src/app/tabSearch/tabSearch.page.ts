@@ -305,12 +305,21 @@ selectRadio(value: string): void {
     await alert.present();
   }
 
-  async presentToast(message: string) {
+  // async presentToast(message: string) {
+  //   const toast = await this.toastController.create({    
+  //     message: message,
+  //     duration: 2000,
+  //     position: 'top',
+  //     color: 'danger'
+  //   });
+  //   await toast.present();
+  // }
+   async presentToast(message: string, color: string = 'danger', duration: number = 3000, position: 'top' | 'bottom' = 'top') {
     const toast = await this.toastController.create({    
       message: message,
-      duration: 3000,
-      position: 'top',
-      color: 'danger'
+      duration: duration,
+      position: position,
+      color: color
     });
     await toast.present();
   }
@@ -362,6 +371,14 @@ selectRadio(value: string): void {
   async checkAddressesWithinRange() {
     this.withinRangeContractorListings = []; // Clear previous results
   
+    console.log('##this.findRadius:', this.findRadius); // Log the target address
+      // Return early if findRadius is not a valid number or is less than or equal to 0
+    if (isNaN(this.findRadius) || this.findRadius <= 0) {
+      console.info('Invalid findRadius:', this.findRadius);      
+      return;
+    }
+
+
     const geocodePromises = this.contractorListings.map((contractorListing) =>
       new Promise<void>((resolve) => {
         console.log('Geocoding contractor address:', contractorListing); // Log the address being geocoded
@@ -394,6 +411,15 @@ selectRadio(value: string): void {
       (value, index, self) =>
         index === self.findIndex((t) => t.contractorListing === value.contractorListing)
     );
+
+    // Display a toast message if no records are found
+    if (this.withinRangeContractorListings.length === 0) {
+      this.presentToast('No contractor listings found within the specified radius. Change \'lookup Range\' or \'Target Address\'.');
+    }
+    else {
+      this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
+        'success', 1300);
+    }
 
     console.log('Final withinRangeContractorListings:', this.withinRangeContractorListings);
   }
