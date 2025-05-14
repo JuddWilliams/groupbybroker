@@ -9,7 +9,7 @@
           <ion-row>
             <ion-col size="12" size-md="8">
               <h4> How it works.</h4>
-              <h3>Using Ai, we've learned the benefits of connecting Customers with Service Providers in close proximity.</h3>
+              <h6>Using Ai, we've learned the benefits of connecting Customers with Service Providers in close proximity.</h6>
 
               <p><ion-icon name="star-outline"></ion-icon> <i> Recognizing the cost savings when servicing an area.</i></p>               
               <p><ion-icon name="star-outline"></ion-icon> <i> Comparing services & incentives in the area   
@@ -46,7 +46,7 @@
                   <ion-grid>
                     <ion-row>
                       <ion-col>
-                        <h6>Consumers</h6>
+                        <div>∙ Consumers ∙</div>
                          <p>
                           We help you find the best contractors in your area based on your needs. Whether that's pricing, level of service, or other factors.
                                 </p>   
@@ -75,7 +75,7 @@
                 <ion-grid>
                   <ion-row>
                     <ion-col>
-                      <h6>Contractors</h6>
+                      <div>∙ Contractors ∙</div>
                       <div>                       
                         <p>Grow your business while reducing costs associated with travel & preparation (time/fuel/loading equipment, etc)    </p>    
                         <ion-button
@@ -140,9 +140,8 @@
                 <ion-grid>
                   <ion-row>
                     <ion-col>
-                      <div class="feedback-header">
-                        
-                        What are others saying?  <ion-button fill="clear" size="small" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
+                      <div class="feedback-header">                        
+                        What are others saying?  <ion-button fill="clear" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
                       </div>
                       <div class="review-list">
                         <ion-item *ngFor="let review of reviews" lines="none">

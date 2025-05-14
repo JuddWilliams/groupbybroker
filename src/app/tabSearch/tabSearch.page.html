@@ -44,9 +44,8 @@
               ></ion-alert>
           </ion-col>
         </ion-row>
-        <ion-row>      
-           <ion-col size="12" size-md="8" size-lg="6">                   
-            <!-- <ion-col style="width: 510px;"> -->
+        <ion-row id="contentx">      
+          <ion-col class="fixed-width-col">            
             <div class="map-container">
               <google-map [options]="mapOptions">
                 <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"  ></map-marker>
@@ -64,40 +63,40 @@
               </google-map>
             </div>
           </ion-col>  
-          <ion-col size="12" size-md="4" size-lg="6">    
+          <ion-col size="12" size-md="6" size-lg="6">              
             <div style="padding-bottom: 5px;">Override ordering preference</div>        
             <!-- <ion-radio-group value="overall" style="display: flex; gap: 10px;"> -->
-          <ion-radio-group [(ngModel)]="sortingValue" class="radio-group">
-            <div class="radio-label">
-              <ion-radio slot="start" value="useAi"></ion-radio>
-              <span (click)="selectRadio('useAi')">Use Ai</span>
-            </div>
-            <div class="radio-label">
-              <ion-radio slot="start" value="proximity"></ion-radio>
-              <span (click)="selectRadio('proximity')">Nearest me</span>
-            </div>
-            <div class="radio-label">
-              <ion-radio slot="start" value="Popularity"></ion-radio>
-              <span (click)="selectRadio('Popularity')">Popularity by Area</span>
-            </div>
-            <div class="radio-label">
-              <ion-radio slot="start" value="cost"></ion-radio>
-              <span (click)="selectRadio('cost')">Cost</span>
-            </div>
-            <div class="radio-label">
-              <ion-radio slot="start" value="Quality"></ion-radio>
-              <span (click)="selectRadio('Quality')">Quality</span>
-            </div>
-            <div class="radio-label">
-              <ion-radio slot="start" value="Dependability"></ion-radio>
-              <span (click)="selectRadio('Dependability')">Dependability</span>
-            </div>
-            <div class="radio-label">
-              <ion-radio slot="start" value="Professionalism"></ion-radio>
-              <span (click)="selectRadio('Professionalism')">Professionalism</span>
-            </div>
-          </ion-radio-group>
-            
+            <ion-radio-group [(ngModel)]="sortingValue" class="radio-group">
+              <div class="radio-label">
+                <ion-radio slot="start" value="useAi"></ion-radio>
+                <span (click)="selectRadio('useAi')">Use Ai</span>
+              </div>
+              <div class="radio-label">
+                <ion-radio slot="start" value="proximity"></ion-radio>
+                <span (click)="selectRadio('proximity')">Nearest me</span>
+              </div>
+              <div class="radio-label">
+                <ion-radio slot="start" value="Popularity"></ion-radio>
+                <span (click)="selectRadio('Popularity')">Popularity by Area</span>
+              </div>
+              <div class="radio-label">
+                <ion-radio slot="start" value="cost"></ion-radio>
+                <span (click)="selectRadio('cost')">Cost</span>
+              </div>
+              <div class="radio-label">
+                <ion-radio slot="start" value="Quality"></ion-radio>
+                <span (click)="selectRadio('Quality')">Quality</span>
+              </div>
+              <div class="radio-label">
+                <ion-radio slot="start" value="Dependability"></ion-radio>
+                <span (click)="selectRadio('Dependability')">Dependability</span>
+              </div>
+              <div class="radio-label">
+                <ion-radio slot="start" value="Professionalism"></ion-radio>
+                <span (click)="selectRadio('Professionalism')">Professionalism</span>
+              </div>
+            </ion-radio-group>
+              
             <!-- <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
               @for (item of items; track item) {
               <ion-item>
