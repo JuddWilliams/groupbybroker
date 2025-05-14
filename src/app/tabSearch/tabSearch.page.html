@@ -59,7 +59,19 @@
                     color: 'black',
                     fontSize: '12px'
                   }"
+                  (mapClick)="onMarkerClick(addressObj)"
                 ></map-marker>
+                  <!-- Info Window -->
+                <map-info-window #infoWindow>
+                  <div>
+                    popup not working.. hmm. maybe try ionic popup?
+                    <!-- <strong>{{ selectedAddress?.contractorListing?.company?.companyName }}</strong><br />
+                    {{ selectedAddress?.contractorListing?.address?.street }}<br />
+                    {{ selectedAddress?.contractorListing?.address?.city }},
+                    {{ selectedAddress?.contractorListing?.address?.state }}
+                    {{ selectedAddress?.contractorListing?.address?.postalCode }} -->
+                  </div>
+                </map-info-window>
               </google-map>
             </div>
           </ion-col>  

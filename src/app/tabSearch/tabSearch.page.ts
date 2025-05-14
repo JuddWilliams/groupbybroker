@@ -5,6 +5,7 @@ import { LocationService } from '../services/location.service';
 import { ContractorListingsService } from '../services/contractor-listings.service';
 import { state } from '@angular/animations';
 import { Address, ContractorListing } from '../models/address';
+import { MapInfoWindow } from '@angular/google-maps';
 
 @Component({
   selector: 'app-tabSearch',
@@ -15,6 +16,7 @@ import { Address, ContractorListing } from '../models/address';
 export class TabSearchPage implements OnInit {
 
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
+  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   
   selectedIndustry: string = 'Lawn care'; 
   errorMessage: string | null = null;
@@ -104,6 +106,7 @@ export class TabSearchPage implements OnInit {
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value
+  selectedAddress: any = null;
 
   constructor(
     private alertController: AlertController,
@@ -113,29 +116,18 @@ export class TabSearchPage implements OnInit {
     private contractorListingsService: ContractorListingsService
   ) {}
 
-  
+  onMarkerClick(addressObj: any): void {
+    this.selectedAddress = addressObj;
+    console.log('Marker clicked:', this.selectedAddress);
 
-selectRadio(value: string): void {
-  this.sortingValue = value;
-}
+    //If using an infoWindow, open it here
+    this.infoWindow.open();
+    alert('Marker clicked: ' + addressObj.contractorListing.address.street);
+  }
 
-  //  handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
-  //   // The `from` and `to` properties contain the index of the item
-  //   // when the drag started and ended, respectively
-  //   console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
-
-  //    // Before complete is called with the items they will remain in the
-  //   // order before the drag
-  //   console.log('Before complete', this.items);
-
-  //   // Finish the reorder and position the item in the DOM based on
-  //   // where the gesture ended. Update the items variable to the
-  //   // new order of items
-  //   this.items = event.detail.complete(this.items);
-
-  //   // After complete is called the items will be in the new order
-  //   console.log('After complete', this.items);   
-  // }
+  selectRadio(value: string): void {
+    this.sortingValue = value;
+  }
   
   async ngOnInit() {
     this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
@@ -377,7 +369,6 @@ selectRadio(value: string): void {
       console.info('Invalid findRadius:', this.findRadius);      
       return;
     }
-
 
     const geocodePromises = this.contractorListings.map((contractorListing) =>
       new Promise<void>((resolve) => {
