@@ -120,12 +120,15 @@
 
 
             <ul>
-              <li style="padding-bottom: 7px;"  *ngFor="let addressObj of withinRangeContractorListings">{{addressObj.contractorListing.type}} Services by {{addressObj.contractorListing.company.companyName}}<br> 
-                <sup> at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{ addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }}</sup>
-                <div style="font-size: small;" >
-                  phone: <a href="tel:904-386-6129">904-386-6129</a><br>
-                  email: <a href="mailto:juddsurfs@gmail.com">juddsurfs&#64;gmail.com</a><br>
-                  website: <a target="_blank" href="https://www.google.com">website: www.google.com</a>
+              <li style="padding-bottom: 7px;"  *ngFor="let addressObj of withinRangeContractorListings">
+                <div id="DisplayCard-List">
+                  {{addressObj.contractorListing.type}} Services by {{addressObj.contractorListing.company.companyName}}<br> 
+                  <sup> at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{ addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }}</sup>
+                  <div style="font-size: small;" >
+                    phone: <a href="tel:904-386-6129">904-386-6129</a><br>
+                    email: <a href="mailto:juddsurfs@gmail.com">juddsurfs&#64;gmail.com</a><br>
+                    website: <a target="_blank" href="https://www.google.com">website: www.google.com</a>
+                  </div>
                 </div>
               </li>
             </ul>

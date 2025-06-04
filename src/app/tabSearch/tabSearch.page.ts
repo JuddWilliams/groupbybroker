@@ -226,7 +226,7 @@ export class TabSearchPage implements OnInit {
 
   async getUserLocationAndCheckPostalCode() {
     const location = await this.locationService.getUserLocation();
-    console.log('XXXUser location:', location); // Log the retrieved location
+    console.log('USER LOCATION:', location); // Log the retrieved location
     if (location) {
       // const postalCode = await this.locationService.getPostalCodeFromCoordinates(
       //   location.latitude,
@@ -248,7 +248,9 @@ export class TabSearchPage implements OnInit {
       //   this.locationNote = "Note: We were unable to determine your location."; 
       // }
       if (this.targetAddress.postalCode && /^\d+$/.test(this.targetAddress.postalCode)) {    
-
+        //
+        // if we found a valid address, lets use that as default. 
+        //
         if (this.targetAddress.postalCode.startsWith('322') ) {// if postal code AND if below threshold
           if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold)
           { 
@@ -269,7 +271,9 @@ export class TabSearchPage implements OnInit {
             this.locationService.showFreeAlert();
         }
       } else {
-        // Handle invalid or non-numeric postal code
+        // 
+        // seems we couldn't determine OR accuracy was too low to determine postal code.
+        //
         
         this.locationNote = 'Invalid postal code.', this.targetAddress.postalCode;
         console.error(this.locationNote);        
@@ -416,7 +420,7 @@ export class TabSearchPage implements OnInit {
   }
 
   onRadiusChange() {
-    this.checkAddressesWithinRange();
+    this.refreshMap();
   }
 
   getLatLng(addressObj: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {

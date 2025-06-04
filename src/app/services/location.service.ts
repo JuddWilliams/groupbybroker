@@ -14,9 +14,13 @@ export class LocationService {
       //const position = await Geolocation.getCurrentPosition();
       const position = await Geolocation.getCurrentPosition({
         enableHighAccuracy: true, // Request high accuracy
+        maximumAge: 0,
       });
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
+
+      console.log(`getCurrentPosition:`, position);
+      console.log(`Accuracy(meters):`, position.coords.accuracy);
 
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
       return { latitude, longitude };
