@@ -18,7 +18,7 @@ export class TabSearchPage implements OnInit {
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   
-  findRadius: number = 25;//0.5; // In miles  
+  findRadius: number = 5;//0.5; // In miles  
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
   userAddedMarker: google.maps.LatLngLiteral | null = null;
 
@@ -215,7 +215,7 @@ export class TabSearchPage implements OnInit {
           mapTypeControl: !this.isSmallViewport,
         };
     
-      this.checkAddressesWithinRange();
+      
 
     // this.geocodeAddress(this.targetAddress, (location) => {
     //   if (location && location.lat && location.lng) {
@@ -448,7 +448,7 @@ export class TabSearchPage implements OnInit {
   }
 
   onRadiusChange() {
-    this.refreshMap();
+    //this.refreshMap();
   }
 
   getLatLng(addressObj: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
@@ -474,7 +474,18 @@ export class TabSearchPage implements OnInit {
       };
 
       console.log('User added marker at:', this.userAddedMarker, 'Zoom set to:', zoom);
-      this.getUserLocationAndCheckPostalCode();
+
+      // Reverse geocode and update targetAddress
+      this.locationService.getPostalCodeFromCoordinates(lat, lng).then(address => {
+        this.targetAddress = address;
+        console.log('Updated targetAddress:', this.targetAddress);
+        // Optionally, refresh the map or listings if needed:
+        // this.refreshMap();
+        this.checkAddressesWithinRange();
+      });
+
+      // Optionally update postal code and location note
+      // this.getUserLocationAndCheckPostalCode();
     }
   }
 
