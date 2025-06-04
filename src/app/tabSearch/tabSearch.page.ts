@@ -18,11 +18,13 @@ export class TabSearchPage implements OnInit {
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   
+  isPopupOpen = false;
+
   findRadius: number = 5;//0.5; // In miles  
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
   userAddedMarker: google.maps.LatLngLiteral | null = null;
 
-  selectedIndustry: string = 'Lawn care'; 
+  selectedIndustry: string = 'Lawn care'; //'All'; //'Lawn care'; 
   errorMessage: string | null = null;
   isSmallViewport: boolean = false; // Flag to track if the viewport is small
   numberOfContractorsInArea: number = 5; 
@@ -31,19 +33,14 @@ export class TabSearchPage implements OnInit {
   
   withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
 
-  mapOptions: google.maps.MapOptions = {
-    // see refreshMap() function
-
-    // center: { lat: 0, lng: 0 },
-    // zoom: 15,
-    // mapTypeControl: true,
+  mapOptions: google.maps.MapOptions = {    
   };
   
   contractorListings: ContractorListing[] = [];
-  //   { street: '11269 Island Club Ln', city: 'Jacksonville', state: 'FL', postalCode: '32225' },
-  //   { street: '9 Harbor View Lane', city: 'Toms River', state: 'NJ', postalCode: '08753' }
-  // ];
 
+  filterForSale: boolean = true;
+  filterBarter: boolean = true;
+  filterCover: boolean = true;
   // Custom icons for markers
   targetIcon = {
     url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red marker for the target
@@ -108,7 +105,6 @@ export class TabSearchPage implements OnInit {
     },
   ];
 
-
   constructor(
     private alertController: AlertController,
     private toastController: ToastController,
@@ -134,14 +130,7 @@ export class TabSearchPage implements OnInit {
     this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
       next: (response) => 
         {
-          console.log('ContractorListings Response:', response);
-          // this.contractorListings = response.map((contractorListing: any) => {        
-          //   return { street: contractorListing.street, city: contractorListing.city, state: contractorListing.state, postalCode: contractorListing.postalCode  };
-          // });
-          // this.contractorListings = response.map((contractorListing: ContractorListing) => {        
-          //   return { street: contractorListing.address.street, city: contractorListing.address.city, state: contractorListing.address.state, postalCode: contractorListing.address.postalCode  };
-          // });
-         
+          console.log('ContractorListings Response:', response);         
           this.contractorListings = response.map((contractorListing: any) => {
             return {
               address: {
@@ -198,125 +187,39 @@ export class TabSearchPage implements OnInit {
 
 
   async platFormReady() {
-    await this.platform.ready(); // Wait for the platform to be ready
-    //await this.getUserLocationAndCheckPostalCode(); // Wait for location and postal code check
-    this.checkViewportSize(); // Execute viewport size check
-    await this.refreshMap(); // Wait for the map to refresh
+    await this.platform.ready();
+    this.checkViewportSize();
+
+    // display map in user's area if available. 
+    //
+    const coords = await this.getUserLocationAndCheckPostalCode();
+    
+    if (coords) {
+      this.refreshMap(coords); 
+    } else {
+      this.refreshMap();
+    }
   }
 
 
-  refreshMap() {
-
-      //Default to Northeast Florida (Jacksonville)
-        //console.log('Geocoded location specified:', location); // Log the geocoded location        
-        this.mapOptions = {
-          center: { lat: 30.3322, lng: -81.6557 },
-          zoom: 12,
-          mapTypeControl: !this.isSmallViewport,
-        };
-    
-      
-
-    // this.geocodeAddress(this.targetAddress, (location) => {
-    //   if (location && location.lat && location.lng) {
-    //     console.log('Geocoded location specified:', location); // Log the geocoded location
-    //     this.targetLocation = location;
-    //     this.mapOptions = {       
-    //       center: location,
-    //       zoom: this.isSmallViewport ? 15 : 15,
-    //       mapTypeControl: !this.isSmallViewport,
-    //     };
-    //   } else {
-    //     // Default to Northeast Florida (Jacksonville)
-    //     console.log('Geocoded location specified:', location); // Log the geocoded location
-    //     this.targetLocation = { lat: 30.3322, lng: -81.6557 };
-    //     this.mapOptions = {
-    //       center: this.targetLocation,
-    //       zoom: 12,
-    //       mapTypeControl: !this.isSmallViewport,
-    //     };
-    //   }
-    //   this.checkAddressesWithinRange();
-    // });
+  refreshMap(coords?: { lat: number, lng: number }) {
+    // Use passed coordinates if available, otherwise default to Jacksonville, Fl. (lat: 30.3322, lng: -81.6557)
+    const center = coords ? coords : { lat: 30.3322, lng: -81.6557 };
+    this.mapOptions = {
+      center,
+      zoom: 12,
+      mapTypeControl: !this.isSmallViewport,
+    };
   }
 
-  async getUserLocationAndCheckPostalCode() {
-    //const location = await this.locationService.getUserLocation();    
-    //console.log('USER LOCATION:', location); // Log the retrieved location
-    
-    //if (location) {
-    if (true)
-    {
-      // const postalCode = await this.locationService.getPostalCodeFromCoordinates(
-      //   location.latitude,
-      //   location.longitude
-      // );
-      if (
-        this.userAddedMarker &&
-        typeof this.userAddedMarker.lat === 'number' &&
-        typeof this.userAddedMarker.lng === 'number'
-      ) {
-        this.targetAddress = await this.locationService.getPostalCodeFromCoordinates(
-          this.userAddedMarker.lat,
-          this.userAddedMarker.lng
-        );
-      } else {
-        console.error('User added marker coordinates are not defined.');
-        this.targetAddress = { street: '', city: '', state: '', postalCode: '' };
-      }
+  async getUserLocationAndCheckPostalCode(): Promise<{ lat: number, lng: number } | null> {
+    const location = await this.locationService.getUserLocation();
+    console.log('USER LOCATION:', location);
 
-      console.log(`Postal Code: ${this.targetAddress.postalCode}`);
-
-      // if (postalCode.startsWith('322') && this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold) {
-      //   this.locationService.showFreeAlert();
-      // } else if (postalCode.startsWith('322') && this.numberOfContractorsInArea >= this.numberOfContractorsInAreaThreshold){
-      //   this.locationNote = ""; 
-      // }
-      // else {
-      //   this.locationNote = "Note: We were unable to determine your location."; 
-      // }
-      if (this.targetAddress.postalCode && /^\d+$/.test(this.targetAddress.postalCode)) {    
-        //
-        // if we found a valid address, lets use that as default. 
-        //
-        if (this.targetAddress.postalCode.startsWith('322') ) {// if postal code AND if below threshold
-          if (this.numberOfContractorsInArea < this.numberOfContractorsInAreaThreshold)
-          { 
-            this.locationNote = `*As we expand to new markets it's free for your area ${this.targetAddress.postalCode}.`; // Update button text
-            console.error(this.locationNote);
-            this.locationService.showFreeAlert();
-          }
-          else 
-          {            
-            this.locationNote = `*There are ${this.numberOfContractorsInArea} other Contractors using our service in this area.`; 
-            console.error(this.locationNote);
-          }         
-        }
-        else // if postal code AND if below threshold
-        {
-            this.locationNote = `*As we expand to new markets it's free for your area ${this.targetAddress.postalCode}.`; // Update button text
-            console.error(this.locationNote);
-            this.locationService.showFreeAlert();
-        }
-      } else {
-        // 
-        // seems we couldn't determine OR accuracy was too low to determine postal code.
-        //
-        
-        this.locationNote = 'Invalid postal code.', this.targetAddress.postalCode;
-        console.error(this.locationNote);        
-      }
+    if (location && typeof location.latitude === 'number' && typeof location.longitude === 'number') {      
+      return { lat: location.latitude, lng: location.longitude };
     }
-    else {
-      alert( `We're unable to determine your locaton.  You may have disabled location access for groupBuyology.com.\n
-        To enable location access, please go to your browser settings:\n
-        - In Chrome: Go to Settings > Privacy and Security > Site Settings > Permissions > Location: Under 'Customized behaviors' then delete. Return to page and refresh.\n
-        - In Safari: Go to Settings > Safari > Location, and allow location access.\n
-        - In Firefox: Click the shield icon in the address bar, then manage location permissions.`
-     );
-      console.error('Unable to retrieve location.');
-      this.locationNote = 'Note: We were unable to determine your location.';
-    }
+    return null;
   }
 
   async presentAlert() {
@@ -329,15 +232,6 @@ export class TabSearchPage implements OnInit {
     await alert.present();
   }
 
-  // async presentToast(message: string) {
-  //   const toast = await this.toastController.create({    
-  //     message: message,
-  //     duration: 2000,
-  //     position: 'top',
-  //     color: 'danger'
-  //   });
-  //   await toast.present();
-  // }
    async presentToast(message: string, color: string = 'danger', duration: number = 3000, position: 'top' | 'bottom' = 'top') {
     const toast = await this.toastController.create({    
       message: message,
@@ -372,8 +266,6 @@ export class TabSearchPage implements OnInit {
       componentRestrictions: {
         route: address.street, // Street name
         // cant be empty .. so o remmoved for now until i improve dlg. 
-        // locality: address.city, // City
-        // administrativeArea: address.state, // State
         postalCode: address.postalCode, // ZIP code
         country: 'US', // Restrict to the United States (optional)
       },
@@ -478,14 +370,10 @@ export class TabSearchPage implements OnInit {
       // Reverse geocode and update targetAddress
       this.locationService.getPostalCodeFromCoordinates(lat, lng).then(address => {
         this.targetAddress = address;
-        console.log('Updated targetAddress:', this.targetAddress);
-        // Optionally, refresh the map or listings if needed:
-        // this.refreshMap();
+        console.log('Updated targetAddress:', this.targetAddress);        
         this.checkAddressesWithinRange();
       });
-
-      // Optionally update postal code and location note
-      // this.getUserLocationAndCheckPostalCode();
+      
     }
   }
 
@@ -503,4 +391,13 @@ export class TabSearchPage implements OnInit {
     const zoom = Math.log2((mapDim * earthCircumference) / (diameter * 256 * padding));
     return Math.max(2, Math.min(Math.floor(zoom), 21));
   }
+
+  openPopup() {
+    this.isPopupOpen = true; // Open the popup
+  }
+
+  closePopup() {
+    this.isPopupOpen = false; // Close the popup
+  }
+
 }

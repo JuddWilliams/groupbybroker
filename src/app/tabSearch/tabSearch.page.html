@@ -8,15 +8,17 @@
       <ion-grid>
         <ion-row>
           <ion-col size-md="3" size-lg="2">
-            <ion-input label="Lookup range (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>          
+            <ion-input label="Lookup range? (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>          
           </ion-col>   
           <ion-col size-md="3" size-lg="3">      
             <ion-select label="Industry? " label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
+              <ion-select-option value="All">All</ion-select-option>
               <ion-select-option value="Lawn care">Landscaping & Lawn care</ion-select-option>
               <ion-select-option value="Pesticides">Pesticides</ion-select-option>
               <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
               <ion-select-option value="Pool maintenance">Pool maintenance</ion-select-option>  
               <ion-select-option value="Poop scoop">Poop scoop</ion-select-option>
+              <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
             </ion-select>        
             <!-- other options
             <ion-select label="What are you intested in? " label-placement="floating">
@@ -28,14 +30,16 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" >
-             Accounts within <b>{{ findRadius }}</b> Miles of target address:<b>              
-              <span *ngIf="targetAddress.street && targetAddress.street.trim() !== ''">{{ targetAddress.street }}, </span>
-              <!-- <span *ngIf="targetAddress.city && targetAddress.city.trim() !== ''">, {{ targetAddress.city }}</span>
-              <span *ngIf="targetAddress.state && targetAddress.state.trim() !== ''">, {{ targetAddress.state }}</span>          
-              <span *ngIf="targetAddress.postalCode">, </span>     -->
+            <div>"Click the map to find any listings in that area."</div>
+            <span *ngIf="withinRangeContractorListings.length >= 1">
+                       {{withinRangeContractorListings.length}} Items of interest within <b>{{ findRadius }}</b> Miles of target address:<b>              
+              <span *ngIf="targetAddress.street && targetAddress.street.trim() !== ''">{{ targetAddress.street }}, </span>              
               {{ targetAddress.postalCode }}
-            </b> 
-              <!-- <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button> -->
+            </b>  
+            </span>
+      
+            <!-- hiding, for now as i'm not using. don't remove yet. -->
+             <ion-button *ngIf="false" size="small" class="small-button" (click)="presentAlert()">change</ion-button>          
               <ion-alert
               trigger="present-alert"
               header="Please enter address"
@@ -85,9 +89,23 @@
               </google-map>
             </div>
           </ion-col>  
-          <ion-col size="12" size-md="6" size-lg="6">              
-            <div style="padding-bottom: 5px;">Override ordering preference</div>        
-            <!-- <ion-radio-group value="overall" style="display: flex; gap: 10px;"> -->
+          <ion-col size="12" size-md="6" size-lg="6">      
+            <div *ngIf="withinRangeContractorListings.length >= 1" style="padding-bottom: 10px;">
+              <ion-label>Show:</ion-label>
+              <div class="checkbox-group">
+                <ion-checkbox [(ngModel)]="filterForSale" labelPlacement="end">For Sale</ion-checkbox>
+                <ion-checkbox [(ngModel)]="filterBarter" labelPlacement="end">Trade</ion-checkbox>
+                <ion-checkbox [(ngModel)]="filterCover" labelPlacement="end">Cover</ion-checkbox>  
+                  <ion-icon
+                    name="help-circle-outline"
+                    (click)="openPopup()"
+                    title="Click for more information"
+                    style="cursor: pointer;"
+                  ></ion-icon>
+              </div>
+            </div>
+
+            <!-- <div style="padding-bottom: 5px;">Override ordering preference</div>        
             <ion-radio-group [(ngModel)]="sortingValue" class="radio-group">
               <div class="radio-label">
                 <ion-radio slot="start" value="useAi"></ion-radio>
@@ -117,7 +135,7 @@
                 <ion-radio slot="start" value="Professionalism"></ion-radio>
                 <span (click)="selectRadio('Professionalism')">Professionalism</span>
               </div>
-            </ion-radio-group>
+            </ion-radio-group> -->
               
             <!-- <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
               @for (item of items; track item) {
@@ -146,4 +164,20 @@
         </ion-row>
       </ion-grid>
   </ion-card>
+    <!-- Popup Modal -->
+  <ion-modal class="sizer-modal" [isOpen]="isPopupOpen" (ionModalDidDismiss)="closePopup()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Information</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closePopup()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <p style="padding: 16px;">This is how it works!</p>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

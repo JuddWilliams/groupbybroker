@@ -72,4 +72,10 @@ ion-col:not(.fixed-width-col) {
   text-align: left; /* Ensure content is left-aligned */
 }
 
+.checkbox-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
 
