@@ -28,14 +28,14 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" >
-             Accounts within <b>{{ findRadius }}</b> Miles of target address:<b>
-              {{ targetAddress.street }}
-              <span *ngIf="targetAddress.city">, {{ targetAddress.city }}</span>
-              <span *ngIf="targetAddress.state">, {{ targetAddress.state }}</span>          
-              <span *ngIf="!targetAddress.city && !targetAddress.state">, </span>    
+             Accounts within <b>{{ findRadius }}</b> Miles of target address:<b>              
+              <span *ngIf="targetAddress.street && targetAddress.street.trim() !== ''">{{ targetAddress.street }}, </span>
+              <!-- <span *ngIf="targetAddress.city && targetAddress.city.trim() !== ''">, {{ targetAddress.city }}</span>
+              <span *ngIf="targetAddress.state && targetAddress.state.trim() !== ''">, {{ targetAddress.state }}</span>          
+              <span *ngIf="targetAddress.postalCode">, </span>     -->
               {{ targetAddress.postalCode }}
             </b> 
-              <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button>
+              <!-- <ion-button size="small" class="small-button" (click)="presentAlert()">change</ion-button> -->
               <ion-alert
               trigger="present-alert"
               header="Please enter address"
@@ -61,7 +61,7 @@
                   (mapClick)="onMarkerClick(addressObj)"
                 ></map-marker>
                 <!-- User-added marker -->
-                <map-marker *ngIf="userAddedMarker" [position]="userAddedMarker" label="New"></map-marker>
+                <map-marker *ngIf="userAddedMarker" [position]="userAddedMarker" label="Target"></map-marker>
                 <map-info-window #infoWindow>
                   <div>
                     <!-- Info window content -->
