@@ -18,7 +18,9 @@ export class TabSearchPage implements OnInit {
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   
-  findRadius: number = 5;//0.5; // In miles
+  findRadius: number = 25;//0.5; // In miles  
+  targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
+  userAddedMarker: google.maps.LatLngLiteral | null = null;
 
   selectedIndustry: string = 'Lawn care'; 
   errorMessage: string | null = null;
@@ -26,7 +28,40 @@ export class TabSearchPage implements OnInit {
   numberOfContractorsInArea: number = 5; 
   readonly numberOfContractorsInAreaThreshold: number = 5;
   locationNote: string = ''; 
+  
+  withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
 
+  mapOptions: google.maps.MapOptions = {
+    // see refreshMap() function
+
+    // center: { lat: 0, lng: 0 },
+    // zoom: 15,
+    // mapTypeControl: true,
+  };
+  
+  contractorListings: ContractorListing[] = [];
+  //   { street: '11269 Island Club Ln', city: 'Jacksonville', state: 'FL', postalCode: '32225' },
+  //   { street: '9 Harbor View Lane', city: 'Toms River', state: 'NJ', postalCode: '08753' }
+  // ];
+
+  // Custom icons for markers
+  targetIcon = {
+    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red marker for the target
+    scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
+  };
+
+  rangeIcon = {
+    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Blue marker for withinRangeContractorListings
+    scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
+  };
+
+  items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
+  //sorting: string = 'useAi'; // Default sorting option
+  sortingValue: string = 'useAi'; // Default selected value
+  selectedAddress: any = null;
+  
+
+  
   public alertButtons = [
     {
       text: 'Cancel',
@@ -73,44 +108,6 @@ export class TabSearchPage implements OnInit {
     },
   ];
 
-  
-
-  targetLocation: google.maps.LatLngLiteral | undefined;
-  withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
-
-  mapOptions: google.maps.MapOptions = {
-    // see refreshMap() function
-
-    // center: { lat: 0, lng: 0 },
-    // zoom: 15,
-    // mapTypeControl: true,
-  };
-  
-  //targetAddress: Address = { street: '4322 Harbour Island Drive', city: 'Jacksonville', state: 'FL', postalCode: '32225' };
-  targetAddress: Address = { street: '', city: '', state: '', postalCode: '' };
-  
-  contractorListings: ContractorListing[] = [];
-  //   { street: '11269 Island Club Ln', city: 'Jacksonville', state: 'FL', postalCode: '32225' },
-  //   { street: '9 Harbor View Lane', city: 'Toms River', state: 'NJ', postalCode: '08753' }
-  // ];
-
-  // Custom icons for markers
-  targetIcon = {
-    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red marker for the target
-    scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
-  };
-
-  rangeIcon = {
-    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Blue marker for withinRangeContractorListings
-    scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
-  };
-
-  items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
-  //sorting: string = 'useAi'; // Default sorting option
-  sortingValue: string = 'useAi'; // Default selected value
-  selectedAddress: any = null;
-
-  userAddedMarker: google.maps.LatLngLiteral | null = null;
 
   constructor(
     private alertController: AlertController,
@@ -211,10 +208,9 @@ export class TabSearchPage implements OnInit {
   refreshMap() {
 
       //Default to Northeast Florida (Jacksonville)
-        console.log('Geocoded location specified:', location); // Log the geocoded location
-        this.targetLocation = { lat: 30.3322, lng: -81.6557 };
+        //console.log('Geocoded location specified:', location); // Log the geocoded location        
         this.mapOptions = {
-          center: this.targetLocation,
+          center: { lat: 30.3322, lng: -81.6557 },
           zoom: 12,
           mapTypeControl: !this.isSmallViewport,
         };
@@ -411,8 +407,8 @@ export class TabSearchPage implements OnInit {
         console.log('Geocoding contractor address:', contractorListing); // Log the address being geocoded
         const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
         this.geocodeAddress(contractorListing.address, (location) => {
-          if (this.targetLocation) {
-            const targetLocation = new google.maps.LatLng(this.targetLocation);
+          if (this.userAddedMarker) {
+            const targetLocation = new google.maps.LatLng(this.userAddedMarker);
             const addressLocation = new google.maps.LatLng(location);
             const distance =
               google.maps.geometry.spherical.computeDistanceBetween(
