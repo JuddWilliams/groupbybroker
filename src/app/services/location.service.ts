@@ -61,7 +61,9 @@ export class LocationService {
       console.log('Street Address:', streetAddress); // Log the full street address for debugging
       let address: Address = {
         street: streetAddress,
-        postalCode: postalCodeComponent ? postalCodeComponent.long_name : '',        
+        postalCode: postalCodeComponent ? postalCodeComponent.long_name : '',
+        city: '',
+        state: ''
       };
 
       return address;
@@ -69,7 +71,9 @@ export class LocationService {
 
     return {
       street: '',
-      postalCode: ''
+      postalCode: '',
+      city: '',
+      state: ''
     };
   }
 

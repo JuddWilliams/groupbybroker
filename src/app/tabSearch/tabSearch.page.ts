@@ -18,6 +18,8 @@ export class TabSearchPage implements OnInit {
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   
+  findRadius: number = 5;//0.5; // In miles
+
   selectedIndustry: string = 'Lawn care'; 
   errorMessage: string | null = null;
   isSmallViewport: boolean = false; // Flag to track if the viewport is small
@@ -71,7 +73,7 @@ export class TabSearchPage implements OnInit {
     },
   ];
 
-  findRadius: number = 2;//0.5; // In miles
+  
 
   targetLocation: google.maps.LatLngLiteral | undefined;
   withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
@@ -107,6 +109,8 @@ export class TabSearchPage implements OnInit {
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value
   selectedAddress: any = null;
+
+  userAddedMarker: google.maps.LatLngLiteral | null = null;
 
   constructor(
     private alertController: AlertController,
@@ -195,47 +199,75 @@ export class TabSearchPage implements OnInit {
     
   }
 
-  // async platFormReady() {
-  //   this.platform.ready().then(() => {
-  //     this.getUserLocationAndCheckPostalCode();
-  //     this.checkViewportSize(); // Check the viewport size after the platform is ready
-  //     this.refreshMap();        
-  //   });
-  // }
 
   async platFormReady() {
     await this.platform.ready(); // Wait for the platform to be ready
-    await this.getUserLocationAndCheckPostalCode(); // Wait for location and postal code check
+    //await this.getUserLocationAndCheckPostalCode(); // Wait for location and postal code check
     this.checkViewportSize(); // Execute viewport size check
     await this.refreshMap(); // Wait for the map to refresh
   }
 
 
   refreshMap() {
-    this.geocodeAddress(this.targetAddress, (location) => {
-      this.targetLocation = location;
-      this.mapOptions = {       
-        center: location,
-        zoom: this.isSmallViewport ? 15 : 15, // Adjust zoom level based on viewport size
-        mapTypeControl: !this.isSmallViewport,
-        //mapTypeId: 'satellite', // Set the map type to satellite       
-      };
+
+      //Default to Northeast Florida (Jacksonville)
+        console.log('Geocoded location specified:', location); // Log the geocoded location
+        this.targetLocation = { lat: 30.3322, lng: -81.6557 };
+        this.mapOptions = {
+          center: this.targetLocation,
+          zoom: 12,
+          mapTypeControl: !this.isSmallViewport,
+        };
+    
       this.checkAddressesWithinRange();
-    });
+
+    // this.geocodeAddress(this.targetAddress, (location) => {
+    //   if (location && location.lat && location.lng) {
+    //     console.log('Geocoded location specified:', location); // Log the geocoded location
+    //     this.targetLocation = location;
+    //     this.mapOptions = {       
+    //       center: location,
+    //       zoom: this.isSmallViewport ? 15 : 15,
+    //       mapTypeControl: !this.isSmallViewport,
+    //     };
+    //   } else {
+    //     // Default to Northeast Florida (Jacksonville)
+    //     console.log('Geocoded location specified:', location); // Log the geocoded location
+    //     this.targetLocation = { lat: 30.3322, lng: -81.6557 };
+    //     this.mapOptions = {
+    //       center: this.targetLocation,
+    //       zoom: 12,
+    //       mapTypeControl: !this.isSmallViewport,
+    //     };
+    //   }
+    //   this.checkAddressesWithinRange();
+    // });
   }
 
   async getUserLocationAndCheckPostalCode() {
-    const location = await this.locationService.getUserLocation();
-    console.log('USER LOCATION:', location); // Log the retrieved location
-    if (location) {
+    //const location = await this.locationService.getUserLocation();    
+    //console.log('USER LOCATION:', location); // Log the retrieved location
+    
+    //if (location) {
+    if (true)
+    {
       // const postalCode = await this.locationService.getPostalCodeFromCoordinates(
       //   location.latitude,
       //   location.longitude
       // );
-      this.targetAddress = await this.locationService.getPostalCodeFromCoordinates(
-        location.latitude,
-        location.longitude
-      );
+      if (
+        this.userAddedMarker &&
+        typeof this.userAddedMarker.lat === 'number' &&
+        typeof this.userAddedMarker.lng === 'number'
+      ) {
+        this.targetAddress = await this.locationService.getPostalCodeFromCoordinates(
+          this.userAddedMarker.lat,
+          this.userAddedMarker.lng
+        );
+      } else {
+        console.error('User added marker coordinates are not defined.');
+        this.targetAddress = { street: '', city: '', state: '', postalCode: '' };
+      }
 
       console.log(`Postal Code: ${this.targetAddress.postalCode}`);
 
@@ -431,7 +463,37 @@ export class TabSearchPage implements OnInit {
     this.findRadiusInput.getInputElement().then(input => input.select());
   }
 
- 
-  
+  onMapClick(event: google.maps.MapMouseEvent) {
+    if (event.latLng) {
+      const lat = event.latLng.lat();
+      const lng = event.latLng.lng();
+      this.userAddedMarker = { lat, lng };
 
+      // Center the map on the new marker and set zoom to fit findRadius
+      const zoom = this.getZoomLevelForRadius(this.findRadius);
+      this.mapOptions = {
+        ...this.mapOptions,
+        center: { lat, lng },
+        zoom: zoom,
+      };
+
+      console.log('User added marker at:', this.userAddedMarker, 'Zoom set to:', zoom);
+      this.getUserLocationAndCheckPostalCode();
+    }
+  }
+
+  // Returns zoom level so that the given radius (in miles) fits in the map view
+  getZoomLevelForRadius(radiusMiles: number): number {
+    const mapWidth = window.innerWidth || 800;
+    const mapHeight = window.innerHeight || 600;
+    const mapDim = Math.min(mapWidth, mapHeight); // Use the smaller dimension
+    const radiusMeters = radiusMiles * 1609.34;
+    const earthCircumference = 40075017;
+    const diameter = radiusMeters * 2;
+    const padding = 1.6; // 1.6 = 60% extra space, adjust as needed for your UI
+
+    // The formula ensures the circle fits within the smallest map dimension
+    const zoom = Math.log2((mapDim * earthCircumference) / (diameter * 256 * padding));
+    return Math.max(2, Math.min(Math.floor(zoom), 21));
+  }
 }

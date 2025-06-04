@@ -47,31 +47,34 @@
         <ion-row id="contentx">      
           <ion-col class="fixed-width-col">            
             <div class="map-container">
-              <google-map [options]="mapOptions">
-                <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"  ></map-marker>
+              <google-map [options]="mapOptions" (mapClick)="onMapClick($event)">
+                <!-- Existing markers -->
+                <map-marker *ngIf="targetLocation" [position]="targetLocation" label="Target"></map-marker>
                 <map-marker
                   *ngFor="let addressObj of withinRangeContractorListings"
                   [position]="getLatLng(addressObj)"
                   [icon]="rangeIcon"
                   [label]="{
-                    text: 
-                          addressObj.contractorListing.company.companyName, 
+                    text: addressObj.contractorListing.company.companyName,
                     color: 'black',
                     fontSize: '12px'
                   }"
                   (mapClick)="onMarkerClick(addressObj)"
                 ></map-marker>
-                  <!-- Info Window -->
+                <!-- User-added marker -->
+                <map-marker *ngIf="userAddedMarker" [position]="userAddedMarker" label="New"></map-marker>
                 <map-info-window #infoWindow>
                   <div>
-                    popup not working.. hmm. maybe try ionic popup?
-                    <!-- <strong>{{ selectedAddress?.contractorListing?.company?.companyName }}</strong><br />
-                    {{ selectedAddress?.contractorListing?.address?.street }}<br />
-                    {{ selectedAddress?.contractorListing?.address?.city }},
-                    {{ selectedAddress?.contractorListing?.address?.state }}
-                    {{ selectedAddress?.contractorListing?.address?.postalCode }} -->
+                    <!-- Info window content -->
                   </div>
                 </map-info-window>
+                 <!-- miles to meters -->
+                <map-circle
+                  *ngIf="userAddedMarker"
+                  [center]="userAddedMarker"
+                  [radius]="findRadius * 1609.34"
+                  [options]="{strokeColor: '#4285F4', strokeOpacity: 0.8, strokeWeight: 2, fillColor: '#4285F4', fillOpacity: 0.1}"
+                ></map-circle>
               </google-map>
             </div>
           </ion-col>  
