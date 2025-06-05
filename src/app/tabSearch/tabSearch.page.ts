@@ -114,8 +114,7 @@ export class TabSearchPage implements OnInit {
   ) {}
 
   onMarkerClick(addressObj: any): void {
-    this.selectedAddress = addressObj;
-    console.log('Marker clicked:', this.selectedAddress);
+    this.selectedAddress = addressObj;    
 
     //If using an infoWindow, open it here
     this.infoWindow.open();
@@ -129,8 +128,7 @@ export class TabSearchPage implements OnInit {
   async ngOnInit() {
     this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
       next: (response) => 
-        {
-          console.log('ContractorListings Response:', response);         
+        {          
           this.contractorListings = response.map((contractorListing: any) => {
             return {
               address: {
@@ -148,9 +146,7 @@ export class TabSearchPage implements OnInit {
             } as ContractorListing;
           });
 
-          this.platFormReady();
-
-          console.log('ContractorListings contractorListings:', this.contractorListings);
+          this.platFormReady();          
         },
       error: (error) => console.error('ContractorListings Error:', error),
     });
@@ -159,8 +155,7 @@ export class TabSearchPage implements OnInit {
 
   onIndustryChange() {
     this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
-      next: (response) => {
-        console.log('ContractorListings Response:', response);
+      next: (response) => {        
         this.contractorListings = response.map((contractorListing: any) => {
           return {
             address: {
@@ -213,8 +208,7 @@ export class TabSearchPage implements OnInit {
   }
 
   async getUserLocationAndCheckPostalCode(): Promise<{ lat: number, lng: number } | null> {
-    const location = await this.locationService.getUserLocation();
-    console.log('USER LOCATION:', location);
+    const location = await this.locationService.getUserLocation();    
 
     if (location && typeof location.latitude === 'number' && typeof location.longitude === 'number') {      
       return { lat: location.latitude, lng: location.longitude };
@@ -244,23 +238,20 @@ export class TabSearchPage implements OnInit {
 
   checkViewportSize() {
     const width = window.innerWidth;
-    const height = window.innerHeight;
-    console.log(`Viewport size: ${width}x${height}`);
+    const height = window.innerHeight;    
     this.isSmallViewport = width < 600; // Example: Treat viewports smaller than 600px as "small"
-    if (this.isSmallViewport) {
-      console.log('Rendering for a small viewport');
-      // Apply logic for small viewports
-    } else {
-      console.log('Rendering for a large viewport');
-      // Apply logic for large viewports
-    }
+    // if (this.isSmallViewport) {
+    //   console.log('Rendering for a small viewport');
+    //   // Apply logic for small viewports
+    // } else {
+    //   console.log('Rendering for a large viewport');
+    //   // Apply logic for large viewports
+    // }
   }
 
   geocodeAddress(address: Address, callback: (location: google.maps.LatLngLiteral) => void) {
     const geocoder = new google.maps.Geocoder();
-    
-    //geocoder.geocode({ address }, (results, status) => {
-    console.log('GeocodingAddress:', address); // Log the address being geocoded
+        
     geocoder.geocode( 
     {
       componentRestrictions: {
@@ -286,8 +277,7 @@ export class TabSearchPage implements OnInit {
 
   async checkAddressesWithinRange() {
     this.withinRangeContractorListings = []; // Clear previous results
-  
-    console.log('##this.findRadius:', this.findRadius); // Log the target address
+      
       // Return early if findRadius is not a valid number or is less than or equal to 0
     if (isNaN(this.findRadius) || this.findRadius <= 0) {
       console.info('Invalid findRadius:', this.findRadius);      
@@ -295,9 +285,8 @@ export class TabSearchPage implements OnInit {
     }
 
     const geocodePromises = this.contractorListings.map((contractorListing) =>
-      new Promise<void>((resolve) => {
-        console.log('Geocoding contractor address:', contractorListing); // Log the address being geocoded
-        const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
+      new Promise<void>((resolve) => {        
+        //const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
         this.geocodeAddress(contractorListing.address, (location) => {
           if (this.userAddedMarker) {
             const targetLocation = new google.maps.LatLng(this.userAddedMarker);
@@ -308,8 +297,7 @@ export class TabSearchPage implements OnInit {
                 addressLocation
               ) / 1609.34; // Convert meters to miles
 
-            if (distance <= this.findRadius) {      
-              console.log('TBD street:', contractorListing);       
+            if (distance <= this.findRadius) {                      
               this.withinRangeContractorListings.push({ contractorListing, location });             
             }
           }
@@ -335,12 +323,10 @@ export class TabSearchPage implements OnInit {
       this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
         'success', 1300);
     }
-
-    console.log('Final withinRangeContractorListings:', this.withinRangeContractorListings);
   }
 
   onRadiusChange() {
-    //this.refreshMap();
+    this.checkAddressesWithinRange();
   }
 
   getLatLng(addressObj: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
@@ -365,12 +351,9 @@ export class TabSearchPage implements OnInit {
         zoom: zoom,
       };
 
-      console.log('User added marker at:', this.userAddedMarker, 'Zoom set to:', zoom);
-
       // Reverse geocode and update targetAddress
       this.locationService.getPostalCodeFromCoordinates(lat, lng).then(address => {
-        this.targetAddress = address;
-        console.log('Updated targetAddress:', this.targetAddress);        
+        this.targetAddress = address;                
         this.checkAddressesWithinRange();
       });
       

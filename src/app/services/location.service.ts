@@ -17,12 +17,7 @@ export class LocationService {
         maximumAge: 0,
       });
       const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-
-      console.log(`getCurrentPosition:`, position);
-      console.log(`Accuracy(meters):`, position.coords.accuracy);
-
-      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+      const longitude = position.coords.longitude;      
       return { latitude, longitude };
     } catch (error) {
       console.error('Error getting location:', error);
@@ -39,31 +34,40 @@ export class LocationService {
 
     if (data.results && data.results.length > 0) {
       const addressComponents = data.results[0].address_components;
-      console.log('Address Components:', addressComponents); // Log the address components for debugging
-
-
       const streetNumberComponent = addressComponents.find((component: any) =>
         component.types.includes('street_number')
-      );
-      console.log('Street Number Component:', streetNumberComponent); // Log the street number component for debugging     
+      );      
 
       const routeComponent = addressComponents.find((component: any) =>
         component.types.includes('route')
-      );
-      console.log('Route Component:', routeComponent); // Log the street route component for debugging
+      );      
       
       const postalCodeComponent = addressComponents.find((component: any) =>
         component.types.includes('postal_code')
       );
-      console.log('Postal Code Component:', postalCodeComponent);
 
-      let streetAddress =  (streetNumberComponent ? streetNumberComponent.long_name : '') + ' ' + (routeComponent ? routeComponent.long_name : ''); // Concatenate street number and route for full address
-      console.log('Street Address:', streetAddress); // Log the full street address for debugging
+      const cityComponent = addressComponents.find((component: any) =>
+        component.types.includes('locality')
+      ) ||
+      addressComponents.find((component: any) =>
+        component.types.includes('administrative_area_level_2')
+      ) ||
+      addressComponents.find((component: any) =>
+        component.types.includes('sublocality')
+      );
+
+      const stateComponent = addressComponents.find((component: any) =>
+        component.types.includes('administrative_area_level_1')
+      );
+
+      let streetAddress =  (streetNumberComponent ? streetNumberComponent.long_name : '') + ' ' + (routeComponent ? routeComponent.long_name : ''); // Concatenate street number and route for full address      
       let address: Address = {
         street: streetAddress,
         postalCode: postalCodeComponent ? postalCodeComponent.long_name : '',
-        city: '',
-        state: ''
+        city: cityComponent ? cityComponent.long_name : '',
+        state: stateComponent ? stateComponent.short_name : '',
+        lat: latitude,
+        lng: longitude
       };
 
       return address;

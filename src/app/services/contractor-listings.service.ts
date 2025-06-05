@@ -30,8 +30,6 @@ export class ContractorListingsService {
     
       const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
     
-      console.log('ContractorListings() - queryString:', queryString); // Debugging line
-
       // Make the HTTP request
       return this.http.get(`${this.apiUrl}/ContractorListings${queryString}`, { headers });
     }
