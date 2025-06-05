@@ -140,10 +140,8 @@ export class TabSearchPage implements OnInit {
   async ngOnInit() {
     this.platFormReady();
 
-    
-
     this.radiusChange$
-      .pipe(debounceTime(750)) //  3/4 second debounce
+      .pipe(debounceTime(750))
       .subscribe((radius) => {
         this.findRadiusForUI = radius;
         const zoom = this.getZoomLevelForRadius(radius);
@@ -155,10 +153,15 @@ export class TabSearchPage implements OnInit {
         this.getContractorListings();
       });
 
-      // Flicker for 5 seconds, then stop
-      setTimeout(() => {
-        this.flickerOverlay = false;
-      }, 5000);
+    // Flicker for 5 seconds, then stop
+    setTimeout(() => {
+      this.flickerOverlay = false;
+    }, 5000);
+
+    // Show participate popup after 2 seconds
+    setTimeout(() => {
+      this.showParticipatePopup();
+    }, 2000);
   }
 
   onIndustryChange() {
@@ -407,5 +410,26 @@ export class TabSearchPage implements OnInit {
 
   onRadiusInputChange(value: number) {
     this.radiusChange$.next(value);
+  }
+
+  async showParticipatePopup() {
+    const alert = await this.alertController.create({
+      header: 'Join the Community!',
+      message: 'Participate for free to help your neighbors and get access to more features.',
+      buttons: [
+        {
+          text: 'Maybe Later',
+          role: 'cancel'
+        },
+        {
+          text: 'Participate for Free',
+          handler: () => {
+            // You can add navigation or logic here
+            this.presentToast('Thank you for joining!');
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 }

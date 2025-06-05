@@ -52,7 +52,7 @@
                   <ion-grid>
                     <ion-row>
                       <ion-col>
-                        <div>∙ Consumers ∙</div>
+                        <div>∙ <b>Consumers</b> ∙</div>
                          <p>
                           Find the best contractor in your area. Ai assisted best pricing, level of service, and other factors.</p>   
                         <!-- <p>
@@ -80,7 +80,7 @@
                 <ion-grid>
                   <ion-row>
                     <ion-col>
-                      <div>∙ Contractors ∙</div>
+                      <div>∙ <b>Contractors</b> ∙</div>
                       <div>                       
                         <p>Grow your business while reducing costs associated with travel & preparation (time/fuel/loading equipment, etc)    </p>    
                         <ion-button
@@ -89,7 +89,7 @@
                         [routerLink]="['/login']"
                         [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
                       >
-                        Start
+                        Join
                       </ion-button>
                         <ul>  
                           <sup>Features</sup>
@@ -146,7 +146,7 @@
                   <ion-row>
                     <ion-col>
                       <div class="feedback-header">                        
-                        What are others saying?  <ion-button fill="clear" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
+                        <b>What are others saying?</b>  <ion-button fill="clear" (click)="openFeedbackPopup()">Leave Feedback</ion-button>
                       </div>
                       <div class="review-list">
                         <ion-item *ngFor="let review of reviews" lines="none">
