@@ -40,7 +40,7 @@ export class TabSearchPage implements OnInit {
   contractorListings: ContractorListing[] = [];
 
   filterForSale: boolean = true;
-  filterBarter: boolean = true;
+  filterTrade: boolean = true;
   filterCover: boolean = true;
   // Custom icons for markers
   targetIcon = {
@@ -55,7 +55,7 @@ export class TabSearchPage implements OnInit {
 
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
-  sortingValue: string = 'useAi'; // Default selected value
+  sortingValue: string = 'useAi'; // Default selected value  
   selectedAddress: any = null;
   
 
@@ -125,6 +125,11 @@ export class TabSearchPage implements OnInit {
   selectRadio(value: string): void {
     this.sortingValue = value;
   }
+
+  selectCheckBox(value: string): void {
+    alert('Not implemented yet: Checkbox selected: ' + value);
+  }
+
   
   async ngOnInit() {
     this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
@@ -174,7 +179,8 @@ export class TabSearchPage implements OnInit {
           } as ContractorListing;
         });
 
-        this.platFormReady();
+        //this.platFormReady();
+        this.checkAddressesWithinRange();
       },
       error: (error) => console.error('ContractorListings Error:', error),
     });

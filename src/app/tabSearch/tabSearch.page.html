@@ -94,9 +94,9 @@
             <div *ngIf="withinRangeContractorListings.length >= 1" style="padding-bottom: 10px;">
               <ion-label><sup>Show:</sup></ion-label>
               <div class="checkbox-group">
-                <ion-checkbox [(ngModel)]="filterForSale" labelPlacement="end">For Sale</ion-checkbox>
-                <ion-checkbox [(ngModel)]="filterBarter" labelPlacement="end">Trade</ion-checkbox>
-                <ion-checkbox [(ngModel)]="filterCover" labelPlacement="end">Cover</ion-checkbox>  
+                <ion-checkbox [(ngModel)]="filterForSale" labelPlacement="end" (click)="selectCheckBox('filterForSale')">For Sale</ion-checkbox>
+                <ion-checkbox [(ngModel)]="filterTrade" labelPlacement="end" (click)="selectCheckBox('filterForTrade')">Trade</ion-checkbox>
+                <ion-checkbox [(ngModel)]="filterCover" labelPlacement="end" (click)="selectCheckBox('filterForCover')">Cover</ion-checkbox>  
                   <ion-icon
                     name="help-circle-outline"
                     (click)="openPopup()"

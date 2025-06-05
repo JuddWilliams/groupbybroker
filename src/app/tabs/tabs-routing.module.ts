@@ -27,18 +27,18 @@ const routes: Routes = [
         loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule),
         canActivate: [AuthGuard] // Protected route
       },
-      {
-        path: '',
-        //redirectTo: '/tabs/tabSearch',
-        redirectTo: '/tabs/tabAbout',
+      { // !!! Default route for tabs !!!
+        path: '', 
+        redirectTo: '/tabs/tabSearch',
+        //redirectTo: '/tabs/tabAbout',
         pathMatch: 'full'
       }
     ]
   },
-  {
+  {// !!! Default route for tabs !!!
     path: '',
-    //redirectTo: '/tabs/tabSearch',
-    redirectTo: '/tabs/tabAbout',
+    redirectTo: '/tabs/tabSearch',
+    //redirectTo: '/tabs/tabAbout',
     pathMatch: 'full'
   }
 ];
