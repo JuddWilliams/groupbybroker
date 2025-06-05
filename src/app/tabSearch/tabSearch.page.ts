@@ -110,6 +110,8 @@ export class TabSearchPage implements OnInit {
 
   private radiusChange$ = new Subject<number>();
 
+  flickerOverlay = true;
+
   constructor(
     private alertController: AlertController,
     private toastController: ToastController,
@@ -152,6 +154,11 @@ export class TabSearchPage implements OnInit {
         };
         this.getContractorListings();
       });
+
+      // Flicker for 5 seconds, then stop
+      setTimeout(() => {
+        this.flickerOverlay = false;
+      }, 5000);
   }
 
   onIndustryChange() {

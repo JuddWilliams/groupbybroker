@@ -96,4 +96,14 @@ ion-col:not(.fixed-width-col) {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
+/* Add this to tabSearch.page.scss */
+.flicker {
+  animation: flicker-animation 0.7s linear infinite;
+}
+
+@keyframes flicker-animation {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
 

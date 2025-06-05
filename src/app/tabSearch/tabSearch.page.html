@@ -63,7 +63,7 @@
           <ion-col class="fixed-width-col">            
             <div class="map-container" style="position: relative;">
               <!-- Overlay text -->
-              <div class="map-overlay-text">
+              <div class="map-overlay-text" [class.flicker]="flickerOverlay">
                 <ion-icon name="hand-left-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon>
                 <b>Click the map to set your search location...</b>
               </div>
