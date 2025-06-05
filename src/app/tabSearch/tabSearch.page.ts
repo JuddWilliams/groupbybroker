@@ -21,6 +21,7 @@ export class TabSearchPage implements OnInit {
   isPopupOpen = false;
 
   findRadius: number = 5;//0.5; // In miles  
+  findRadiusForUI: number = this.findRadius;// so its not updated as user types... 
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
   userAddedMarker: google.maps.LatLngLiteral | null = null;
 
@@ -321,12 +322,13 @@ export class TabSearchPage implements OnInit {
     }
     else {
       this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
-        'success', 1300);
+        'success', 1000);
     }
   }
 
   onRadiusChange() {
       // Center the map on the new marker and set zoom to fit findRadius
+      this.findRadiusForUI = this.findRadius; // Update the radius for drawing purposes
       const zoom = this.getZoomLevelForRadius(this.findRadius);
       this.mapOptions = {
         ...this.mapOptions,

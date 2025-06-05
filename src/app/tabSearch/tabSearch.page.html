@@ -8,7 +8,8 @@
       <ion-grid>
         <ion-row>
           <ion-col size-md="3" size-lg="2">
-            <ion-input label="Lookup range? (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ngModelChange)="onRadiusChange()" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>          
+            <ion-input label="Lookup range? (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>                   
+            <ion-button size="small" (click)="onRadiusChange()">Apply</ion-button>
           </ion-col>   
           <ion-col size-md="3" size-lg="3">      
             <ion-select label="Industry? " label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
@@ -32,7 +33,7 @@
           <ion-col size="12" >
             <div style="padding-bottom: 7px;"><b>"Click the map to find any listings in that area."</b></div>
             <span *ngIf="withinRangeContractorListings.length >= 1">
-                       <b>{{withinRangeContractorListings.length}}</b> Items of interest within <b>{{ findRadius }}</b> Miles of target address:<b>              
+                       <b>{{withinRangeContractorListings.length}}</b> Items of interest within <b>{{ findRadiusForUI }}</b> Miles of target address:<b>              
               <span *ngIf="targetAddress.street && targetAddress.street.trim() !== ''">{{ targetAddress.street }}, </span>              
               {{ targetAddress.postalCode }}
             </b>  
@@ -75,7 +76,7 @@
                 <map-circle
                   *ngIf="userAddedMarker"
                   [center]="userAddedMarker"
-                  [radius]="findRadius * 1609.34"
+                  [radius]="findRadiusForUI * 1609.34"
                   [options]="{
                     strokeColor: '#4285F4',
                     strokeOpacity: 0.8,
