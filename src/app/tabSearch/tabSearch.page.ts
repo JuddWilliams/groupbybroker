@@ -326,6 +326,14 @@ export class TabSearchPage implements OnInit {
   }
 
   onRadiusChange() {
+      // Center the map on the new marker and set zoom to fit findRadius
+      const zoom = this.getZoomLevelForRadius(this.findRadius);
+      this.mapOptions = {
+        ...this.mapOptions,
+        center: { lat: (this.targetAddress as any).lat, lng: (this.targetAddress as any).lng },
+        zoom: zoom,
+      };
+
     this.checkAddressesWithinRange();
   }
 
