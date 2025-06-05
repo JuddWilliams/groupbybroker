@@ -8,9 +8,10 @@
         <ion-grid>
           <ion-row>
             <ion-col size="12" size-md="8">              
-              <h4>Optimize efficiency and cut costs by grouping work by area</h4> 
-              <p>"By reducing travel and preparation both contractors and homeowners benefit from a cost-effective, seamless operation."
+              <h4>Work together as a community to optimize efficiency</h4> 
+              <p>"By reducing travel and preparation time both contractors and homeowners benefit from a cost-effective operation."
               </p>
+              
               <!-- 
                 
                 <p><ion-icon name="star-outline"></ion-icon> <i> Recognizing the cost savings when servicing an area.</i></p>               
@@ -60,8 +61,8 @@
                           Customer satisfaction also improves as contractors work towards better reviews and higher user ratings.  
                           Many also offer referrals for your participation.
                         </p>             -->
-                        <p>Or just post your job for hire.</p>          
-                        <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Search</ion-button>
+                        <!-- <p>Or just post your job for hire.</p>          
+                        <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Search</ion-button> -->
                         <ion-button
                         size="small"
                         fill="outline"
@@ -69,7 +70,7 @@
                         [queryParams]="{ returnUrl: '/tabs/tabDashboard' }">
                       Post / Request Bids
                       </ion-button>
-                        <ion-img src="assets/mapEg.gif"></ion-img>          
+                        <!-- <ion-img src="assets/mapEg.gif"></ion-img>           -->
                       </ion-col>
                     </ion-row>
                   </ion-grid>     
@@ -82,18 +83,18 @@
                     <ion-col>
                       <div>∙ <b>Contractors</b> ∙</div>
                       <div>                       
-                        <p>Grow your business while reducing costs associated with travel & preparation (time/fuel/loading equipment, etc)    </p>    
+                        <p>Grow your business while reducing costs associated with travel, preparation, and much more.</p>    
                         <ion-button
                         size="small"
                         fill="outline"
                         [routerLink]="['/login']"
                         [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
                       >
-                        Join
+                        Free Participate
                       </ion-button>
                         <ul>  
                           <sup>Features</sup>
-                          <li>Buy, Sell,Trade accounts (Business to business)  
+                          <li>Buy, Sell,Trade accounts (B2B)  
                             <ion-icon
                               name="help-circle-outline"
                               (click)="openPopup()"
@@ -101,7 +102,7 @@
                               style="cursor: pointer;"
                           ></ion-icon>
                         </li> 
-                            <li>Promote your services by offering proximity incentives & referrals 
+                            <li>Offer incentives & referrals for jobs in close proximity to your other jobs.
                               <ion-icon
                                 name="help-circle-outline"
                                 (click)="openPopup()"
@@ -109,21 +110,13 @@
                                 style="cursor: pointer;"
                             ></ion-icon>
                           </li>     
-                          <li>Support while on medical leave, vacation, other   
+                          <li>Coverage while on medical leave, vacation, other   
                             <ion-icon
                             name="help-circle-outline"
                             (click)="openPopup()"
                             title="Click for more information"
                             style="cursor: pointer;"
-                            ></ion-icon></li>     
-                          <li>Offer simpler payment services to your customers  
-                            <ion-icon 
-                            name="help-circle-outline"
-                            (click)="openPopup()"
-                            title="Click for more information"
-                            style="cursor: pointer;"
-                            ></ion-icon>
-                          </li>      
+                            ></ion-icon></li>                                 
                         <li>Facilitate referral programs  
                           <ion-icon 
                           name="help-circle-outline"

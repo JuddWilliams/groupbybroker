@@ -8,6 +8,7 @@ import { Address, ContractorListing } from '../models/address';
 import { MapInfoWindow } from '@angular/google-maps';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabSearch',
@@ -117,7 +118,8 @@ export class TabSearchPage implements OnInit {
     private toastController: ToastController,
     private platform: Platform,
     private locationService: LocationService,
-    private contractorListingsService: ContractorListingsService
+    private contractorListingsService: ContractorListingsService,
+    private router: Router // add this
   ) {}
 
   onMarkerClick(addressObj: any): void {
@@ -414,18 +416,17 @@ export class TabSearchPage implements OnInit {
 
   async showParticipatePopup() {
     const alert = await this.alertController.create({
-      header: 'Join the Community!',
-      message: 'Participate for free to help your neighbors and get access to more features.',
+      header: 'Join the Community',
+      message: 'Participate for free while we promote this service in your area.  As a community work together in being cost-effective.',
       buttons: [
         {
-          text: 'Maybe Later',
+          text: 'maybe later',
           role: 'cancel'
         },
         {
-          text: 'Participate for Free',
+          text: 'participate for free',
           handler: () => {
-            // You can add navigation or logic here
-            this.presentToast('Thank you for joining!');
+            this.router.navigate(['/tabs/tabAbout']); // redirect to tabAbout
           }
         }
       ]
