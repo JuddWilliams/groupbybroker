@@ -6,6 +6,8 @@ import { ContractorListingsService } from '../services/contractor-listings.servi
 import { state } from '@angular/animations';
 import { Address, ContractorListing } from '../models/address';
 import { MapInfoWindow } from '@angular/google-maps';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tabSearch',
@@ -20,7 +22,7 @@ export class TabSearchPage implements OnInit {
   
   isPopupOpen = false;
 
-  findRadius: number = 5;//0.5; // In miles  
+  findRadius: number = 15;//0.5; // In miles  
   findRadiusForUI: number = this.findRadius;// so its not updated as user types... 
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
   userAddedMarker: google.maps.LatLngLiteral | null = null;
@@ -106,6 +108,8 @@ export class TabSearchPage implements OnInit {
     },
   ];
 
+  private radiusChange$ = new Subject<number>();
+
   constructor(
     private alertController: AlertController,
     private toastController: ToastController,
@@ -132,34 +136,30 @@ export class TabSearchPage implements OnInit {
 
   
   async ngOnInit() {
-    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
-      next: (response) => 
-        {          
-          this.contractorListings = response.map((contractorListing: any) => {
-            return {
-              address: {
-                street: contractorListing.street || '',
-                city: contractorListing.city || '',
-                state: contractorListing.state || '',
-                postalCode: contractorListing.postalCode || '',
-              },
-              company: {
-                id:  -1,
-                companyName: contractorListing.businessName || '',               
-              },
-              type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
-              private: contractorListing.private || false, // Assuming 'private' is a property in the response
-            } as ContractorListing;
-          });
+    this.platFormReady();
 
-          this.platFormReady();          
-        },
-      error: (error) => console.error('ContractorListings Error:', error),
-    });
     
+
+    this.radiusChange$
+      .pipe(debounceTime(750)) //  3/4 second debounce
+      .subscribe((radius) => {
+        this.findRadiusForUI = radius;
+        const zoom = this.getZoomLevelForRadius(radius);
+        this.mapOptions = {
+          ...this.mapOptions,
+          center: { lat: (this.targetAddress as any).lat, lng: (this.targetAddress as any).lng },
+          zoom: zoom,
+        };
+        this.getContractorListings();
+      });
   }
 
   onIndustryChange() {
+    this.getContractorListings();
+  }
+
+  getContractorListings()
+  {
     this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
       next: (response) => {        
         this.contractorListings = response.map((contractorListing: any) => {
@@ -178,15 +178,13 @@ export class TabSearchPage implements OnInit {
             private: contractorListing.private || false, // Assuming 'private' is a property in the response
           } as ContractorListing;
         });
-
-        //this.platFormReady();
+        
         this.checkAddressesWithinRange();
       },
       error: (error) => console.error('ContractorListings Error:', error),
-    });
-    
-  }
+    });    
 
+  }
 
   async platFormReady() {
     await this.platform.ready();
@@ -207,6 +205,7 @@ export class TabSearchPage implements OnInit {
   refreshMap(coords?: { lat: number, lng: number }) {
     // Use passed coordinates if available, otherwise default to Jacksonville, Fl. (lat: 30.3322, lng: -81.6557)
     const center = coords ? coords : { lat: 30.3322, lng: -81.6557 };
+    console.log('Refreshing map with center:', center);
     this.mapOptions = {
       center,
       zoom: 12,
@@ -342,7 +341,7 @@ export class TabSearchPage implements OnInit {
         zoom: zoom,
       };
 
-    this.checkAddressesWithinRange();
+    this.getContractorListings();
   }
 
   getLatLng(addressObj: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
@@ -370,7 +369,7 @@ export class TabSearchPage implements OnInit {
       // Reverse geocode and update targetAddress
       this.locationService.getPostalCodeFromCoordinates(lat, lng).then(address => {
         this.targetAddress = address;                
-        this.checkAddressesWithinRange();
+        this.getContractorListings();
       });
       
     }
@@ -399,4 +398,7 @@ export class TabSearchPage implements OnInit {
     this.isPopupOpen = false; // Close the popup
   }
 
+  onRadiusInputChange(value: number) {
+    this.radiusChange$.next(value);
+  }
 }

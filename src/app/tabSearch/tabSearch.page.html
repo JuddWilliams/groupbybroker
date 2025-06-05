@@ -7,13 +7,23 @@
   <ion-card>    
       <ion-grid>
         <ion-row>
-          <ion-col size-md="3" size-lg="2">
-            <ion-input label="Lookup range? (miles)" label-placement="floating" #findRadiusInput [(ngModel)]="findRadius" (ionFocus)="selectText()" placeholder="Enter Range"></ion-input>                   
-            <ion-button size="small" (click)="onRadiusChange()">Apply</ion-button>
+          <ion-col size-md="3" size-lg="2" style="display: flex; align-items: flex-end; gap: 6px;">
+            <ion-input
+              label="Lookup range? (miles)"
+              label-placement="floating"
+              #findRadiusInput
+              [(ngModel)]="findRadius"
+              (ngModelChange)="onRadiusInputChange($event)"
+              (ionFocus)="selectText()"
+              placeholder="Enter Range"
+              style="flex: 1;"
+            ></ion-input>
+            <!-- <ion-button size="small" fill="outline" class="small-button" (click)="onRadiusChange()">Apply</ion-button>  -->
+              
           </ion-col>   
           <ion-col size-md="3" size-lg="3">      
             <ion-select label="Industry? " label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
-              <ion-select-option value="All">All</ion-select-option>
+              <!-- <ion-select-option value="All">All</ion-select-option> -->
               <ion-select-option value="Lawn care">Yard care</ion-select-option>
               <ion-select-option value="Pesticides">Pesticides</ion-select-option>
               <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>

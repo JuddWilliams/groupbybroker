@@ -11,7 +11,7 @@ import { ToastController } from '@ionic/angular';
   standalone: false,
 })
 export class TabAboutPage implements OnInit {
-  
+    
   numberOfContractorsInArea: number = 0;
   readonly numberOfContractorsInAreaThreshold: number = 500;
   isPopupOpen = false;
@@ -149,7 +149,7 @@ export class TabAboutPage implements OnInit {
         this.locationNote = 'Note: We were unable to determine your location.';
       }
     }
-    else {
+    else {      
       alert( `We're unable to determine your locaton.  You may have disabled location access for groupBuyology.com.\n
         To enable location access, please go to your browser settings:\n
         - In Chrome: Go to Settings > Privacy and Security > Site Settings > Permissions > Location: Under 'Customized behaviors' then delete. Return to page and refresh.\n

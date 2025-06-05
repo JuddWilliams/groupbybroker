@@ -15,7 +15,7 @@ const routes: Routes = [
       {
         path: 'tabSearch',
         loadChildren: () => import('../tabSearch/tabSearch.module').then(m => m.TabSearchPageModule),
-        canActivate: [AuthGuard] // Protected route
+       // canActivate: [AuthGuard] // Protected route
       },
       {
         path: 'tabDashboard',
