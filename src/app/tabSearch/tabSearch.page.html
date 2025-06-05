@@ -41,7 +41,7 @@
         </ion-row>
         <ion-row>
           <ion-col size="12" >
-            <div style="padding-bottom: 7px;"><b>"Click the map to find any listings in that area."</b></div>
+            <!-- <div style="padding-bottom: 7px;"><b>"Click the map to find any listings in that area."</b></div> -->
             <span *ngIf="withinRangeContractorListings.length >= 1">
                        <b>{{withinRangeContractorListings.length}}</b> Items of interest within <b>{{ findRadiusForUI }}</b> Miles of target address:<b>              
               <span *ngIf="targetAddress.street && targetAddress.street.trim() !== ''">{{ targetAddress.street }}, </span>              
@@ -61,7 +61,13 @@
         </ion-row>
         <ion-row id="contentx">      
           <ion-col class="fixed-width-col">            
-            <div class="map-container">
+            <div class="map-container" style="position: relative;">
+              <!-- Overlay text -->
+              <div class="map-overlay-text">
+                <ion-icon name="hand-left-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon>
+                <b>Click the map to set your search location...</b>
+              </div>
+              <!-- The map itself -->
               <google-map [options]="mapOptions" (mapClick)="onMapClick($event)">
                 <!-- Existing markers -->                
                 <map-marker
