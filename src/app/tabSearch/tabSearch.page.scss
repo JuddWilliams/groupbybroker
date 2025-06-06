@@ -80,8 +80,8 @@ ion-col:not(.fixed-width-col) {
 
 .map-overlay-text {
   position: absolute;
-  top: 60px;
-  left: 50%;
+  top: 10px;
+  left: 65%;
   transform: translateX(-50%);
   background: rgba(255, 251, 230, 0.95);
   border: 1px solid #ffe082;
@@ -94,7 +94,7 @@ ion-col:not(.fixed-width-col) {
   display: flex;
   align-items: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  opacity: 0.75;
+  opacity: 0.82;
 }
 
 /* Add this to tabSearch.page.scss */

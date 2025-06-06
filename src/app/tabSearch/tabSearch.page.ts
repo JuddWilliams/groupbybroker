@@ -38,7 +38,7 @@ export class TabSearchPage implements OnInit {
   flickerOverlay = true;
 
 
-  selectedIndustry: string = 'Lawn care'; //'All'; //'Lawn care'; 
+  selectedIndustry: string = 'All'; //'All'; //'Lawn care'; 
   errorMessage: string | null = null;
   isSmallViewport: boolean = false; // Flag to track if the viewport is small
   numberOfContractorsInArea: number = 5; 
@@ -141,33 +141,35 @@ export class TabSearchPage implements OnInit {
     this.platFormReady();
 
     // laod contractors.. this won't stay here i 'm guessing!!!
-    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
-    next: (response) => {        
-      this.contractorListings = response.map((contractorListing: any) => {
-        return {
-          address: {
-            street: contractorListing.street || '',
-            city: contractorListing.city || '',
-            state: contractorListing.state || '',
-            postalCode: contractorListing.postalCode || '',
-          },
-          company: {
-            id:  -1,
-            companyName: contractorListing.businessName || '',               
-          },
-          type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
-          private: contractorListing.private || false, // Assuming 'private' is a property in the response
-        } as ContractorListing;
-      });
-      
-      this.checkAddressesWithinRange();
-    },
-    error: (error) => console.error('ContractorListings Error:', error),
-   });    
+    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, 'Lawn care'/*this.selectedIndustry*/).subscribe({
+      next: (response) => {        
+        this.contractorListings = response.map((contractorListing: any) => {
+          return {
+            address: {
+              street: contractorListing.street || '',
+              city: contractorListing.city || '',
+              state: contractorListing.state || '',
+              postalCode: contractorListing.postalCode || '',
+            },
+            company: {
+              id:  -1,
+              companyName: contractorListing.businessName || '',               
+            },
+            type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
+            private: contractorListing.private || false, // Assuming 'private' is a property in the response
+          } as ContractorListing;
+        });
+        
+        // removed since it gets called on bounds change.
+        // 
+        //this.checkAddressesWithinRange();
+      },
+      error: (error) => console.error('ContractorListings Error:', error),
+    });    
 
 
     this.boundsChange$
-      .pipe(debounceTime(750))
+      .pipe(debounceTime(900))
       .subscribe(() => {
         this.checkAddressesWithinRange();
       });
@@ -180,7 +182,10 @@ export class TabSearchPage implements OnInit {
     // Show participate popup after 2 seconds
     setTimeout(() => {
       this.showParticipatePopup();
-    }, 5000);
+    }, 60000);
+     
+    window.addEventListener('resize', () => this.checkViewportSize());
+
   }
 
   onIndustryChange() {
@@ -317,8 +322,7 @@ export class TabSearchPage implements OnInit {
 
       // Reverse geocode and update targetAddress
       this.locationService.getPostalCodeFromCoordinates(lat, lng).then(address => {
-        this.targetAddress = address;                
-        //this.getContractorListings();
+        this.targetAddress = address;                        
       });
       
     }
@@ -372,9 +376,7 @@ export class TabSearchPage implements OnInit {
     }
     
     const geocodePromises =  this.contractorListings.map((contractorListing) =>
-      new Promise<void>((resolve) => {        
-        //const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
-        console.log("here");
+      new Promise<void>((resolve) => {                        
         this.geocodeAddress(contractorListing.address, (location) => {
           console.log("contractorListing.address:", contractorListing.address);
           console.log("its cords:", location);
@@ -396,17 +398,20 @@ export class TabSearchPage implements OnInit {
     // Wait for all geocoding operations to complete
     await Promise.all(geocodePromises);
 
+    
+    // Add a second delay before showing the toast
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Display a toast message if no records are found
     if (this.withinRangeContractorListings.length === 0) {
       this.presentToast('No listings found. Zoom out or try a different area.',
         'warning', 3000
       );
     }
-    else {
-      this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
-        'success', 1000);
-    }
-
+    // else {
+    //   this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
+    //     'success', 1000);
+    // }
   }
 
   isWithinBounds(lat: number, lng: number, bounds: google.maps.LatLngBounds): boolean 
