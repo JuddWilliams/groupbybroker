@@ -6,21 +6,7 @@
 <ion-content>
   <ion-card>    
       <ion-grid>
-        <ion-row>
-          <ion-col size-md="3" size-lg="2" style="display: flex; align-items: flex-end; gap: 6px;">
-            <ion-input
-              label="Lookup range? (miles)"
-              label-placement="floating"
-              #findRadiusInput
-              [(ngModel)]="findRadius"
-              (ngModelChange)="onRadiusInputChange($event)"
-              (ionFocus)="selectText()"
-              placeholder="Enter Range"
-              style="flex: 1;"
-            ></ion-input>
-            <!-- <ion-button size="small" fill="outline" class="small-button" (click)="onRadiusChange()">Apply</ion-button>  -->
-              
-          </ion-col>   
+        <ion-row>      
           <ion-col size-md="3" size-lg="3">      
             <ion-select label="Industry? " label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
               <!-- <ion-select-option value="All">All</ion-select-option> -->
@@ -40,23 +26,11 @@
            </ion-col>            
         </ion-row>
         <ion-row>
-          <ion-col size="12" >
-            <!-- <div style="padding-bottom: 7px;"><b>"Click the map to find any listings in that area."</b></div> -->
-            <span *ngIf="withinRangeContractorListings.length >= 1">
-                       <b>{{withinRangeContractorListings.length}}</b> Items of interest within <b>{{ findRadiusForUI }}</b> Miles of target address:<b>              
-              <span *ngIf="targetAddress.street && targetAddress.street.trim() !== ''">{{ targetAddress.street }}, </span>              
-              {{ targetAddress.postalCode }}
-            </b>  
+          <ion-col size="12" >            
+            <!-- <span *ngIf="withinRangeContractorListings.length >= 1"> -->
+            <span>
+              <b>{{withinRangeContractorListings.length}}</b> item<span *ngIf="withinRangeContractorListings.length !== 1" >s</span> of interest within current map view                       
             </span>
-      
-            <!-- hiding, for now as i'm not using. don't remove yet. -->
-             <ion-button *ngIf="false" size="small" class="small-button" (click)="presentAlert()">change</ion-button>          
-              <ion-alert
-              trigger="present-alert"
-              header="Please enter address"
-              [buttons]="alertButtons"
-              [inputs]="alertInputs"
-              ></ion-alert>
           </ion-col>
         </ion-row>
         <ion-row id="contentx">      
@@ -65,7 +39,7 @@
               <!-- Overlay text -->
               <div class="map-overlay-text" [class.flicker]="flickerOverlay">
                 <ion-icon name="hand-left-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon>
-                <b>Click the map to set your search location...</b>
+                <b>Use map to find items of interest</b>
               </div>
               <!-- The map itself -->
               <google-map #googleMap [options]="mapOptions" (mapClick)="onMapClick($event)" (boundsChanged)="onMapBoundsChanged()">
@@ -82,7 +56,7 @@
                   (mapClick)="onMarkerClick(addressObj)"
                 ></map-marker>
                 <!-- User-added marker -->
-                <map-marker *ngIf="userAddedMarker" [position]="userAddedMarker" label="Target"></map-marker>
+                <map-marker *ngIf="userAddedMarker" [position]="userAddedMarker" label="Pin"></map-marker>
                 <map-info-window #infoWindow>
                   <div>
                     <!-- Info window content -->

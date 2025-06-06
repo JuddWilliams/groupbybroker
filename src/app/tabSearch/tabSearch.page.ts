@@ -22,12 +22,21 @@ export class TabSearchPage implements OnInit {
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   @ViewChild('googleMap', { static: false }) map!: GoogleMap;
   
+  mapOptions: google.maps.MapOptions = {    
+  };
+  
   isPopupOpen = false;
+  findRadiusForUI: number = 15;// so its not updated as user types... 
 
-  findRadius: number = 15;//0.5; // In miles  
-  findRadiusForUI: number = this.findRadius;// so its not updated as user types... 
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
   userAddedMarker: google.maps.LatLngLiteral | null = null;
+  withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
+  contractorListings: ContractorListing[] = [];
+
+  private radiusChange$ = new Subject<number>();
+  private boundsChange$ = new Subject<void>();
+  flickerOverlay = true;
+
 
   selectedIndustry: string = 'Lawn care'; //'All'; //'Lawn care'; 
   errorMessage: string | null = null;
@@ -36,16 +45,15 @@ export class TabSearchPage implements OnInit {
   readonly numberOfContractorsInAreaThreshold: number = 5;
   locationNote: string = ''; 
   
-  withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
-
-  mapOptions: google.maps.MapOptions = {    
-  };
-  
-  contractorListings: ContractorListing[] = [];
-
   filterForSale: boolean = true;
   filterTrade: boolean = true;
   filterCover: boolean = true;
+  
+  items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
+  //sorting: string = 'useAi'; // Default sorting option
+  sortingValue: string = 'useAi'; // Default selected value  
+  selectedAddress: any = null;
+  
   // Custom icons for markers
   targetIcon = {
     url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red marker for the target
@@ -57,13 +65,6 @@ export class TabSearchPage implements OnInit {
     scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
   };
 
-  items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
-  //sorting: string = 'useAi'; // Default sorting option
-  sortingValue: string = 'useAi'; // Default selected value  
-  selectedAddress: any = null;
-  
-
-  
   public alertButtons = [
     {
       text: 'Cancel',
@@ -109,11 +110,6 @@ export class TabSearchPage implements OnInit {
       max: 99999,
     },
   ];
-
-  private radiusChange$ = new Subject<number>();
-  private boundsChange$ = new Subject<void>();
-
-  flickerOverlay = true;
 
   constructor(
     private alertController: AlertController,
@@ -164,7 +160,7 @@ export class TabSearchPage implements OnInit {
         } as ContractorListing;
       });
       
-      this.checkAddressesWithinRange2();
+      this.checkAddressesWithinRange();
     },
     error: (error) => console.error('ContractorListings Error:', error),
    });    
@@ -173,26 +169,13 @@ export class TabSearchPage implements OnInit {
     this.boundsChange$
       .pipe(debounceTime(750))
       .subscribe(() => {
-        this.checkAddressesWithinMapBounds();
-      });
-
-    this.radiusChange$
-      .pipe(debounceTime(750))
-      .subscribe((radius) => {
-        this.findRadiusForUI = radius;
-        const zoom = this.getZoomLevelForRadius(radius);
-        this.mapOptions = {
-          ...this.mapOptions,
-          center: { lat: (this.targetAddress as any).lat, lng: (this.targetAddress as any).lng },
-          zoom: zoom,
-        };
-        this.getContractorListings();
+        this.checkAddressesWithinRange();
       });
 
     // Flicker for 5 seconds, then stop
     setTimeout(() => {
       this.flickerOverlay = false;
-    }, 5000);
+    }, 3000);
 
     // Show participate popup after 2 seconds
     setTimeout(() => {
@@ -201,36 +184,9 @@ export class TabSearchPage implements OnInit {
   }
 
   onIndustryChange() {
-    this.getContractorListings();
+    alert("todo: need to implement this");    
   }
 
-  getContractorListings()
-  {
-    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
-      next: (response) => {        
-        this.contractorListings = response.map((contractorListing: any) => {
-          return {
-            address: {
-              street: contractorListing.street || '',
-              city: contractorListing.city || '',
-              state: contractorListing.state || '',
-              postalCode: contractorListing.postalCode || '',
-            },
-            company: {
-              id:  -1,
-              companyName: contractorListing.businessName || '',               
-            },
-            type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
-            private: contractorListing.private || false, // Assuming 'private' is a property in the response
-          } as ContractorListing;
-        });
-        
-        this.checkAddressesWithinRange();
-      },
-      error: (error) => console.error('ContractorListings Error:', error),
-    });    
-
-  }
 
   async platFormReady() {
     await this.platform.ready();
@@ -268,16 +224,6 @@ export class TabSearchPage implements OnInit {
     return null;
   }
 
-  async presentAlert() {
-    const alert = await this.alertController.create({
-      header: 'Please enter address',
-      inputs: this.alertInputs,
-      buttons: this.alertButtons
-    });
-
-    await alert.present();
-  }
-
    async presentToast(message: string, color: string = 'danger', duration: number = 3000, position: 'top' | 'bottom' = 'top') {
     const toast = await this.toastController.create({    
       message: message,
@@ -286,6 +232,26 @@ export class TabSearchPage implements OnInit {
       color: color
     });
     await toast.present();
+  }
+
+    async showParticipatePopup() {
+    const alert = await this.alertController.create({
+      header: 'Join the Community',
+      message: 'As a free service you have nothing to loose.  Simple and easy to use.',
+      buttons: [
+        {
+          text: 'maybe later',
+          role: 'cancel'
+        },
+        {
+          text: 'participate for free',
+          handler: () => {
+            this.router.navigate(['/tabs/tabDashboard']); // redirect to tabAbout
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   checkViewportSize() {
@@ -326,73 +292,7 @@ export class TabSearchPage implements OnInit {
       }
     });
   }
-
-  async checkAddressesWithinRange() {
-    this.withinRangeContractorListings = []; // Clear previous results
-      
-      // Return early if findRadius is not a valid number or is less than or equal to 0
-    if (isNaN(this.findRadius) || this.findRadius <= 0) {
-      console.info('Invalid findRadius:', this.findRadius);      
-      return;
-    }
-
-    const geocodePromises = this.contractorListings.map((contractorListing) =>
-      new Promise<void>((resolve) => {        
-        //const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
-        this.geocodeAddress(contractorListing.address, (location) => {
-          if (this.userAddedMarker) {
-            const targetLocation = new google.maps.LatLng(this.userAddedMarker);
-            const addressLocation = new google.maps.LatLng(location);
-            const distance =
-              google.maps.geometry.spherical.computeDistanceBetween(
-                targetLocation,
-                addressLocation
-              ) / 1609.34; // Convert meters to miles
-
-            if (distance <= this.findRadius) {                      
-              this.withinRangeContractorListings.push({ contractorListing, location });             
-            }
-          }
-          resolve(); // Resolve the promise when geocoding is complete
-        });
-      })
-    );
-
-    // Wait for all geocoding operations to complete
-    await Promise.all(geocodePromises);
-
-    // Remove duplicates from withinRangeAddresses (if any)
-    this.withinRangeContractorListings = this.withinRangeContractorListings.filter(
-      (value, index, self) =>
-        index === self.findIndex((t) => t.contractorListing === value.contractorListing)
-    );
-
-    // Display a toast message if no records are found
-    if (this.withinRangeContractorListings.length === 0) {
-      this.presentToast('No contractor listings found within the specified radius. Change \'lookup Range\' or \'Target Address\'.');
-    }
-    else {
-      this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
-        'success', 1000);
-    }
-  }
-
-  onRadiusChange() {
-
-    alert("ignoring this for now.. changing to entire view.. ");
-    
-    // Center the map on the new marker and set zoom to fit findRadius
-    this.findRadiusForUI = this.findRadius; // Update the radius for drawing purposes
-    const zoom = this.getZoomLevelForRadius(this.findRadius);
-    this.mapOptions = {
-      ...this.mapOptions,
-      center: { lat: (this.targetAddress as any).lat, lng: (this.targetAddress as any).lng },
-      zoom: zoom,
-    };
-
-    this.getContractorListings();
-  }
-
+  
   getLatLng(addressObj: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }): google.maps.LatLngLiteral {
     return addressObj.location;
   }
@@ -408,7 +308,7 @@ export class TabSearchPage implements OnInit {
       this.userAddedMarker = { lat, lng };
 
       // Center the map on the new marker and set zoom to fit findRadius
-      const zoom = this.getZoomLevelForRadius(this.findRadius);
+      const zoom = this.getZoomLevelForRadius(this.findRadiusForUI);
       this.mapOptions = {
         ...this.mapOptions,
         center: { lat, lng },
@@ -418,7 +318,7 @@ export class TabSearchPage implements OnInit {
       // Reverse geocode and update targetAddress
       this.locationService.getPostalCodeFromCoordinates(lat, lng).then(address => {
         this.targetAddress = address;                
-        this.getContractorListings();
+        //this.getContractorListings();
       });
       
     }
@@ -451,48 +351,11 @@ export class TabSearchPage implements OnInit {
     this.radiusChange$.next(value);
   }
 
-  async showParticipatePopup() {
-    const alert = await this.alertController.create({
-      header: 'Join the Community',
-      message: 'As a free service you have nothing to loose.  Simple and easy to use.',
-      buttons: [
-        {
-          text: 'maybe later',
-          role: 'cancel'
-        },
-        {
-          text: 'participate for free',
-          handler: () => {
-            this.router.navigate(['/tabs/tabAbout']); // redirect to tabAbout
-          }
-        }
-      ]
-    });
-    await alert.present();
+  onMapBoundsChanged() {    
+    this.boundsChange$.next();    
   }
 
-  onMapBoundsChanged() {
-    // recalculate your visible listings here
-    console.log("onMapBoundsChanged()");
-    this.boundsChange$.next();
-    
-  }
-
-  checkAddressesWithinMapBounds() {
-    console.log('checkAddressesWithinMapBounds()');
-    
-
-
-    //this.getContractorListings();// !!!!calling here vs Call on pin/radius 
-    // this was getContractorListing. but changing to call here as i will do other things. 
-
-
-        this.checkAddressesWithinRange2();
-
-    // pdate the UI or markers based on the filtered listings
-  }
-
-  async checkAddressesWithinRange2() {
+  async checkAddressesWithinRange() {
     
      this.withinRangeContractorListings = []; 
 
@@ -508,12 +371,6 @@ export class TabSearchPage implements OnInit {
       return;
     }
     
-    // const ne = bounds.getNorthEast(); // northeast corner (lat, lng)
-    // const sw = bounds.getSouthWest(); // southwest corner (lat, lng)
-    // console.log("getNorthEast()", ne);
-    // console.log("getSouthWest()", sw);
-
-
     const geocodePromises =  this.contractorListings.map((contractorListing) =>
       new Promise<void>((resolve) => {        
         //const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
@@ -541,7 +398,9 @@ export class TabSearchPage implements OnInit {
 
     // Display a toast message if no records are found
     if (this.withinRangeContractorListings.length === 0) {
-      this.presentToast('No contractor listings found within the specified radius. Change \'lookup Range\' or \'Target Address\'.');
+      this.presentToast('No listings found. Zoom out or try a different area.',
+        'warning', 3000
+      );
     }
     else {
       this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
