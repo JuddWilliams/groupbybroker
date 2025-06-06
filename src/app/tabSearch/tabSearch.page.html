@@ -68,7 +68,7 @@
                 <b>Click the map to set your search location...</b>
               </div>
               <!-- The map itself -->
-              <google-map [options]="mapOptions" (mapClick)="onMapClick($event)">
+              <google-map #googleMap [options]="mapOptions" (mapClick)="onMapClick($event)" (boundsChanged)="onMapBoundsChanged()">
                 <!-- Existing markers -->                
                 <map-marker
                   *ngFor="let addressObj of withinRangeContractorListings"

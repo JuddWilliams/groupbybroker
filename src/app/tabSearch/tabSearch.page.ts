@@ -5,7 +5,7 @@ import { LocationService } from '../services/location.service';
 import { ContractorListingsService } from '../services/contractor-listings.service';
 import { state } from '@angular/animations';
 import { Address, ContractorListing } from '../models/address';
-import { MapInfoWindow } from '@angular/google-maps';
+import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -20,6 +20,7 @@ export class TabSearchPage implements OnInit {
 
   @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
+  @ViewChild('googleMap', { static: false }) map!: GoogleMap;
   
   isPopupOpen = false;
 
@@ -110,6 +111,7 @@ export class TabSearchPage implements OnInit {
   ];
 
   private radiusChange$ = new Subject<number>();
+  private boundsChange$ = new Subject<void>();
 
   flickerOverlay = true;
 
@@ -142,6 +144,38 @@ export class TabSearchPage implements OnInit {
   async ngOnInit() {
     this.platFormReady();
 
+    // laod contractors.. this won't stay here i 'm guessing!!!
+    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry).subscribe({
+    next: (response) => {        
+      this.contractorListings = response.map((contractorListing: any) => {
+        return {
+          address: {
+            street: contractorListing.street || '',
+            city: contractorListing.city || '',
+            state: contractorListing.state || '',
+            postalCode: contractorListing.postalCode || '',
+          },
+          company: {
+            id:  -1,
+            companyName: contractorListing.businessName || '',               
+          },
+          type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
+          private: contractorListing.private || false, // Assuming 'private' is a property in the response
+        } as ContractorListing;
+      });
+      
+      this.checkAddressesWithinRange2();
+    },
+    error: (error) => console.error('ContractorListings Error:', error),
+   });    
+
+
+    this.boundsChange$
+      .pipe(debounceTime(750))
+      .subscribe(() => {
+        this.checkAddressesWithinMapBounds();
+      });
+
     this.radiusChange$
       .pipe(debounceTime(750))
       .subscribe((radius) => {
@@ -163,7 +197,7 @@ export class TabSearchPage implements OnInit {
     // Show participate popup after 2 seconds
     setTimeout(() => {
       this.showParticipatePopup();
-    }, 2000);
+    }, 5000);
   }
 
   onIndustryChange() {
@@ -344,14 +378,17 @@ export class TabSearchPage implements OnInit {
   }
 
   onRadiusChange() {
-      // Center the map on the new marker and set zoom to fit findRadius
-      this.findRadiusForUI = this.findRadius; // Update the radius for drawing purposes
-      const zoom = this.getZoomLevelForRadius(this.findRadius);
-      this.mapOptions = {
-        ...this.mapOptions,
-        center: { lat: (this.targetAddress as any).lat, lng: (this.targetAddress as any).lng },
-        zoom: zoom,
-      };
+
+    alert("ignoring this for now.. changing to entire view.. ");
+    
+    // Center the map on the new marker and set zoom to fit findRadius
+    this.findRadiusForUI = this.findRadius; // Update the radius for drawing purposes
+    const zoom = this.getZoomLevelForRadius(this.findRadius);
+    this.mapOptions = {
+      ...this.mapOptions,
+      center: { lat: (this.targetAddress as any).lat, lng: (this.targetAddress as any).lng },
+      zoom: zoom,
+    };
 
     this.getContractorListings();
   }
@@ -417,7 +454,7 @@ export class TabSearchPage implements OnInit {
   async showParticipatePopup() {
     const alert = await this.alertController.create({
       header: 'Join the Community',
-      message: 'Participate for free while we promote this service in your area.  As a community work together in being cost-effective.',
+      message: 'As a free service you have nothing to loose.  Simple and easy to use.',
       buttons: [
         {
           text: 'maybe later',
@@ -433,4 +470,91 @@ export class TabSearchPage implements OnInit {
     });
     await alert.present();
   }
+
+  onMapBoundsChanged() {
+    // recalculate your visible listings here
+    console.log("onMapBoundsChanged()");
+    this.boundsChange$.next();
+    
+  }
+
+  checkAddressesWithinMapBounds() {
+    console.log('checkAddressesWithinMapBounds()');
+    
+
+
+    //this.getContractorListings();// !!!!calling here vs Call on pin/radius 
+    // this was getContractorListing. but changing to call here as i will do other things. 
+
+
+        this.checkAddressesWithinRange2();
+
+    // pdate the UI or markers based on the filtered listings
+  }
+
+  async checkAddressesWithinRange2() {
+    
+     this.withinRangeContractorListings = []; 
+
+     if (!this.map.googleMap) {
+      console.warn('Google Map is not initialized');
+      return;
+    }
+
+    // Get the current bounds of the map
+    const bounds = this.map.googleMap.getBounds();
+    if (!bounds) {
+      console.warn('Bounds are not available');
+      return;
+    }
+    
+    // const ne = bounds.getNorthEast(); // northeast corner (lat, lng)
+    // const sw = bounds.getSouthWest(); // southwest corner (lat, lng)
+    // console.log("getNorthEast()", ne);
+    // console.log("getSouthWest()", sw);
+
+
+    const geocodePromises =  this.contractorListings.map((contractorListing) =>
+      new Promise<void>((resolve) => {        
+        //const addressString = `${contractorListing.address.street}, ${contractorListing.address.city}, ${contractorListing.address.state} ${contractorListing.address.postalCode}`;
+        console.log("here");
+        this.geocodeAddress(contractorListing.address, (location) => {
+          console.log("contractorListing.address:", contractorListing.address);
+          console.log("its cords:", location);
+           
+          let listingInBounds = this.isWithinBounds(location.lat, location.lng, (this.map.googleMap as any).getBounds());
+          console.log("listingInBounds:", listingInBounds);
+
+          if (listingInBounds) {
+            console.log('Contractor listing within the map bounds:', contractorListing.address);
+            this.withinRangeContractorListings.push({ contractorListing, location });  
+          }
+           
+          resolve();
+          return listingInBounds;
+        });
+      })
+    );
+
+    // Wait for all geocoding operations to complete
+    await Promise.all(geocodePromises);
+
+    // Display a toast message if no records are found
+    if (this.withinRangeContractorListings.length === 0) {
+      this.presentToast('No contractor listings found within the specified radius. Change \'lookup Range\' or \'Target Address\'.');
+    }
+    else {
+      this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
+        'success', 1000);
+    }
+
+  }
+
+  isWithinBounds(lat: number, lng: number, bounds: google.maps.LatLngBounds): boolean 
+  {
+    return bounds.contains(new google.maps.LatLng(lat, lng));
+  }
+
 }
+
+
