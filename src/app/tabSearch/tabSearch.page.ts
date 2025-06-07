@@ -6,7 +6,7 @@ import { ContractorListingsService } from '../services/contractor-listings.servi
 import { state } from '@angular/animations';
 import { Address, ContractorListing } from '../models/address';
 import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -140,38 +140,10 @@ export class TabSearchPage implements OnInit {
   async ngOnInit() {
     this.platFormReady();
 
-    // laod contractors.. this won't stay here i 'm guessing!!!
-    this.contractorListingsService.ContractorListings(undefined, undefined, undefined, 'Lawn care'/*this.selectedIndustry*/).subscribe({
-      next: (response) => {        
-        this.contractorListings = response.map((contractorListing: any) => {
-          return {
-            address: {
-              street: contractorListing.street || '',
-              city: contractorListing.city || '',
-              state: contractorListing.state || '',
-              postalCode: contractorListing.postalCode || '',
-            },
-            company: {
-              id:  -1,
-              companyName: contractorListing.businessName || '',               
-            },
-            type: contractorListing.serviceType || '', // Assuming 'type' is a property in the response
-            private: contractorListing.private || false, // Assuming 'private' is a property in the response
-          } as ContractorListing;
-        });
-        
-        // removed since it gets called on bounds change.
-        // 
-        //this.checkAddressesWithinRange();
-      },
-      error: (error) => console.error('ContractorListings Error:', error),
-    });    
-
-
     this.boundsChange$
       .pipe(debounceTime(900))
       .subscribe(() => {
-        this.checkAddressesWithinRange();
+        this.checkAddressesWithinRange(); // this is called on  google map init ;-)  so we don't need to call on our page init. 
       });
 
     // Flicker for 5 seconds, then stop
@@ -360,58 +332,69 @@ export class TabSearchPage implements OnInit {
   }
 
   async checkAddressesWithinRange() {
-    
-     this.withinRangeContractorListings = []; 
+    this.withinRangeContractorListings = [];
 
-     if (!this.map.googleMap) {
+    if (!this.map.googleMap) {
       console.warn('Google Map is not initialized');
       return;
     }
 
-    // Get the current bounds of the map
     const bounds = this.map.googleMap.getBounds();
     if (!bounds) {
       console.warn('Bounds are not available');
       return;
     }
-    
-    const geocodePromises =  this.contractorListings.map((contractorListing) =>
-      new Promise<void>((resolve) => {                        
-        this.geocodeAddress(contractorListing.address, (location) => {
-          console.log("contractorListing.address:", contractorListing.address);
-          console.log("its cords:", location);
-           
-          let listingInBounds = this.isWithinBounds(location.lat, location.lng, (this.map.googleMap as any).getBounds());
-          console.log("listingInBounds:", listingInBounds);
 
-          if (listingInBounds) {
-            console.log('Contractor listing within the map bounds:', contractorListing.address);
-            this.withinRangeContractorListings.push({ contractorListing, location });  
-          }
-           
-          resolve();
-          return listingInBounds;
-        });
-      })
-    );
-
-    // Wait for all geocoding operations to complete
-    await Promise.all(geocodePromises);
-
-    
-    // Add a second delay before showing the toast
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Display a toast message if no records are found
-    if (this.withinRangeContractorListings.length === 0) {
-      this.presentToast('No listings found. Zoom out or try a different area.',
-        'warning', 3000
+    try {
+      // fetch contractor listings as a promise
+      const responseContractorListings = await firstValueFrom(
+        this.contractorListingsService.ContractorListings(undefined, undefined, undefined, 'Lawn care')
       );
+
+      // map and filter in one step
+      const contractorListings: ContractorListing[] = responseContractorListings.map((contractorListing: any) => ({
+        address: {
+          street: contractorListing.street || '',
+          city: contractorListing.city || '',
+          state: contractorListing.state || '',
+          postalCode: contractorListing.postalCode || '',
+        },
+        company: {
+          id: -1,
+          companyName: contractorListing.businessName || '',
+        },
+        type: contractorListing.serviceType || '',
+        private: contractorListing.private || false,
+      }));
+
+      // geocode and filter by bounds
+      const geocodePromises = contractorListings.map(
+        (contractorListing) =>
+          new Promise<void>((resolve) => {
+            this.geocodeAddress(contractorListing.address, (location) => {
+              if (this.isWithinBounds(location.lat, location.lng, bounds)) {
+                this.withinRangeContractorListings.push({ contractorListing, location });
+              }
+              resolve();
+            });
+          })
+      );
+
+      await Promise.all(geocodePromises);
+
+      // optional: delay before showing resolve(), then toast
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      if (this.withinRangeContractorListings.length === 0) {
+        this.presentToast('No listings found. Zoom out or try a different area.', 'warning', 3000);
+      }
+      // else {
+      //   this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`, 'success', 1000);
+      // }
+    } catch (error) {
+      console.error('ContractorListings Error:', error);
+      this.presentToast('Error loading contractor listings.', 'danger', 3000);
     }
-    // else {
-    //   this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`,
-    //     'success', 1000);
-    // }
   }
 
   isWithinBounds(lat: number, lng: number, bounds: google.maps.LatLngBounds): boolean 
