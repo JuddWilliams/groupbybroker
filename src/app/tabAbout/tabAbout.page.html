@@ -55,7 +55,9 @@
                       <ion-col>
                         <div>∙ <b>Consumers</b> ∙</div>
                          <p>
-                          Find the best contractor in your area. Ai assisted best pricing, level of service, and other factors.</p>   
+                          Find the best contractor in your area offering incentives for your business.                          
+                          Start by 'Searching' for contractors working near you or 'Request Bids'... </p>   
+                          <p>*Ai assisted best pricing, level of service, and other factors. </p>
                         <!-- <p>
                           We all benefit from cost savings as contractors look to service accounts in close proximity.  
                           Customer satisfaction also improves as contractors work towards better reviews and higher user ratings.  
@@ -64,11 +66,17 @@
                         <!-- <p>Or just post your job for hire.</p>          
                         <ion-button size="small" fill="outline" routerLink="/tabs/tabSearch">Search</ion-button> -->
                         <ion-button
+                          size="small"
+                          fill="outline"
+                          [routerLink]="['/tabs/tabSearch']">
+                            Search
+                        </ion-button>
+                        <ion-button
                         size="small"
                         fill="outline"
                         [routerLink]="['/login']"
                         [queryParams]="{ returnUrl: '/tabs/tabDashboard' }">
-                      Post / Request Bids
+                          Request Bids
                       </ion-button>
                         <!-- <ion-img src="assets/mapEg.gif"></ion-img>           -->
                       </ion-col>
@@ -83,14 +91,21 @@
                     <ion-col>
                       <div>∙ <b>Contractors</b> ∙</div>
                       <div>                       
-                        <p>Grow your business while reducing costs associated with travel, preparation, and much more.</p>    
+                        <p>Grow your business while reducing costs associated with travel, preparation, and much more.  
+                        </p>    
+                        <ion-button
+                          size="small"
+                          fill="outline"
+                          [routerLink]="['/tabs/tabSearch']">
+                            Search
+                        </ion-button>
                         <ion-button
                         size="small"
                         fill="outline"
                         [routerLink]="['/login']"
                         [queryParams]="{ returnUrl: '/tabs/tabDashboard' }"
                       >
-                        Free Participate
+                        Join, it's free 
                       </ion-button>
                         <ul>  
                           <sup>Features</sup>
@@ -117,7 +132,7 @@
                             title="Click for more information"
                             style="cursor: pointer;"
                             ></ion-icon></li>                                 
-                        <li>Facilitate referral programs  
+                        <li>Facilitate referral program 
                           <ion-icon 
                           name="help-circle-outline"
                           (click)="openPopup()"

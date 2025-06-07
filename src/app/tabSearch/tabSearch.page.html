@@ -8,16 +8,14 @@
       <ion-grid>        
         <ion-row>      
           <ion-col>
-              <h4>Find accounts for 'sale', 'trade', or 'cover' in area.</h4>
-              <span>To learn more click 'About'
-                <!-- <ion-button
+              <h5>Accounts 'out for bid', 'for sale', 'willing to trade', or 'need coverage' in area.</h5>
+              <span>
+                Click '<a
                   routerLink="/tabs/tabAbout"
-                  fill="clear"
-                  size="small"
-                  class="link-button"
-                >About
-                </ion-button> -->
-                </span> 
+                  class="about-link"
+                  style="vertical-align: baseline; padding-left: 2px;"
+                >About</a>' to learn more .
+              </span> 
            </ion-col>            
         </ion-row>
         <!-- <ion-row>
@@ -79,7 +77,7 @@
           <ion-col size="12" size-md="6" size-lg="6">      
             <div *ngIf="withinRangeContractorListings.length >= 1" style="padding-bottom: 10px;">
               <!-- <ion-label><sub>Filter options:</sub></ion-label> -->
-              <ion-select style="width: 190px;" label="Industry? " label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
+              <ion-select style="width: 190px;" label="Filter options" label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
               <ion-select-option value="All">All</ion-select-option>               
               <ion-select-option value="Lawn care">Yard care</ion-select-option>
               <ion-select-option value="Pesticides">Pesticides</ion-select-option>
