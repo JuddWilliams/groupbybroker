@@ -8,7 +8,7 @@
       <ion-grid>        
         <ion-row>      
           <ion-col>
-              <h5>Accounts 'out for bid', 'for sale', 'willing to trade', or 'need coverage' in area.</h5>
+              <h6>Accounts 'out for bid', 'for sale', 'willing to trade', or 'need coverage' in area.</h6>
               <span>
                 Click '<a
                   routerLink="/tabs/tabAbout"
@@ -86,7 +86,8 @@
                 <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
                 <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
               </ion-select>   
-              <div class="checkbox-group">
+              <div class="checkbox-group">                
+                <ion-checkbox [(ngModel)]="filterOutForBid" labelPlacement="end" (click)="selectCheckBox('filterOutForBid')">Out for bid</ion-checkbox>
                 <ion-checkbox [(ngModel)]="filterForSale" labelPlacement="end" (click)="selectCheckBox('filterForSale')">For Sale</ion-checkbox>
                 <ion-checkbox [(ngModel)]="filterTrade" labelPlacement="end" (click)="selectCheckBox('filterForTrade')">Trade</ion-checkbox>
                 <ion-checkbox [(ngModel)]="filterCover" labelPlacement="end" (click)="selectCheckBox('filterForCover')">Cover</ion-checkbox>  

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, AlertInput, IonInput, ToastController, Platform, ItemReorderEventDetail } from '@ionic/angular';
+import { AlertController, AlertInput, IonInput, ToastController, Platform, ItemReorderEventDetail, LoadingController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocationService } from '../services/location.service';
 import { ContractorListingsService } from '../services/contractor-listings.service';
@@ -48,6 +48,8 @@ export class TabSearchPage implements OnInit {
   filterForSale: boolean = true;
   filterTrade: boolean = true;
   filterCover: boolean = true;
+  filterOutForBid: boolean = true;
+  
   
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
@@ -117,7 +119,8 @@ export class TabSearchPage implements OnInit {
     private platform: Platform,
     private locationService: LocationService,
     private contractorListingsService: ContractorListingsService,
-    private router: Router // add this
+    private router: Router, // add this
+    private loadingController: LoadingController,
   ) {}
 
   onMarkerClick(addressObj: any): void {
@@ -141,7 +144,7 @@ export class TabSearchPage implements OnInit {
     this.platFormReady();
 
     this.boundsChange$
-      .pipe(debounceTime(900))
+      .pipe(debounceTime(800))
       .subscribe(() => {
         this.checkAddressesWithinRange(); // this is called on  google map init ;-)  so we don't need to call on our page init. 
       });
@@ -334,6 +337,14 @@ export class TabSearchPage implements OnInit {
   }
 
   async checkAddressesWithinRange() {
+
+    const loading = await this.loadingController.create({
+      message: 'Loading map data...',
+      spinner: 'crescent', // or 'bubbles', 'dots', etc.
+      backdropDismiss: false
+    });
+    await loading.present();
+
     this.withinRangeContractorListings = [];
 
     if (!this.map.googleMap) {
@@ -398,6 +409,9 @@ export class TabSearchPage implements OnInit {
     } catch (error) {
       console.error('ContractorListings Error:', error);
       this.presentToast('Error loading contractor listings.', 'danger', 3000);
+    }
+    finally {
+      await loading.dismiss();
     }
   }
 
