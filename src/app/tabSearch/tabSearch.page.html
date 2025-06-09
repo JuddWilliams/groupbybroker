@@ -75,17 +75,17 @@
             </div>
           </ion-col>  
           <ion-col size="12" size-md="6" size-lg="6">      
-            <div *ngIf="withinRangeContractorListings.length >= 1" style="padding-bottom: 10px;">
+            <div style="padding-bottom: 10px;"> <!-- *ngIf="withinRangeContractorListings.length >= 1"  -->
               <!-- <ion-label><sub>Filter options:</sub></ion-label> -->
               <ion-select style="width: 190px;" label="Filter options" label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
-              <ion-select-option value="All">All</ion-select-option>               
-              <ion-select-option value="Lawn care">Yard care</ion-select-option>
-              <ion-select-option value="Pesticides">Pesticides</ion-select-option>
-              <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
-              <ion-select-option value="Pool maintenance">Pool maintenance</ion-select-option>  
-              <ion-select-option value="Poop scoop">Poop scoop</ion-select-option>
-              <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
-            </ion-select>   
+                <ion-select-option value="All">All</ion-select-option>               
+                <ion-select-option value="Yard Care">Yard Care</ion-select-option>
+                <ion-select-option value="Pesticides">Pesticides</ion-select-option>
+                <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
+                <ion-select-option value="Pool Maintenance">Pool Maintenance</ion-select-option>  
+                <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
+                <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
+              </ion-select>   
               <div class="checkbox-group">
                 <ion-checkbox [(ngModel)]="filterForSale" labelPlacement="end" (click)="selectCheckBox('filterForSale')">For Sale</ion-checkbox>
                 <ion-checkbox [(ngModel)]="filterTrade" labelPlacement="end" (click)="selectCheckBox('filterForTrade')">Trade</ion-checkbox>
@@ -144,13 +144,16 @@
             <ul>
               <li style="padding-bottom: 7px;"  *ngFor="let addressObj of withinRangeContractorListings">
                 <div id="DisplayCard-List">
-                  {{addressObj.contractorListing.type}} Services by {{addressObj.contractorListing.company.companyName}}<br> 
-                  <sup> at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{ addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }}</sup>
-                  <div style="font-size: small;" >
+                  '{{addressObj.contractorListing.type}}' - by {{addressObj.contractorListing.company.companyName}}<br> 
+                  <sup> 
+                    at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{ addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }}
+                     ( <a (click)="openPopup(addressObj)">view</a> )
+                  </sup>
+                  <!-- <div style="font-size: small;" >
                     phone: <a href="tel:904-386-6129">904-386-6129</a><br>
                     email: <a href="mailto:juddsurfs@gmail.com">juddsurfs&#64;gmail.com</a><br>
                     website: <a target="_blank" href="https://www.google.com">website: www.google.com</a>
-                  </div>
+                  </div> -->
                 </div>
               </li>
             </ul>

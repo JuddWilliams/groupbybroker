@@ -161,7 +161,7 @@ export class TabSearchPage implements OnInit {
   }
 
   onIndustryChange() {
-    alert("todo: need to implement this");    
+    this.checkAddressesWithinRange();
   }
 
 
@@ -315,7 +315,9 @@ export class TabSearchPage implements OnInit {
     return Math.max(2, Math.min(Math.floor(zoom), 21));
   }
 
-  openPopup() {
+//  openPopup(withinRangeContractorListings: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }) { 
+  openPopup(addressObj?: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }) {
+    console.log('Opening popup for:', addressObj);    
     this.isPopupOpen = true; // Open the popup
   }
 
@@ -348,7 +350,7 @@ export class TabSearchPage implements OnInit {
     try {
       // fetch contractor listings as a promise
       const responseContractorListings = await firstValueFrom(
-        this.contractorListingsService.ContractorListings(undefined, undefined, undefined, 'Lawn care')
+        this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry)
       );
 
       // map and filter in one step
@@ -384,13 +386,15 @@ export class TabSearchPage implements OnInit {
 
       // optional: delay before showing resolve(), then toast
       await new Promise((resolve) => setTimeout(resolve, 500));
-
+      
+      
       if (this.withinRangeContractorListings.length === 0) {
         this.presentToast('No listings found. Zoom out or try a different area.', 'warning', 3000);
       }
       // else {
       //   this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`, 'success', 1000);
       // }
+
     } catch (error) {
       console.error('ContractorListings Error:', error);
       this.presentToast('Error loading contractor listings.', 'danger', 3000);
