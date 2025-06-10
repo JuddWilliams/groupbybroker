@@ -15,7 +15,7 @@ export class ContractorListingsService {
   
     constructor(private http: HttpClient) { }
   
-    ContractorListings(city?: string, state?: string, postalCode?: string, type?: string): Observable<any> {
+    ContractorListings(city?: string, state?: string, postalCode?: string, type?: string,  option?:string[]): Observable<any> {
       const headers = new HttpHeaders({
         'x-api-key': this.apiKey, // Add API key to headers
         'Content-Type': 'application/json', // Specify JSON content type
@@ -27,6 +27,10 @@ export class ContractorListingsService {
       if (state) queryParams.push(`state=${encodeURIComponent(state)}`);
       if (postalCode) queryParams.push(`postalCode=${encodeURIComponent(postalCode)}`);
       if (type) queryParams.push(`type=${encodeURIComponent(type)}`);
+      //if (option) queryParams.push(`option=${encodeURIComponent(option)}`);
+      if (option && option.length) {
+        option.forEach(opt => queryParams.push(`option=${encodeURIComponent(opt)}`));
+}
     
       const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
     

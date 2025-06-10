@@ -45,15 +45,16 @@ export class TabSearchPage implements OnInit {
   readonly numberOfContractorsInAreaThreshold: number = 5;
   locationNote: string = ''; 
   
-  filterForSale: boolean = true;
-  filterTrade: boolean = true;
-  filterCover: boolean = true;
-  filterOutForBid: boolean = true;
+  optionForSale: boolean = true;
+  optionTrade: boolean = true;
+  optionCover: boolean = true;
+  optionOutForBid: boolean = true;
   
   
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value  
+  optionValue: string[] = ['Out for bid','For Sale','Trade','Cover']; // Default selected values for options
   selectedAddress: any = null;
   
   // Custom icons for markers
@@ -122,23 +123,6 @@ export class TabSearchPage implements OnInit {
     private router: Router, // add this
     private loadingController: LoadingController,
   ) {}
-
-  onMarkerClick(addressObj: any): void {
-    this.selectedAddress = addressObj;    
-
-    //If using an infoWindow, open it here
-    this.infoWindow.open();
-    alert('Marker clicked: ' + addressObj.contractorListing.address.street);
-  }
-
-  selectRadio(value: string): void {
-    this.sortingValue = value;
-  }
-
-  selectCheckBox(value: string): void {
-    alert('Not implemented yet: Checkbox selected: ' + value);
-  }
-
   
   async ngOnInit() {
     this.platFormReady();
@@ -163,11 +147,6 @@ export class TabSearchPage implements OnInit {
 
   }
 
-  onIndustryChange() {
-    this.checkAddressesWithinRange();
-  }
-
-
   async platFormReady() {
     await this.platform.ready();
     this.checkViewportSize();
@@ -183,7 +162,6 @@ export class TabSearchPage implements OnInit {
     }
   }
 
-
   refreshMap(coords?: { lat: number, lng: number }) {
     // Use passed coordinates if available, otherwise default to Jacksonville, Fl. (lat: 30.3322, lng: -81.6557)
     const center = coords ? coords : { lat: 30.3322, lng: -81.6557 };
@@ -193,6 +171,36 @@ export class TabSearchPage implements OnInit {
       zoom: 12,
       mapTypeControl: !this.isSmallViewport,
     };
+  }
+
+  
+  onMarkerClick(addressObj: any): void {
+    this.selectedAddress = addressObj;    
+
+    //If using an infoWindow, open it here
+    this.infoWindow.open();
+    alert('Marker clicked: ' + addressObj.contractorListing.address.street);
+  }
+
+  selectRadio(value: string): void {
+    this.sortingValue = value;    
+  }
+
+  selectCheckBox(value: string): void {   
+    
+    
+    const selected: string[] = [];
+    if (this.optionOutForBid) selected.push('Out for bid');
+    if (this.optionForSale) selected.push('For Sale');
+    if (this.optionTrade) selected.push('Trade');
+    if (this.optionCover) selected.push('Cover');
+    this.optionValue = selected;
+    console.log('Selected options:', this.optionValue);
+    this.checkAddressesWithinRange();
+  }
+
+  onIndustryChange() {
+    this.checkAddressesWithinRange();
   }
 
   async getUserLocationAndCheckPostalCode(): Promise<{ lat: number, lng: number } | null> {
@@ -361,7 +369,7 @@ export class TabSearchPage implements OnInit {
     try {
       // fetch contractor listings as a promise
       const responseContractorListings = await firstValueFrom(
-        this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry)
+        this.contractorListingsService.ContractorListings(undefined, undefined, undefined, this.selectedIndustry, this.optionValue)
       );
 
       // map and filter in one step
@@ -398,6 +406,10 @@ export class TabSearchPage implements OnInit {
       // optional: delay before showing resolve(), then toast
       await new Promise((resolve) => setTimeout(resolve, 500));
       
+      // sort by type (alphabetically, case-insensitive)
+      this.withinRangeContractorListings.sort((a, b) => 
+        a.contractorListing.type.localeCompare(b.contractorListing.type, undefined, { sensitivity: 'base' })
+      );
       
       if (this.withinRangeContractorListings.length === 0) {
         this.presentToast('No listings found. Zoom out or try a different area.', 'warning', 3000);
