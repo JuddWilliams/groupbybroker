@@ -8,14 +8,15 @@
       <ion-grid>        
         <ion-row>      
           <ion-col>
-              <h6>Accounts 'out for bid', 'for sale', 'willing to trade', or 'need coverage' in area.</h6>
-              <span>
+              <span>'Out for Bid',&nbsp; 'For Sale',&nbsp; 'Trade',&nbsp; or 'Coverage' in area.</span>
+              <br>
+              <sup>
                 Click '<a
                   routerLink="/tabs/tabAbout"
                   class="about-link"
                   style="vertical-align: baseline; padding-left: 2px;"
                 >About</a>' to learn more .
-              </span> 
+              </sup> 
            </ion-col>            
         </ion-row>
         <!-- <ion-row>
@@ -30,13 +31,13 @@
             <div class="map-container" style="position: relative;">
               <!-- Overlay text  hide on smaller??? *ngIf="!isSmallViewport" -->
               <div class="map-overlay-text" [class.flicker]="flickerOverlay">
-                <ion-icon name="bookmark-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon>
+                <!-- <ion-icon name="bookmark-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon> -->
                 <span>
                   <b>{{withinRangeContractorListings.length}}</b> item<span *ngIf="withinRangeContractorListings.length !== 1" >s</span>   
                 </span>
               </div>
               <!-- The map itself -->
-              <google-map #googleMap [options]="mapOptions" (mapClick)="onMapClick($event)" (boundsChanged)="onMapBoundsChanged()">
+               <google-map class="map-container-google" #googleMap [options]="mapOptions" (boundsChanged)="onMapBoundsChanged()">              
                 <!-- Existing markers -->                
                 <map-marker
                   *ngFor="let addressObj of withinRangeContractorListings"
@@ -48,29 +49,12 @@
                     fontSize: '12px'
                   }"
                   (mapClick)="onMarkerClick(addressObj)"
-                ></map-marker>
-                <!-- User-added marker -->
-                <map-marker *ngIf="userAddedMarker" [position]="userAddedMarker" label="Pin"></map-marker>
+                ></map-marker>                
                 <map-info-window #infoWindow>
                   <div>
                     <!-- Info window content -->
                   </div>
-                </map-info-window>
-                 <!-- miles to meters -->
-                <map-circle
-                  *ngIf="userAddedMarker"
-                  [center]="userAddedMarker"
-                  [radius]="findRadiusForUI * 1609.34"
-                  [options]="{
-                    strokeColor: '#4285F4',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: '#4285F4',
-                    fillOpacity: 0.1,
-                    clickable: false,
-                    draggable: false
-                  }"
-                ></map-circle>
+                </map-info-window>                 
               </google-map>
             </div>
           </ion-col>  

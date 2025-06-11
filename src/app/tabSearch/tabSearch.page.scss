@@ -37,13 +37,31 @@ ion-input {
   margin-left: 4px;
 }
 
-.map-container {
-  height: 100%; /* Set the desired height */
-  width: calc(100% - 3%); /* Ensure the container takes the full width of the parent */
-  overflow: hidden; /* Ensure the content does not overflow */
-  position: relative; /* Ensure the container has a position context */
+/* Responsive adjustment for very small screens */
+@media (max-width: 400px) {
+  .map-container {  
+    width: calc(100% - 7%);     
+     aspect-ratio: 1 / 1; /* makes height always equal to width */
+    overflow: auto;
+    position: relative;
+    box-sizing: border-box;
+  }
 }
 
+// this also never worked!! grrr
+//@media (max-width: 400px) {
+  // .map-container-google {      
+  //   width: 20px;   
+  //    aspect-ratio: 1 / 1;
+  //   height: 20px; 
+  //   max-height: 20px; 
+  //   overflow: auto;
+  //   position: relative;
+  //   box-sizing: border-box;
+  // }
+//}
+
+// this never worked!! grrr
 // google-map {
 //   flex: 1; 
 //   height: 100%; /* Ensure the google-map component takes the full height of the container */
@@ -81,7 +99,7 @@ ion-col:not(.fixed-width-col) {
 .map-overlay-text {
   position: absolute;
   top: 10px;
-  left: 65%;
+  left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 251, 230, 0.95);
   border: 1px solid #ffe082;

@@ -29,7 +29,7 @@ export class TabSearchPage implements OnInit {
   findRadiusForUI: number = 15;// so its not updated as user types... 
 
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
-  userAddedMarker: google.maps.LatLngLiteral | null = null;
+  //userAddedMarker: google.maps.LatLngLiteral | null = null;
   withinRangeContractorListings: {  contractorListing: ContractorListing, location: google.maps.LatLngLiteral }[] = [];
   contractorListings: ContractorListing[] = [];
 
@@ -136,7 +136,7 @@ export class TabSearchPage implements OnInit {
     // Flicker for 5 seconds, then stop
     setTimeout(() => {
       this.flickerOverlay = false;
-    }, 3000);
+    }, 4000);
 
     // Show participate popup after 2 seconds
     setTimeout(() => {
@@ -287,28 +287,6 @@ export class TabSearchPage implements OnInit {
 
   selectText() {
     this.findRadiusInput.getInputElement().then(input => input.select());
-  }
-
-  onMapClick(event: google.maps.MapMouseEvent) {
-    if (event.latLng) {
-      const lat = event.latLng.lat();
-      const lng = event.latLng.lng();
-      this.userAddedMarker = { lat, lng };
-
-      // Center the map on the new marker and set zoom to fit findRadius
-      const zoom = this.getZoomLevelForRadius(this.findRadiusForUI);
-      this.mapOptions = {
-        ...this.mapOptions,
-        center: { lat, lng },
-        zoom: zoom,
-      };
-
-      // Reverse geocode and update targetAddress
-      this.locationService.getPostalCodeFromCoordinates(lat, lng).then(address => {
-        this.targetAddress = address;                        
-      });
-      
-    }
   }
 
   // Returns zoom level so that the given radius (in miles) fits in the map view
