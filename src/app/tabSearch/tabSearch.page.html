@@ -177,10 +177,45 @@
       <ion-content>
         <!-- here   *ngIf="currentContractorListing"-->
         <img
-          [src]="getStaticMapUrl(currentContractorListing.contractorListing.address)"
-          alt="Map for address"
+          *ngIf="currentContractorListing"
+          [src]="getStaticMapUrl(currentContractorListing.contractorListing.address, 'satellite', satelliteZoom)"
+          alt="Satellite Map"
           style="width: 100%; max-width: 350px; border-radius: 8px; margin-bottom: 10px"
         />
+        <div style="display: flex; gap: 8px; margin-bottom: 10px">
+          <button ion-button size="small" (click)="decreaseSatelliteZoom()">- Zoom Out</button>
+          <button ion-button size="small" (click)="increaseSatelliteZoom()">+ Zoom In</button>
+        </div>
+
+        <div style="position: relative; width: 100%; max-width: 350px; margin-bottom: 10px">
+          <img
+            *ngIf="currentContractorListing"
+            [src]="getStreetViewUrl(currentContractorListing.location)"
+            alt="Street View"
+            style="width: 100%; border-radius: 8px"
+          />
+          <div
+            style="
+              position: absolute;
+              bottom: 8px;
+              left: 8px;
+              right: 8px;
+              background: rgba(0, 0, 0, 0.6);
+              color: #fff;
+              padding: 6px 10px;
+              border-radius: 6px;
+              font-size: 0.8em;
+              text-align: left;
+            "
+          >
+            You may have to rotate; as default view is north facing from pinned location.
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 10px">
+          <button ion-button size="small" (click)="streetViewHeading = (streetViewHeading - 15 + 360) % 360">⟲ Left</button>
+          <button ion-button size="small" (click)="streetViewHeading = (streetViewHeading + 15) % 360">Right ⟳</button>
+        </div>
+
         <p>{{this.currentContractorListing?.contractorListing?.address?.street}}</p>
         <p>
           {{this.currentContractorListing?.contractorListing?.address?.city}}
