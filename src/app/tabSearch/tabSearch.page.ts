@@ -11,6 +11,7 @@ import {
 import { Geolocation } from '@capacitor/geolocation';
 import { LocationService } from '../services/location.service';
 import { ContractorListingsService } from '../services/contractor-listings.service';
+import { ContractorListingsMockService } from '../services/contractor-listings-mock.service';
 import { state } from '@angular/animations';
 import { Address, ContractorListing } from '../models/address';
 import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
@@ -126,7 +127,9 @@ export class TabSearchPage implements OnInit {
     private toastController: ToastController,
     private platform: Platform,
     private locationService: LocationService,
-    private contractorListingsService: ContractorListingsService,
+    //private contractorListingsService: ContractorListingsService,
+    //private contractorListingsMockService: ContractorListingsMockService,
+    private contractorListingsService: ContractorListingsMockService,
     private router: Router, // add this
     private loadingController: LoadingController
   ) {}
@@ -301,11 +304,9 @@ export class TabSearchPage implements OnInit {
 
     geocoder.geocode(
       {
+        address: `${address.street}, ${address.city}, ${address.state} ${address.postalCode}`,
         componentRestrictions: {
-          route: address.street, // Street name
-          // cant be empty .. so o remmoved for now until i improve dlg.
-          postalCode: address.postalCode, // ZIP code
-          country: 'US', // Restrict to the United States (optional)
+          country: 'US',
         },
       },
       (results, status) => {

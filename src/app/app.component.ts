@@ -14,10 +14,12 @@ import { ToastController } from '@ionic/angular';
 export class AppComponent implements OnInit, OnDestroy {
   private healthCheckInterval: any; // Store the interval ID
 
-  constructor(private http: HttpClient, 
-    public authService: AuthService, 
+  constructor(
+    private http: HttpClient,
+    public authService: AuthService,
     private router: Router,
-  private toastController: ToastController ) {} // Preserving your router dependency
+    private toastController: ToastController
+  ) {} // Preserving your router dependency
 
   ngOnInit(): void {
     this.checkApiHealth();
@@ -35,13 +37,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   checkApiHealth(): void {
-    const apiKey = environment.apiKey; // Your API key
-     const headers = new HttpHeaders({
-            'x-api-key': apiKey, // Add API key to headers
-            'Content-Type': 'application/json', // Specify JSON content type
-          });
+    console.warn('API health check failed is disabled to while we use free subscription of azure sql server');
+    return;
 
-    let apiUrl = environment.apiUrl + '/auth/dbhealthcheck';  
+    const apiKey = environment.apiKey; // Your API key
+    const headers = new HttpHeaders({
+      'x-api-key': apiKey, // Add API key to headers
+      'Content-Type': 'application/json', // Specify JSON content type
+    });
+
+    let apiUrl = environment.apiUrl + '/auth/dbhealthcheck';
     this.http.get(apiUrl, { headers }).subscribe({
       next: (response) => {
         console.log('API is healthy:', response);
@@ -49,17 +54,27 @@ export class AppComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('API health check failed:', error);
         //alert('The API is currently unavailable. Please try again later.');
-        this.presentToast('The API is currently unavailable. Please allow 30 seconds before refreshing page.', 'warning', 6000, 'bottom');
+        this.presentToast(
+          'The API is currently unavailable. Please allow 30 seconds before refreshing page.',
+          'warning',
+          6000,
+          'bottom'
+        );
       },
     });
   }
 
-  async presentToast(message: string, color: string = 'success', duration: number = 3000, position: 'top' | 'bottom' | 'middle' = 'top' ) {
-    const toast = await this.toastController.create({    
+  async presentToast(
+    message: string,
+    color: string = 'success',
+    duration: number = 3000,
+    position: 'top' | 'bottom' | 'middle' = 'top'
+  ) {
+    const toast = await this.toastController.create({
       message: message,
       duration: duration,
       position: position,
-      color: color
+      color: color,
     });
     await toast.present();
   }
@@ -83,4 +98,3 @@ export class AppComponent implements OnInit, OnDestroy {
     return initials;
   }
 }
-
