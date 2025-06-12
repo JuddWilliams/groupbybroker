@@ -1,12 +1,13 @@
-
-
 <ion-app>
   <ion-header>
     <ion-toolbar>
-      <div style="padding-left: 10px; background-color: yellow;">Under Construction</div>
+      <div>
+        <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Bids </ion-button>
+        <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Post it </ion-button>
+      </div>
+      <!-- <div style="padding-left: 10px; background-color: yellow">Under Construction</div> -->
       <ion-buttons slot="end">
         <!-- Circle with User's Initials -->
-    
         <ion-button title="{{ loggedInEmail }}" *ngIf="!authService.isLoggedIn()" routerLink="/login"><u>Login</u></ion-button>
         <ion-button title="{{ loggedInEmail }}" *ngIf="authService.isLoggedIn()" (click)="onLogout()"><u>Logout</u></ion-button>
         <div title="{{ loggedInUser }}" *ngIf="loggedInUser" class="user-circle">
@@ -14,8 +15,7 @@
         </div>
       </ion-buttons>
     </ion-toolbar>
-  </ion-header>  
-  <ion-content >
-  </ion-content>
+  </ion-header>
+  <ion-content> </ion-content>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>

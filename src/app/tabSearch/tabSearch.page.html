@@ -4,87 +4,101 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-card>    
-      <ion-grid>        
-        <ion-row>      
-          <ion-col>
-              <span>'Out for Bid',&nbsp; 'For Sale',&nbsp; 'Trade',&nbsp; or 'Coverage' in area.</span>
-              <br>
-              <sup>
-                Click '<a
-                  routerLink="/tabs/tabAbout"
-                  class="about-link"
-                  style="vertical-align: baseline; padding-left: 2px;"
-                >About</a>' to learn more .
-              </sup> 
-           </ion-col>            
-        </ion-row>
-        <!-- <ion-row>
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <span>'Out for Bid',&nbsp; 'For Sale',&nbsp; 'Trade',&nbsp; or 'Coverage' in area.</span>
+          <br />
+          <sup>
+            Click '
+            <a routerLink="/tabs/tabAbout" class="about-link" style="vertical-align: baseline; padding-left: 2px">About</a>' to
+            learn more .
+          </sup>
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row>
           <ion-col size="12" >                        
             <span>
               <b>{{withinRangeContractorListings.length}}</b> item<span *ngIf="withinRangeContractorListings.length !== 1" >s</span> of interest within current map view                       
             </span>
           </ion-col>
         </ion-row> -->
-        <ion-row id="contentx">      
-          <ion-col class="fixed-width-col">            
-            <div class="map-container" style="position: relative;">
-              <!-- Overlay text  hide on smaller??? *ngIf="!isSmallViewport" -->
-              <div class="map-overlay-text" [class.flicker]="flickerOverlay">
-                <!-- <ion-icon name="bookmark-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon> -->
-                <span>
-                  <b>{{withinRangeContractorListings.length}}</b> item<span *ngIf="withinRangeContractorListings.length !== 1" >s</span>   
-                </span>
-              </div>
-              <!-- The map itself -->
-               <google-map class="map-container-google" #googleMap [options]="mapOptions" (boundsChanged)="onMapBoundsChanged()">              
-                <!-- Existing markers -->                
-                <map-marker
-                  *ngFor="let addressObj of withinRangeContractorListings"
-                  [position]="getLatLng(addressObj)"
-                  [icon]="rangeIcon"
-                  [label]="{
+      <ion-row id="contentx">
+        <ion-col class="fixed-width-col">
+          <div class="map-container" style="position: relative">
+            <!-- Overlay text  hide on smaller??? *ngIf="!isSmallViewport" -->
+            <div class="map-overlay-text" [class.flicker]="flickerOverlay">
+              <!-- <ion-icon name="bookmark-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon> -->
+              <span>
+                <b>{{withinRangeContractorListings.length}}</b>
+                item<span *ngIf="withinRangeContractorListings.length !== 1">s</span>
+              </span>
+            </div>
+            <!-- The map itself -->
+            <google-map class="map-container-google" #googleMap [options]="mapOptions" (boundsChanged)="onMapBoundsChanged()">
+              <!-- Existing markers -->
+              <map-marker
+                *ngFor="let addressObj of withinRangeContractorListings"
+                [position]="getLatLng(addressObj)"
+                [icon]="rangeIcon"
+                [label]="{
                     text: addressObj.contractorListing.company.companyName,
                     color: 'black',
                     fontSize: '12px'
                   }"
-                  (mapClick)="onMarkerClick(addressObj)"
-                ></map-marker>                
-                <map-info-window #infoWindow>
-                  <div>
-                    <!-- Info window content -->
-                  </div>
-                </map-info-window>                 
-              </google-map>
+                (mapClick)="onMarkerClick(addressObj)"
+              ></map-marker>
+              <map-info-window #infoWindow>
+                <div>
+                  <!-- Info window content -->
+                </div>
+              </map-info-window>
+            </google-map>
+          </div>
+        </ion-col>
+        <ion-col size="12" size-md="6" size-lg="6">
+          <div style="padding-bottom: 10px">
+            <!-- *ngIf="withinRangeContractorListings.length >= 1"  -->
+            <!-- <ion-label><sub>Filter options:</sub></ion-label> -->
+            <ion-select
+              style="width: 190px"
+              label="Filter options"
+              label-placement="floating"
+              [(ngModel)]="selectedIndustry"
+              (ionChange)="onIndustryChange()"
+            >
+              <ion-select-option value="All">All Job Types</ion-select-option>
+              <ion-select-option value="Yard Care">Yard Care</ion-select-option>
+              <ion-select-option value="Pesticides">Pesticides</ion-select-option>
+              <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
+              <ion-select-option value="Pool Maintenance">Pool Maintenance</ion-select-option>
+              <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
+              <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
+            </ion-select>
+            <div class="checkbox-group">
+              <ion-checkbox [(ngModel)]="optionOutForBid" labelPlacement="end" (ionChange)="selectCheckBox('Out for Bid')"
+                >Out for bid</ion-checkbox
+              >
+              <ion-checkbox [(ngModel)]="optionForSale" labelPlacement="end" (ionChange)="selectCheckBox('For Sale')"
+                >For Sale</ion-checkbox
+              >
+              <ion-checkbox [(ngModel)]="optionTrade" labelPlacement="end" (ionChange)="selectCheckBox('optionForTrade')"
+                >Trade</ion-checkbox
+              >
+              <ion-checkbox [(ngModel)]="optionCover" labelPlacement="end" (ionChange)="selectCheckBox('optionForCover')"
+                >Cover</ion-checkbox
+              >
+              <ion-icon
+                name="help-circle-outline"
+                (click)="openPopup()"
+                title="Click for more information"
+                style="cursor: pointer"
+              ></ion-icon>
             </div>
-          </ion-col>  
-          <ion-col size="12" size-md="6" size-lg="6">      
-            <div style="padding-bottom: 10px;"> <!-- *ngIf="withinRangeContractorListings.length >= 1"  -->
-              <!-- <ion-label><sub>Filter options:</sub></ion-label> -->
-              <ion-select style="width: 190px;" label="Filter options" label-placement="floating" [(ngModel)]="selectedIndustry" (ionChange)="onIndustryChange()">
-                <ion-select-option value="All">All types</ion-select-option>               
-                <ion-select-option value="Yard Care">Yard Care</ion-select-option>
-                <ion-select-option value="Pesticides">Pesticides</ion-select-option>
-                <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
-                <ion-select-option value="Pool Maintenance">Pool Maintenance</ion-select-option>  
-                <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
-                <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
-              </ion-select>   
-              <div class="checkbox-group">                
-                <ion-checkbox [(ngModel)]="optionOutForBid" labelPlacement="end" (ionChange)="selectCheckBox('Out for Bid')">Out for bid</ion-checkbox>
-                <ion-checkbox [(ngModel)]="optionForSale" labelPlacement="end" (ionChange)="selectCheckBox('For Sale')">For Sale</ion-checkbox>
-                <ion-checkbox [(ngModel)]="optionTrade" labelPlacement="end" (ionChange)="selectCheckBox('optionForTrade')">Trade</ion-checkbox>
-                <ion-checkbox [(ngModel)]="optionCover" labelPlacement="end" (ionChange)="selectCheckBox('optionForCover')">Cover</ion-checkbox>  
-                  <ion-icon
-                    name="help-circle-outline"
-                    (click)="openPopup()"
-                    title="Click for more information"
-                    style="cursor: pointer;"
-                  ></ion-icon>
-              </div>
-            </div>
+          </div>
 
-            <!-- <div style="padding-bottom: 5px;">Override ordering preference</div>        
+          <!-- <div style="padding-bottom: 5px;">Override ordering preference</div>        
             <ion-radio-group [(ngModel)]="sortingValue" class="radio-group">
               <div class="radio-label">
                 <ion-radio slot="start" value="useAi"></ion-radio>
@@ -115,8 +129,8 @@
                 <span (click)="selectRadio('Professionalism')">Professionalism</span>
               </div>
             </ion-radio-group> -->
-              
-            <!-- <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
+
+          <!-- <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
               @for (item of items; track item) {
               <ion-item>
                 <ion-label> {{ item }} </ion-label>
@@ -125,28 +139,29 @@
               }
             </ion-reorder-group> -->
 
-
-            <ul>
-              <li style="padding-bottom: 7px;"  *ngFor="let addressObj of withinRangeContractorListings">
-                <div id="DisplayCard-List">
-                  '{{addressObj.contractorListing.type}}' - by {{addressObj.contractorListing.company.companyName}}<br> 
-                  <sup> 
-                    at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{ addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }}
-                     ( <a (click)="openPopup(addressObj)">view</a> )
-                  </sup>
-                  <!-- <div style="font-size: small;" >
+          <ul>
+            <li style="padding-bottom: 7px" *ngFor="let addressObj of withinRangeContractorListings">
+              <div id="DisplayCard-List">
+                '{{addressObj.contractorListing.type}}' - by {{addressObj.contractorListing.company.companyName}}<br />
+                <sup>
+                  at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{
+                  addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }} (
+                  <a (click)="openPopup(addressObj)">view</a>
+                  )
+                </sup>
+                <!-- <div style="font-size: small;" >
                     phone: <a href="tel:904-386-6129">904-386-6129</a><br>
                     email: <a href="mailto:juddsurfs@gmail.com">juddsurfs&#64;gmail.com</a><br>
                     website: <a target="_blank" href="https://www.google.com">website: www.google.com</a>
                   </div> -->
-                </div>
-              </li>
-            </ul>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+              </div>
+            </li>
+          </ul>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-card>
-    <!-- Popup Modal -->
+  <!-- Popup Modal -->
   <ion-modal class="sizer-modal" [isOpen]="isPopupOpen" (ionModalDidDismiss)="closePopup()">
     <ng-template>
       <ion-header>
@@ -158,7 +173,7 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <p style="padding: 16px;">This is how it works!</p>
+        <p style="padding: 16px">This is how it works!</p>
       </ion-content>
     </ng-template>
   </ion-modal>
