@@ -39,15 +39,15 @@
             <google-map class="map-container-google" #googleMap [options]="mapOptions" (boundsChanged)="onMapBoundsChanged()">
               <!-- Existing markers -->
               <map-marker
-                *ngFor="let addressObj of withinRangeContractorListings"
-                [position]="getLatLng(addressObj)"
+                *ngFor="let contractorListing of withinRangeContractorListings"
+                [position]="getLatLng(contractorListing)"
                 [icon]="rangeIcon"
                 [label]="{
-                    text: addressObj.contractorListing.company.companyName,
+                    text: contractorListing.contractorListing.company.companyName,
                     color: 'black',
                     fontSize: '12px'
                   }"
-                (mapClick)="onMarkerClick(addressObj)"
+                (mapClick)="onMarkerClick(contractorListing)"
               ></map-marker>
               <map-info-window #infoWindow>
                 <div>
@@ -166,14 +166,29 @@
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Information</ion-title>
+          <ion-title>
+            <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Claim it </ion-button>
+          </ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="closePopup()">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <p style="padding: 16px">This is how it works!</p>
+        <!-- here   *ngIf="currentContractorListing"-->
+        <img
+          [src]="getStaticMapUrl(currentContractorListing.contractorListing.address)"
+          alt="Map for address"
+          style="width: 100%; max-width: 350px; border-radius: 8px; margin-bottom: 10px"
+        />
+        <p>{{this.currentContractorListing?.contractorListing?.address?.street}}</p>
+        <p>
+          {{this.currentContractorListing?.contractorListing?.address?.city}}
+          {{this.currentContractorListing?.contractorListing?.address?.state}},
+          {{this.currentContractorListing?.contractorListing?.address?.postalCode}}
+        </p>
+        <p>{{this.currentContractorListing?.contractorListing?.type}}</p>
+        <p>{{this.currentContractorListing?.contractorListing?.company?.companyName}}</p>
       </ion-content>
     </ng-template>
   </ion-modal>

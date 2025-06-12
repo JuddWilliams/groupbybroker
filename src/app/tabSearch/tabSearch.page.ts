@@ -9,6 +9,7 @@ import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
 import { Subject, firstValueFrom } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-tabSearch',
@@ -48,14 +49,15 @@ export class TabSearchPage implements OnInit {
   optionForSale: boolean = true;
   optionTrade: boolean = true;
   optionCover: boolean = true;
-  optionOutForBid: boolean = true;
-  
+  optionOutForBid: boolean = true;  
   
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value  
   optionValue: string[] = ['Out for bid','For Sale','Trade','Cover']; // Default selected values for options
   selectedAddress: any = null;
+
+  currentContractorListing: any | undefined;
   
   // Custom icons for markers
   targetIcon = {
@@ -173,13 +175,35 @@ export class TabSearchPage implements OnInit {
     };
   }
 
+  getStaticMapUrl(address: { street: string, city: string, state: string, postalCode: string }): string {
+    const apiKey =  environment.googleMapsApiKey; // Replace with your actual API key
+    const fullAddress = `${address.street}, ${address.city}, ${address.state} ${address.postalCode}`;
+    console.log('Address for static map:', fullAddress);
+    const encodedAddress = encodeURIComponent(fullAddress);
+    console.log('Encoded address for static map:', encodedAddress);
+    let value = `https://maps.googleapis.com/maps/api/staticmap?center=${encodedAddress}&zoom=16&size=350x200&maptype=roadmap&markers=color:red%7C${encodedAddress}&key=${apiKey}`;  
+    console.log('Static map URL:', value);
+    return value;
+  }
   
-  onMarkerClick(addressObj: any): void {
-    this.selectedAddress = addressObj;    
+  onMarkerClick(contractorListing: any): void {
+    // this.selectedAddress = contractorListing;        
+    // this.infoWindow.open();
+    // alert('Marker clicked: ' + selectedAddress.contractorListing.address.street);
+    //console.log('Opening popup for:', contractorListing);   
+    this.currentContractorListing = contractorListing;
+    console.log('Opening popup for currentContractorListing:', this.currentContractorListing);    
+    console.log('Opening popup for ?:', this.currentContractorListing?.contractorListing?.address?.postalCode);
+    this.isPopupOpen = true; // Open the popup
+  }
 
-    //If using an infoWindow, open it here
-    this.infoWindow.open();
-    alert('Marker clicked: ' + addressObj.contractorListing.address.street);
+  openPopup(Obj?: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }) {
+    console.log('Opening popup for:', Obj);    
+    this.isPopupOpen = true; // Open the popup
+  }
+
+  closePopup() {
+    this.isPopupOpen = false; // Close the popup
   }
 
   selectRadio(value: string): void {
@@ -302,16 +326,6 @@ export class TabSearchPage implements OnInit {
     // The formula ensures the circle fits within the smallest map dimension
     const zoom = Math.log2((mapDim * earthCircumference) / (diameter * 256 * padding));
     return Math.max(2, Math.min(Math.floor(zoom), 21));
-  }
-
-//  openPopup(withinRangeContractorListings: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }) { 
-  openPopup(addressObj?: { contractorListing: ContractorListing, location: google.maps.LatLngLiteral }) {
-    console.log('Opening popup for:', addressObj);    
-    this.isPopupOpen = true; // Open the popup
-  }
-
-  closePopup() {
-    this.isPopupOpen = false; // Close the popup
   }
 
   onRadiusInputChange(value: number) {

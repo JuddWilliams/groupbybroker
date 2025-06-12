@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { Address } from '../models/address';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class LocationService {
   }
 
   async getPostalCodeFromCoordinates(latitude: number, longitude: number): Promise<Address> {
-    const apiKey = 'AIzaSyCkX46SX8MpXB0cBsNgTLov1-xe19I0Q4s'; // Replace with your Google Maps API key
+    const apiKey = environment.googleMapsApiKey;//'AIzaSyCkX46SX8MpXB0cBsNgTLov1-xe19I0Q4s'; // Replace with your Google Maps API key
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
     const response = await fetch(url);
