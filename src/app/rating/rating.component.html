@@ -1,14 +1,14 @@
 <div style="display: flex; gap: 4px">
   <ng-container *ngFor="let width of fillWidths">
     <div style="position: relative; width: 24px; height: 24px">
-      <!-- Empty star -->
+      <!-- Empty star with thin black outline -->
       <svg width="24" height="24" viewBox="0 0 24 24" style="position: absolute; top: 0; left: 0">
-        <polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9" fill="#e0e0e0" />
+        <polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9" fill="#b0b0b0" stroke="#000" stroke-width="0.5" />
       </svg>
-      <!-- Filled star -->
+      <!-- Filled star with thin black outline -->
       <div [style.width.%]="width" style="overflow: hidden; position: absolute; top: 0; left: 0; height: 100%">
         <svg width="24" height="24" viewBox="0 0 24 24">
-          <polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9" fill="#ffc107" />
+          <polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9" fill="#ffc107" stroke="#000" stroke-width="0.5" />
         </svg>
       </div>
     </div>

@@ -8,14 +8,16 @@ import { Component, Input } from '@angular/core';
 })
 export class RatingComponent {
   @Input() percent = 0; // 0 to 100
+  totalStars = 4;
 
   get fillWidths(): number[] {
-    // 4 stars, each star is 25%
+    // Each star is 25%
     const widths = [];
     let remaining = this.percent;
-    for (let i = 0; i < 4; i++) {
-      widths.push(Math.max(0, Math.min(remaining, 25)) * 4); // 0-100% width per star
-      remaining -= 25;
+    for (let i = 0; i < this.totalStars; i++) {
+      const fill = Math.max(0, Math.min(remaining, 100 / this.totalStars));
+      widths.push((fill / (100 / this.totalStars)) * 100); // percent of this star
+      remaining -= 100 / this.totalStars;
     }
     return widths;
   }
