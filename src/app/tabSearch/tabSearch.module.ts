@@ -6,7 +6,8 @@ import { TabSearchPage } from './tabSearch.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 import { TabSearchPageRoutingModule } from './tabSearch-routing.module';
 
-import { GoogleMapsModule } from '@angular/google-maps'
+import { GoogleMapsModule } from '@angular/google-maps';
+import { RatingComponent } from '../rating/rating.component';
 
 @NgModule({
   imports: [
@@ -15,8 +16,8 @@ import { GoogleMapsModule } from '@angular/google-maps'
     FormsModule,
     ExploreContainerComponentModule,
     TabSearchPageRoutingModule,
-    GoogleMapsModule
+    GoogleMapsModule,
   ],
-  declarations: [TabSearchPage]
+  declarations: [TabSearchPage, RatingComponent],
 })
 export class TabSearchPageModule {}

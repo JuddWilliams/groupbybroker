@@ -7,6 +7,7 @@ import {
   Platform,
   ItemReorderEventDetail,
   LoadingController,
+  ModalController,
 } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocationService } from '../services/location.service';
@@ -64,6 +65,7 @@ export class TabSearchPage implements OnInit {
   selectedAddress: any = null;
 
   currentContractorListing: any | undefined;
+  percent: number = 0; // Percentage for the progress bar
 
   // Custom icons for markers
   targetIcon = {
@@ -131,7 +133,8 @@ export class TabSearchPage implements OnInit {
     //private contractorListingsMockService: ContractorListingsMockService,
     private contractorListingsService: ContractorListingsMockService,
     private router: Router, // add this
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
@@ -201,11 +204,34 @@ export class TabSearchPage implements OnInit {
   }
 
   streetViewHeading = 0; // default north
+  streetViewFov = 80; // default field of view
+  streetViewPitch = 0; // default is level
 
   getStreetViewUrl(location: google.maps.LatLngLiteral): string {
     const apiKey = environment.googleMapsApiKey;
     const { lat, lng } = location;
-    return `https://maps.googleapis.com/maps/api/streetview?size=350x200&location=${lat},${lng}&fov=80&heading=${this.streetViewHeading}&pitch=0&key=${apiKey}`;
+    return `https://maps.googleapis.com/maps/api/streetview?size=350x200&location=${lat},${lng}&fov=${this.streetViewFov}&heading=${this.streetViewHeading}&pitch=${this.streetViewPitch}&key=${apiKey}`;
+  }
+
+  increaseStreetViewFov() {
+    this.streetViewFov = Math.min(this.streetViewFov + 10, 120);
+  }
+
+  decreaseStreetViewFov() {
+    this.streetViewFov = Math.max(this.streetViewFov - 10, 10);
+  }
+
+  increaseStreetViewPitch() {
+    this.streetViewPitch = Math.min(this.streetViewPitch + 10, 90);
+  }
+
+  decreaseStreetViewPitch() {
+    this.streetViewPitch = Math.max(this.streetViewPitch - 10, -90);
+  }
+
+  async onClaimIt() {
+    await this.closePopup();
+    this.router.navigate(['/tabs/tabDashboard']);
   }
 
   onMarkerClick(contractorListing: any): void {
@@ -214,18 +240,17 @@ export class TabSearchPage implements OnInit {
     // alert('Marker clicked: ' + selectedAddress.contractorListing.address.street);
     //console.log('Opening popup for:', contractorListing);
     this.currentContractorListing = contractorListing;
-    console.log('Opening popup for currentContractorListing:', this.currentContractorListing);
-    console.log('Opening popup for ?:', this.currentContractorListing?.contractorListing?.address?.postalCode);
     this.isPopupOpen = true; // Open the popup
   }
 
   openPopup(Obj?: { contractorListing: ContractorListing; location: google.maps.LatLngLiteral }) {
-    console.log('Opening popup for:', Obj);
+    this.currentContractorListing = Obj;
     this.isPopupOpen = true; // Open the popup
   }
 
-  closePopup() {
-    this.isPopupOpen = false; // Close the popup
+  async closePopup() {
+    await this.modalController.dismiss();
+    this.isPopupOpen = false;
   }
 
   selectRadio(value: string): void {
@@ -405,6 +430,7 @@ export class TabSearchPage implements OnInit {
         },
         type: contractorListing.serviceType || '',
         private: contractorListing.private || false,
+        optionType: contractorListing.optionType || '',
       }));
 
       // geocode and filter by bounds

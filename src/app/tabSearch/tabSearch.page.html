@@ -166,9 +166,10 @@
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>
-            <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Claim it </ion-button>
-          </ion-title>
+          <ion-buttons slot="start">
+            <ion-button id="claimIt" size="small" fill="outline" (click)="onClaimIt()"> Claim it </ion-button>
+          </ion-buttons>
+          <ion-title>{{this.currentContractorListing?.contractorListing?.address?.street}}</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="closePopup()">Close</ion-button>
           </ion-buttons>
@@ -177,6 +178,7 @@
       <ion-content>
         <!-- here   *ngIf="currentContractorListing"-->
         <img
+          id="arialview-image"
           *ngIf="currentContractorListing"
           [src]="getStaticMapUrl(currentContractorListing.contractorListing.address, 'satellite', satelliteZoom)"
           alt="Satellite Map"
@@ -189,6 +191,7 @@
 
         <div style="position: relative; width: 100%; max-width: 350px; margin-bottom: 10px">
           <img
+            id="streetview-image"
             *ngIf="currentContractorListing"
             [src]="getStreetViewUrl(currentContractorListing.location)"
             alt="Street View"
@@ -200,30 +203,42 @@
               bottom: 8px;
               left: 8px;
               right: 8px;
-              background: rgba(0, 0, 0, 0.6);
+              background: rgba(0, 0, 0, 0.2);
               color: #fff;
               padding: 6px 10px;
               border-radius: 6px;
-              font-size: 0.8em;
+              font-size: 0.7em;
               text-align: left;
             "
           >
-            ATTENTION: You may have to rotate; as default view is north facing from pinned location.
+            ATTENTION: default view is north facing from pinned location.
           </div>
         </div>
         <div style="display: flex; gap: 8px; margin-bottom: 10px">
           <button ion-button size="small" (click)="streetViewHeading = (streetViewHeading - 15 + 360) % 360">⟲ Left</button>
           <button ion-button size="small" (click)="streetViewHeading = (streetViewHeading + 15) % 360">Right ⟳</button>
+          <button ion-button size="small" (click)="decreaseStreetViewFov()">+ Zoom In</button>
+          <button ion-button size="small" (click)="increaseStreetViewFov()">- Zoom Out</button>
+          <button ion-button size="small" (click)="increaseStreetViewPitch()">↑ Up</button>
+          <button ion-button size="small" (click)="decreaseStreetViewPitch()">↓ Down</button>
         </div>
-
-        <p>{{this.currentContractorListing?.contractorListing?.address?.street}}</p>
-        <p>
-          {{this.currentContractorListing?.contractorListing?.address?.city}}
-          {{this.currentContractorListing?.contractorListing?.address?.state}},
-          {{this.currentContractorListing?.contractorListing?.address?.postalCode}}
-        </p>
-        <p>{{this.currentContractorListing?.contractorListing?.type}}</p>
-        <p>{{this.currentContractorListing?.contractorListing?.company?.companyName}}</p>
+        <!-- font-size: 0.1em; -->
+        <div
+          style="background: rgba(0, 0, 0, 0.1); margin: 3px 6px 3px 3px; padding: 0px 7px; border-radius: 6px; text-align: left"
+        >
+          <h4>{{this.currentContractorListing?.contractorListing?.type}}</h4>
+          <sup>by {{this.currentContractorListing?.contractorListing?.company?.companyName}}</sup>
+          <p>Option: {{this.currentContractorListing?.contractorListing?.optionType}}</p>
+          <p>
+            <app-rating [percent]="100"></app-rating>
+          </p>
+          <p style="font-size: smaller">
+            {{this.currentContractorListing?.contractorListing?.address?.street}},
+            {{this.currentContractorListing?.contractorListing?.address?.city}}
+            {{this.currentContractorListing?.contractorListing?.address?.state}},
+            {{this.currentContractorListing?.contractorListing?.address?.postalCode}}
+          </p>
+        </div>
       </ion-content>
     </ng-template>
   </ion-modal>

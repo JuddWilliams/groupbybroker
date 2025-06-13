@@ -4,6 +4,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-rating',
   templateUrl: './rating.component.html',
   styleUrls: ['./rating.component.scss'],
+  standalone: false,
 })
 export class RatingComponent {
   @Input() percent = 0; // 0 to 100

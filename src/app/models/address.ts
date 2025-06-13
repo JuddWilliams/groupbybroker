@@ -23,6 +23,7 @@ export interface Company {
 export interface ContractorListing {
   address: Address;
   type: string;
-  company: Company;  
+  company: Company;
   private: boolean;
+  optionType: string; // 'For Sale', 'Out for bid', 'Trade', 'Cover'
 }
