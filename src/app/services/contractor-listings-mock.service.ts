@@ -14,81 +14,33 @@ export class ContractorListingsMockService {
         city: 'Jacksonville',
         state: 'FL',
         postalCode: '32225',
-        businessName: 'Test 1 Lawn Care',
+        businessName: 'JnW Lawn Care',
         serviceType: 'Yard care',
         private: false,
-        optionType: 'For Sale', //'Out for bid', 'For Sale', 'Trade', 'Cover'
+        optionType: 'For Sale, Trade, Cover', //'Out for bid', 'For Sale', 'Trade', 'Cover'
+        homeOwnerRating: 100,
       },
       {
-        street: '4322 Harbour Island drive',
+        street: '12307 Hawkstowe lane',
         city: 'Jacksonville',
         state: 'FL',
         postalCode: '32225',
-        businessName: 'Test 1 Maid & Cleaning services',
-        serviceType: 'Maid & Cleaning Services',
-        private: false,
-        optionType: 'Cover',
-      },
-      {
-        street: '4328 Harbour Island drive',
-        city: 'Jacksonville',
-        state: 'FL',
-        postalCode: '32225',
-        businessName: 'Test 2 lawn care',
-        serviceType: 'Yard Care',
-        private: false,
-        optionType: 'Trade',
-      },
-      {
-        street: '4447 Harbour Island drive',
-        city: 'Jacksonville',
-        state: 'FL',
-        postalCode: '32225',
-        businessName: 'Test 1 Pesticide services',
-        serviceType: 'Pesticides',
-        private: false,
-        optionType: 'For Sale',
-      },
-      {
-        street: '4419 Harbour Island drive',
-        city: 'Jacksonville',
-        state: 'FL',
-        postalCode: '32225',
-        businessName: 'Test 1 Weed & Feed services',
-        serviceType: 'Weed & Feed',
-        private: false,
-        optionType: 'For Sale',
-      },
-      {
-        street: '1119 Harbour Island drive',
-        city: 'Jacksonville',
-        state: 'FL',
-        postalCode: '32225',
-        businessName: 'test 1 Pool Maintenance',
+        businessName: 'Williams Pool & Spa Services',
         serviceType: 'Pool Maintenance',
         private: false,
         optionType: 'For Sale',
       },
       {
-        street: '4201 Harbour Island drive',
+        street: '7976 Woodpecker Trail',
         city: 'Jacksonville',
         state: 'FL',
-        postalCode: '32225',
-        businessName: 'Test 1 Poop Scoop services',
-        serviceType: 'Poop Scooping',
+        postalCode: '32256',
+        //businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
         private: false,
-        optionType: 'For Sale',
+        optionType: 'Out for Bid',
       },
-      {
-        street: '4212 Harbour Island drive',
-        city: 'Jacksonville',
-        state: 'FL',
-        postalCode: '32225',
-        businessName: 'Test 1 Maid & Cleaning services',
-        serviceType: 'Maid & Cleaning Services',
-        private: false,
-        optionType: 'For Sale',
-      },
+
       // Add more mock listings as needed
     ];
 
@@ -98,9 +50,17 @@ export class ContractorListingsMockService {
     }
 
     // Filter by option if provided (option is an array)
-    if (option) {
-      data = data.filter((item) => option.includes(item.optionType));
-    }
+    // if (option) {
+    //   data = data.filter((item) => option.includes(item.optionType));
+    // }
+
+    data = data.filter((item) => {
+      if (!item.optionType) return false;
+      // Split optionType into an array, trim spaces
+      const types = item.optionType.split(',').map((s) => s.trim().toLowerCase());
+      // Check if any option matches any type
+      return option?.some((opt) => types.includes(opt.toLowerCase())) ?? false;
+    });
 
     return of(data);
   }

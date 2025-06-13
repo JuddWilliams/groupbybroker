@@ -21,4 +21,9 @@ export class RatingComponent {
     }
     return widths;
   }
+
+  doHelp(value: string) {
+    // Placeholder for help functionality
+    alert('? clicked" + value');
+  }
 }

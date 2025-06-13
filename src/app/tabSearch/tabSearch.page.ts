@@ -15,7 +15,7 @@ import { ContractorListingsService } from '../services/contractor-listings.servi
 import { ContractorListingsMockService } from '../services/contractor-listings-mock.service';
 import { state } from '@angular/animations';
 import { Address, ContractorListing } from '../models/address';
-import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
+import { GoogleMap } from '@angular/google-maps';
 import { Subject, firstValueFrom } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -28,8 +28,6 @@ import { environment } from 'src/environments/environment';
   standalone: false,
 })
 export class TabSearchPage implements OnInit {
-  @ViewChild('findRadiusInput', { static: false }) findRadiusInput!: IonInput;
-  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
   @ViewChild('googleMap', { static: false }) map!: GoogleMap;
 
   mapOptions: google.maps.MapOptions = {};
@@ -38,7 +36,6 @@ export class TabSearchPage implements OnInit {
   findRadiusForUI: number = 15; // so its not updated as user types...
 
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
-  //userAddedMarker: google.maps.LatLngLiteral | null = null;
   withinRangeContractorListings: { contractorListing: ContractorListing; location: google.maps.LatLngLiteral }[] = [];
   contractorListings: ContractorListing[] = [];
 
@@ -58,6 +55,11 @@ export class TabSearchPage implements OnInit {
   optionCover: boolean = true;
   optionOutForBid: boolean = true;
 
+  satelliteZoom = 19;
+  streetViewHeading = 0; // default north
+  streetViewFov = 80; // default field of view
+  streetViewPitch = 0; // default is level
+
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value
@@ -65,7 +67,8 @@ export class TabSearchPage implements OnInit {
   selectedAddress: any = null;
 
   currentContractorListing: any | undefined;
-  percent: number = 0; // Percentage for the progress bar
+  homeOwnerRating: number = 80; // Percentage for the progress bar
+  contractorRating: number = 25; // Percentage for the progress bar
 
   // Custom icons for markers
   targetIcon = {
@@ -149,10 +152,11 @@ export class TabSearchPage implements OnInit {
       this.flickerOverlay = false;
     }, 4000);
 
-    // Show participate popup after 2 seconds
+    // Show participate popup after x seconds
     setTimeout(() => {
-      this.showParticipatePopup();
-    }, 60000);
+      //this.showParticipatePopup();  // TODO: implemented in later
+      console.log('Show participate popup after 60 seconds - TODO: implemented in later');
+    }, 30000);
 
     window.addEventListener('resize', () => this.checkViewportSize());
   }
@@ -183,8 +187,6 @@ export class TabSearchPage implements OnInit {
     };
   }
 
-  satelliteZoom = 19;
-
   getStaticMapUrl(
     address: { street: string; city: string; state: string; postalCode: string },
     mapType: string = 'roadmap',
@@ -202,10 +204,6 @@ export class TabSearchPage implements OnInit {
   decreaseSatelliteZoom() {
     this.satelliteZoom = Math.max(this.satelliteZoom - 1, 16);
   }
-
-  streetViewHeading = 0; // default north
-  streetViewFov = 80; // default field of view
-  streetViewPitch = 0; // default is level
 
   getStreetViewUrl(location: google.maps.LatLngLiteral): string {
     const apiKey = environment.googleMapsApiKey;
@@ -235,10 +233,6 @@ export class TabSearchPage implements OnInit {
   }
 
   onMarkerClick(contractorListing: any): void {
-    // this.selectedAddress = contractorListing;
-    // this.infoWindow.open();
-    // alert('Marker clicked: ' + selectedAddress.contractorListing.address.street);
-    //console.log('Opening popup for:', contractorListing);
     this.currentContractorListing = contractorListing;
     this.isPopupOpen = true; // Open the popup
   }
@@ -354,10 +348,6 @@ export class TabSearchPage implements OnInit {
     location: google.maps.LatLngLiteral;
   }): google.maps.LatLngLiteral {
     return addressObj.location;
-  }
-
-  selectText() {
-    this.findRadiusInput.getInputElement().then((input) => input.select());
   }
 
   // Returns zoom level so that the given radius (in miles) fits in the map view

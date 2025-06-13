@@ -37,23 +37,18 @@
             </div>
             <!-- The map itself -->
             <google-map class="map-container-google" #googleMap [options]="mapOptions" (boundsChanged)="onMapBoundsChanged()">
-              <!-- Existing markers -->
+              <!-- Existing markers +  '(' + contractorListing.contractorListing.optionType + ')'  -->
               <map-marker
                 *ngFor="let contractorListing of withinRangeContractorListings"
                 [position]="getLatLng(contractorListing)"
                 [icon]="rangeIcon"
                 [label]="{
-                    text: contractorListing.contractorListing.company.companyName,
+                    text: contractorListing.contractorListing.type +  '(' + contractorListing.contractorListing.optionType + ')',                     
                     color: 'black',
                     fontSize: '12px'
                   }"
                 (mapClick)="onMarkerClick(contractorListing)"
               ></map-marker>
-              <map-info-window #infoWindow>
-                <div>
-                  <!-- Info window content -->
-                </div>
-              </map-info-window>
             </google-map>
           </div>
         </ion-col>
@@ -167,7 +162,7 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button id="claimIt" size="small" fill="outline" (click)="onClaimIt()"> Claim it </ion-button>
+            <!-- <ion-button id="claimIt" size="small" fill="outline" (click)="onClaimIt()"> Claim it </ion-button> -->
           </ion-buttons>
           <ion-title>{{this.currentContractorListing?.contractorListing?.address?.street}}</ion-title>
           <ion-buttons slot="end">
@@ -222,21 +217,31 @@
           <button ion-button size="small" (click)="increaseStreetViewPitch()">↑ Up</button>
           <button ion-button size="small" (click)="decreaseStreetViewPitch()">↓ Down</button>
         </div>
-        <!-- font-size: 0.1em; -->
         <div
           style="background: rgba(0, 0, 0, 0.1); margin: 3px 6px 3px 3px; padding: 0px 7px; border-radius: 6px; text-align: left"
         >
-          <h4>{{this.currentContractorListing?.contractorListing?.type}}</h4>
-          <sup>by {{this.currentContractorListing?.contractorListing?.company?.companyName}}</sup>
-          <p>Option: {{this.currentContractorListing?.contractorListing?.optionType}}</p>
-          <p>
-            <app-rating [percent]="18"></app-rating>
-          </p>
+          <table id="infoTable" style="width: 100%">
+            <tr>
+              <td style="text-align: left; width: 50%">
+                <div *ngIf="!this.currentContractorListing?.contractorListing?.optionType?.toLowerCase().includes('out for bid')">
+                  <sup> <b>Contractor:</b> {{this.currentContractorListing?.contractorListing?.company?.companyName}} </sup>
+                  <app-rating id="contractorRating" [percent]="this.contractorRating"></app-rating>
+                </div>
+              </td>
+              <td style="text-align: right; width: 50%">
+                <h4>{{this.currentContractorListing?.contractorListing?.type}}</h4>
+                <p>{{this.currentContractorListing?.contractorListing?.optionType}}</p>
+              </td>
+            </tr>
+          </table>
+
           <p style="font-size: smaller">
+            <b>Homeowner:</b>
             {{this.currentContractorListing?.contractorListing?.address?.street}},
             {{this.currentContractorListing?.contractorListing?.address?.city}}
             {{this.currentContractorListing?.contractorListing?.address?.state}},
             {{this.currentContractorListing?.contractorListing?.address?.postalCode}}
+            <app-rating id="homeOwnerRating" [percent]="this.homeOwnerRating"></app-rating>
           </p>
         </div>
       </ion-content>
