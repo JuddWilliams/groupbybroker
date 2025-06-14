@@ -184,9 +184,9 @@ export class TabSearchPage implements OnInit {
       center,
       zoom: 12,
       mapTypeControl: !this.isSmallViewport,
-      styles: [
-        { featureType: 'markers.labels', elementType: 'labels.text.fill', stylers: [{ saturation: '-20', color: '#000000' }] },
-      ],
+      // styles: [
+      //   { featureType: 'markers.labels', elementType: 'labels.text.fill', stylers: [{ saturation: '-20', color: '#000000' }] },
+      // ],
     };
   }
 
