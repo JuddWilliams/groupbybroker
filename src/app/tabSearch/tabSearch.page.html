@@ -164,7 +164,7 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <!-- <ion-button id="claimIt" size="small" fill="outline" (click)="onClaimIt()"> Claim it </ion-button> -->
+            <ion-button id="claimIt" size="small" fill="outline" (click)="onClaimIt()"> Claim this home </ion-button>
           </ion-buttons>
           <ion-title>{{this.currentContractorListing?.contractorListing?.address?.street}}</ion-title>
           <ion-buttons slot="end">
@@ -222,29 +222,42 @@
         <div
           style="background: rgba(0, 0, 0, 0.1); margin: 3px 6px 3px 3px; padding: 0px 7px; border-radius: 6px; text-align: left"
         >
-          <table id="infoTable" style="width: 100%">
-            <tr>
-              <td style="text-align: left; width: 50%">
-                <div *ngIf="!this.currentContractorListing?.contractorListing?.optionType?.toLowerCase().includes('out for bid')">
+          <ion-grid>
+            <ion-row>
+              <ion-col style="text-align: left">
+                <ion-text color="primary">
+                  <h1 style="margin: 0px 0px">{{this.currentContractorListing?.contractorListing?.type}}</h1>
+                </ion-text>
+                <p style="margin: 0px 0px">{{this.currentContractorListing?.contractorListing?.optionType}}</p>
+              </ion-col>
+              <ion-col style="text-align: right">
+                <div
+                  style="padding-top: 3px"
+                  *ngIf="!this.currentContractorListing?.contractorListing?.optionType?.toLowerCase().includes('out for bid')"
+                >
                   <sup> <b>Contractor:</b> {{this.currentContractorListing?.contractorListing?.company?.companyName}} </sup>
-                  <app-rating id="contractorRating" [percent]="this.contractorRating"></app-rating>
+                  <div style="display: flex; justify-content: flex-end">
+                    <app-rating id="contractorRating" [percent]="this.contractorRating"></app-rating>
+                  </div>
                 </div>
-              </td>
-              <td style="text-align: right; width: 50%">
-                <h4>{{this.currentContractorListing?.contractorListing?.type}}</h4>
-                <p>{{this.currentContractorListing?.contractorListing?.optionType}}</p>
-              </td>
-            </tr>
-          </table>
-
-          <p style="font-size: smaller">
-            <b>Homeowner:</b>
-            {{this.currentContractorListing?.contractorListing?.address?.street}},
-            {{this.currentContractorListing?.contractorListing?.address?.city}}
-            {{this.currentContractorListing?.contractorListing?.address?.state}},
-            {{this.currentContractorListing?.contractorListing?.address?.postalCode}}
-            <app-rating id="homeOwnerRating" [percent]="this.homeOwnerRating"></app-rating>
-          </p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col style="text-align: left"> </ion-col>
+              <ion-col id="col1" style="text-align: right">
+                <div style="font-size: smaller">
+                  <b>Homeowner:</b>
+                  {{this.currentContractorListing?.contractorListing?.address?.street}},
+                  {{this.currentContractorListing?.contractorListing?.address?.city}}
+                  {{this.currentContractorListing?.contractorListing?.address?.state}},
+                  {{this.currentContractorListing?.contractorListing?.address?.postalCode}}
+                </div>
+                <div style="display: flex; justify-content: flex-end">
+                  <app-rating id="homeOwnerRating" [percent]="this.homeOwnerRating"></app-rating>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </div>
       </ion-content>
     </ng-template>
