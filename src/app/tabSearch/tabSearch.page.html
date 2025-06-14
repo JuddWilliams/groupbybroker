@@ -39,13 +39,15 @@
             <google-map class="map-container-google" #googleMap [options]="mapOptions" (boundsChanged)="onMapBoundsChanged()">
               <!-- Existing markers +  '(' + contractorListing.contractorListing.optionType + ')'  -->
               <map-marker
+                class="marker"
                 *ngFor="let contractorListing of withinRangeContractorListings"
                 [position]="getLatLng(contractorListing)"
                 [icon]="rangeIcon"
                 [label]="{
-                    text: contractorListing.contractorListing.type +  '(' + contractorListing.contractorListing.optionType + ')',                     
+                    text: contractorListing.contractorListing.type +  ' (' + contractorListing.contractorListing.optionType + ')',                     
                     color: 'black',
-                    fontSize: '12px'
+                    fontSize: '16px',
+                    fontWeight: 'bold'
                   }"
                 (mapClick)="onMarkerClick(contractorListing)"
               ></map-marker>
