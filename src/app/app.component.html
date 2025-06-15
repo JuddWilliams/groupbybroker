@@ -6,9 +6,9 @@
       <ion-buttons [collapse]="true" slot="start">
         <ion-menu-button auto-hide="false" id="main-content"></ion-menu-button>
         <!-- (click)="onMenu()"  -->
-        <div id="createAccountDiv">
-          <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Create account </ion-button>
-          <sup style="padding-left: 3px">∙free and easy∙</sup>
+        <div *ngIf="!isAuthPage()" id="createAccountDiv">
+          <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']">Create account </ion-button>
+          <!-- <sup style="padding-left: 3px">∙free and easy∙</sup> -->
         </div>
         <!-- <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Post it </ion-button> -->
       </ion-buttons>

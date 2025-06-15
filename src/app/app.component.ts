@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private http: HttpClient,
     public authService: AuthService,
-    private router: Router,
+    public router: Router, // Changed to public
     private toastController: ToastController,
     private menu: MenuController
   ) {} // Preserving your router dependency
@@ -107,5 +107,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!nickName) return '';
     const initials = nickName.substring(0, 2).toUpperCase(); // Extract first 2 letters
     return initials;
+  }
+
+  isAuthPage(): boolean {
+    const url = this.router.url;
+    return url.includes('login') || url.includes('create-user') || url.includes('reset-password') || url.includes('tabDashboard');
   }
 }

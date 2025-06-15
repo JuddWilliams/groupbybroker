@@ -15,18 +15,13 @@ export class LoginPage {
   loading = false; // Track loading state
   returnUrl: string = '/'; // Default redirect URL
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     // Get the returnUrl from the query parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  
   onCancel(): void {
     this.router.navigate(['/tabs/tabAbout']); // Navigate to the previous screen
   }
@@ -35,18 +30,42 @@ export class LoginPage {
     this.loading = true; // Show spinner
     this.errorMessage = '';
 
-    this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        this.loading = false; // Hide spinner
-        console.log('Login successful:', response);
-        this.authService.saveLogin(response.token, response.userId, response.nickName); // Save login details
-        this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
-      },
-      error: (error) => {
-        this.loading = false; // Hide spinner
-        this.errorMessage = error.error;//'Invalid credentials. Please try again.';
-        console.error('Login error:', error);
-      },
-    });
+    // while the api is down for submscription reasons..mocking response.
+    //
+    //
+
+    const mockResponse = {
+      // userid: {
+      //   id: 1,
+      //   name: 'Judd Williams',
+      //   email: 'juddsurfs@gmail.com',
+      // },
+      userId: 'juddsurfs@gmail.com',
+      nickName: 'Judd',
+      token: 'mock-jwt-token',
+    };
+
+    // Simulate what you would do on a successful login
+    this.loading = false; // Hide spinner
+    console.log('Login successful:', mockResponse);
+    this.authService.saveLogin(mockResponse.token, mockResponse.userId, mockResponse.nickName); // Save login details
+    this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
+
+    // working code. uncomment once backend is subscribed to
+    //
+
+    // this.authService.login(this.email, this.password).subscribe({
+    //   next: (response) => {
+    //     this.loading = false; // Hide spinner
+    //     console.log('Login successful:', response);
+    //     this.authService.saveLogin(response.token, response.userId, response.nickName); // Save login details
+    //     this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
+    //   },
+    //   error: (error) => {
+    //     this.loading = false; // Hide spinner
+    //     this.errorMessage = error.error;//'Invalid credentials. Please try again.';
+    //     console.error('Login error:', error);
+    //   },
+    // });
   }
 }
