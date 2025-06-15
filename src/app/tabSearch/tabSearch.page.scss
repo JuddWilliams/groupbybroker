@@ -90,11 +90,40 @@ ion-col:not(.fixed-width-col) {
   text-align: left; /* Ensure content is left-aligned */
 }
 
+// .checkbox-group {
+//   display: flex;
+//   gap: 16px;
+//   align-items: center;
+// }
 .checkbox-group {
   display: flex;
-  gap: 16px;
-  align-items: center;
+  flex-wrap: wrap;  
+  margin: 0px 0px 0px 11px !important;
+  gap: 16px;       /* Allows checkboxes to wrap to next line */
+  max-width: 100%;         /* Prevents overflow */
+  box-sizing: border-box;  /* Includes padding/border in width */
 }
+
+
+ 
+.my-label-text-wrapper {
+
+   &::part(label)
+   {
+      margin-inline-start: 5px !important;
+   }
+}
+
+
+// did not work (actuall.. its margin-inline-start)
+// ::ng-deep label-text-wrapper {
+//   margin: 0px 0px 0px -5px !important;
+// }
+
+
+
+
+//<div class="label-text-wrapper" part="label"><div class="label-text">Filter options</div></div>
 
 .map-overlay-text {
   position: absolute;

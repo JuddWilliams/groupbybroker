@@ -7,14 +7,15 @@
   <ion-card>
     <ion-grid>
       <ion-row>
-        <ion-col>
-          <span>'Out for Bid',&nbsp; 'For Sale',&nbsp; 'Trade',&nbsp; or 'Coverage' in area.</span>
+        <ion-col style="padding-bottom: 0px">
+          <span>We promote efficiency. So as you travel less your customers pay less... and you make more. </span>
           <br />
-          <sup>
+          <sup style="padding-left: 5px">
             Click '
             <a routerLink="/tabs/tabAbout" class="about-link" style="vertical-align: baseline; padding-left: 2px">About</a>' to
             learn more .
           </sup>
+          <ion-icon name="trending-down-outline" style="font-size: 16px" color="primary"></ion-icon>
         </ion-col>
       </ion-row>
       <!-- <ion-row>
@@ -25,7 +26,7 @@
           </ion-col>
         </ion-row> -->
       <ion-row id="contentx">
-        <ion-col class="fixed-width-col">
+        <ion-col class="fixed-width-col" style="padding-top: 0px">
           <div class="map-container" style="position: relative">
             <!-- Overlay text  hide on smaller??? *ngIf="!isSmallViewport" -->
             <div class="map-overlay-text" [class.flicker]="flickerOverlay">
@@ -54,13 +55,12 @@
             </google-map>
           </div>
         </ion-col>
-        <ion-col size="12" size-md="6" size-lg="6">
+        <ion-col style="padding-top: 0px" size="12" size-md="6" size-lg="6">
           <div style="padding-bottom: 10px">
             <!-- *ngIf="withinRangeContractorListings.length >= 1"  -->
-            <!-- <ion-label><sub>Filter options:</sub></ion-label> -->
             <ion-select
               style="width: 190px"
-              label="Filter options"
+              label="Filter job type:"
               label-placement="floating"
               [(ngModel)]="selectedIndustry"
               (ionChange)="onIndustryChange()"
@@ -73,25 +73,52 @@
               <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
               <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
             </ion-select>
-            <div class="checkbox-group">
-              <ion-checkbox [(ngModel)]="optionOutForBid" labelPlacement="end" (ionChange)="selectCheckBox('Out for Bid')"
-                >Out for bid</ion-checkbox
-              >
-              <ion-checkbox [(ngModel)]="optionForSale" labelPlacement="end" (ionChange)="selectCheckBox('For Sale')"
-                >For Sale</ion-checkbox
-              >
-              <ion-checkbox [(ngModel)]="optionTrade" labelPlacement="end" (ionChange)="selectCheckBox('optionForTrade')"
-                >Trade</ion-checkbox
-              >
-              <ion-checkbox [(ngModel)]="optionCover" labelPlacement="end" (ionChange)="selectCheckBox('optionForCover')"
-                >Cover</ion-checkbox
-              >
+            <div style="font-size: small; padding-bottom: 7px">
+              Options:
               <ion-icon
                 name="help-circle-outline"
-                (click)="openPopup()"
+                (click)="openPopupOptions()"
                 title="Click for more information"
                 style="cursor: pointer"
               ></ion-icon>
+            </div>
+
+            <div class="checkbox-group">
+              <ion-checkbox
+                class="my-label-text-wrapper"
+                [(ngModel)]="optionOpenToBid"
+                labelPlacement="end"
+                (ionChange)="selectCheckBox('Open to Bid')"
+                >Open to Bid</ion-checkbox
+              >
+              <ion-checkbox
+                class="my-label-text-wrapper"
+                [(ngModel)]="optionForSale"
+                labelPlacement="end"
+                (ionChange)="selectCheckBox('For Sale')"
+                >For Sale</ion-checkbox
+              >
+              <ion-checkbox
+                class="my-label-text-wrapper"
+                [(ngModel)]="optionTrade"
+                labelPlacement="end"
+                (ionChange)="selectCheckBox('optionForTrade')"
+                >Trade</ion-checkbox
+              >
+              <ion-checkbox
+                class="my-label-text-wrapper"
+                [(ngModel)]="optionPartner"
+                labelPlacement="end"
+                (ionChange)="selectCheckBox('Partner')"
+                >Partner</ion-checkbox
+              >
+              <ion-checkbox
+                class="my-label-text-wrapper"
+                [(ngModel)]="optionCover"
+                labelPlacement="end"
+                (ionChange)="selectCheckBox('optionForCover')"
+                >Cover</ion-checkbox
+              >
             </div>
           </div>
 
@@ -143,7 +170,7 @@
                 <sup>
                   at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{
                   addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }} (
-                  <a (click)="openPopup(addressObj)">view</a>
+                  <a (click)="openPopupListing(addressObj)">view</a>
                   )
                 </sup>
                 <!-- <div style="font-size: small;" >
@@ -159,7 +186,7 @@
     </ion-grid>
   </ion-card>
   <!-- Popup Modal -->
-  <ion-modal class="sizer-modal" [isOpen]="isPopupOpen" (ionModalDidDismiss)="closePopup()">
+  <ion-modal id="PropertyDetail" class="sizer-modal" [isOpen]="isPopupOpenListing" (ionModalDidDismiss)="closePopupListing()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -168,7 +195,7 @@
           </ion-buttons>
           <ion-title>{{this.currentContractorListing?.contractorListing?.address?.street}}</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="closePopup()">Close</ion-button>
+            <ion-button (click)="closePopupListing()">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -233,7 +260,7 @@
               <ion-col style="text-align: right">
                 <div
                   style="padding-top: 3px"
-                  *ngIf="!this.currentContractorListing?.contractorListing?.optionType?.toLowerCase().includes('out for bid')"
+                  *ngIf="!this.currentContractorListing?.contractorListing?.optionType?.toLowerCase().includes('open to bid')"
                 >
                   <sup> <b>Contractor:</b> {{this.currentContractorListing?.contractorListing?.company?.companyName}} </sup>
                   <div style="display: flex; justify-content: flex-end">
@@ -259,6 +286,48 @@
             </ion-row>
           </ion-grid>
         </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal id="HelpOptions" class="sizer-modal" [isOpen]="isPopupOpenOptions" (ionModalDidDismiss)="closePopupOptions()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start"> </ion-buttons>
+          <ion-title>?</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closePopupOptions()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Options</h1>
+        <ion-text color="primary">
+          <h2>Unsolicited Bid</h2>
+        </ion-text>
+        <p>
+          <ion-text color="warning"><ion-icon name="warning"></ion-icon></ion-text>
+          This desribes when when a contractor is determined to expand their territory in this particular area based on efficiency
+          models. The contractor may offer a competitive price or other incentives for the homeowner to consider. Only the
+          homeowner, one who claimed the property, can view the contractor's unsolicited bid(s).
+          <!-- I saw a werewolf with a Chinese menu in his hand. Walking through the
+          <ion-text color="success"><sub>streets</sub></ion-text> of Soho in the rain. He
+          <ion-text color="medium"><i>was</i></ion-text> looking for a place called Lee Ho Fook's. Gonna get a
+          <ion-text color="danger">big dish of beef chow mein.</ion-text> -->
+        </p>
+        <ion-text color="primary">
+          <h2>Open to bid</h2>
+        </ion-text>
+        <p>
+          <ion-text color="warning"><ion-icon name="warning"></ion-icon></ion-text>
+          This desribes when a homeowner has claimed thier property and indicates they are looking for a contractor to bid on a
+          job. They will offer details including what's important to them such as a budget, quality, timeliness, rating, etc.
+          <!-- I saw a werewolf with a Chinese menu in his hand. Walking through the
+          <ion-text color="success"><sub>streets</sub></ion-text> of Soho in the rain. He
+          <ion-text color="medium"><i>was</i></ion-text> looking for a place called Lee Ho Fook's. Gonna get a
+          <ion-text color="danger">big dish of beef chow mein.</ion-text> -->
+        </p>
       </ion-content>
     </ng-template>
   </ion-modal>

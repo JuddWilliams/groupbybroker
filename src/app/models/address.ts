@@ -25,5 +25,5 @@ export interface ContractorListing {
   type: string;
   company: Company;
   private: boolean;
-  optionType: string; // 'Out for bid', 'For Sale', 'Trade', 'Cover'
+  optionType: string; // 'Open to Bid', 'For Sale', 'Partner', 'Trade', 'Cover'
 }

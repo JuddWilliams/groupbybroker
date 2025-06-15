@@ -36,6 +36,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  onMenu(): void {
+    // This method can be used to handle menu actions if needed
+    alert('Under Construction: Menu action triggered');
+  }
+
   checkApiHealth(): void {
     console.warn('API health check failed is disabled to while we use free subscription of azure sql server');
     return;

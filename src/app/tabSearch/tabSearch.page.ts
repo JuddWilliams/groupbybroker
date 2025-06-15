@@ -32,7 +32,8 @@ export class TabSearchPage implements OnInit {
 
   mapOptions: google.maps.MapOptions = {};
 
-  isPopupOpen = false;
+  isPopupOpenListing = false;
+  isPopupOpenOptions = false;
   findRadiusForUI: number = 15; // so its not updated as user types...
 
   targetAddress: Address = { street: '', city: '', state: '', postalCode: '32225' };
@@ -52,8 +53,9 @@ export class TabSearchPage implements OnInit {
 
   optionForSale: boolean = true;
   optionTrade: boolean = true;
+  optionPartner: boolean = true;
   optionCover: boolean = true;
-  optionOutForBid: boolean = true;
+  optionOpenToBid: boolean = true;
 
   satelliteZoom = 19;
   streetViewHeading = 0; // default north
@@ -63,7 +65,7 @@ export class TabSearchPage implements OnInit {
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value
-  optionValue: string[] = ['Out for bid', 'For Sale', 'Trade', 'Cover']; // Default selected values for options
+  optionValue: string[] = ['Open to Bid', 'For Sale', 'Trade', 'Partner', 'Cover']; // Default selected values for options
   selectedAddress: any = null;
 
   currentContractorListing: any | undefined;
@@ -231,23 +233,31 @@ export class TabSearchPage implements OnInit {
   }
 
   async onClaimIt() {
-    await this.closePopup();
+    await this.closePopupListing();
     this.router.navigate(['/tabs/tabDashboard']);
   }
 
   onMarkerClick(contractorListing: any): void {
     this.currentContractorListing = contractorListing;
-    this.isPopupOpen = true; // Open the popup
+    this.isPopupOpenListing = true; // Open the popup
   }
 
-  openPopup(Obj?: { contractorListing: ContractorListing; location: google.maps.LatLngLiteral }) {
+  openPopupListing(Obj?: { contractorListing: ContractorListing; location: google.maps.LatLngLiteral }) {
     this.currentContractorListing = Obj;
-    this.isPopupOpen = true; // Open the popup
+    this.isPopupOpenListing = true; // Open the popup
   }
 
-  async closePopup() {
+  async closePopupListing() {
     await this.modalController.dismiss();
-    this.isPopupOpen = false;
+    this.isPopupOpenListing = false;
+  }
+
+  openPopupOptions() {
+    this.isPopupOpenOptions = true; // Open the popup
+  }
+
+  async closePopupOptions() {
+    this.isPopupOpenOptions = false;
   }
 
   selectRadio(value: string): void {
@@ -256,9 +266,10 @@ export class TabSearchPage implements OnInit {
 
   selectCheckBox(value: string): void {
     const selected: string[] = [];
-    if (this.optionOutForBid) selected.push('Out for bid');
+    if (this.optionOpenToBid) selected.push('Open to Bid');
     if (this.optionForSale) selected.push('For Sale');
     if (this.optionTrade) selected.push('Trade');
+    if (this.optionPartner) selected.push('Partner');
     if (this.optionCover) selected.push('Cover');
     this.optionValue = selected;
     console.log('Selected options:', this.optionValue);
