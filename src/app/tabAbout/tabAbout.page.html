@@ -7,11 +7,44 @@
   <ion-card>
     <ion-grid>
       <ion-row>
-        <ion-col size="12" size-md="8">
+        <ion-col id="column-x" size="12" size-md="8">
           <h4>Work together as a community to optimize efficiency</h4>
           <p>
-            "By reducing travel and preparation time both contractors and homeowners benefit from a cost-effective operation."
+            Mission Statement -
+            <i
+              >"Improve efficiency. For example, reducing travel and preparation time as both contractors and homeowners benefit
+              from a cost-effective operation."</i
+            >
           </p>
+          <ion-grid>
+            <ion-row>
+              <ion-col id="col1" size="auto">
+                <h5 style="margin-top: 3px">We answer these questions:</h5>
+
+                <ul>
+                  <li>What is the best way to find a contractor?</li>
+                  <li>Can the contractors buy, sell, swap, cover, or partner in servicing accounts?</li>
+                  <li>Who do my neighbors use?</li>
+                  <li>Are there recommendations or ratings?</li>
+                  <li>Level of service compared to price?</li>
+                  <li>Referrals available?</li>
+                  <li>Can i get a lower price?</li>
+                  <li>Couldn’t these services benefit from better payment options?</li>
+                  <li>What happens when provider temporarily unavailable due to injury, sickness, vacation, other?</li>
+                  <li>Is there flexibility in scheduling?</li>
+                </ul>
+              </ion-col>
+              <ion-col id="col2">
+                <sup>Currently supported services: </sup> <br />
+                <ion-chip>Yard care</ion-chip>
+                <ion-chip color="primary">Pesticides</ion-chip>
+                <ion-chip color="secondary">Weed & Feed</ion-chip>
+                <ion-chip color="tertiary">Pool maintenance</ion-chip>
+                <ion-chip color="primary">Maid services</ion-chip>
+                <ion-chip color="success">Poop scooper</ion-chip>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
 
           <!-- 
                 
@@ -21,18 +54,8 @@
                 <i> Comparing services & incentives in the area   
                 including <a title="Click for more information" (click)="openPopup()"> reviews</a>/<a title="Click for more information" (click)="openPopup()">user ratings</a>, and other factors. </i>
               </p> -->
-
-          <p>
-            <sup>Currently supported services: </sup> <br />
-            <ion-chip>Yard care</ion-chip>
-            <ion-chip color="primary">Pesticides</ion-chip>
-            <ion-chip color="secondary">Weed & Feed</ion-chip>
-            <ion-chip color="tertiary">Pool maintenance</ion-chip>
-            <ion-chip color="primary">Maid services</ion-chip>
-            <ion-chip color="success">Poop scooper</ion-chip>
-          </p>
         </ion-col>
-        <ion-col size="12" size-md="4" style="padding-left: 30px">
+        <ion-col id="column-y" size="12" size-md="4" style="padding-left: 30px">
           <h4>What it cost</h4>
           <p style="font-weight: bolder">
             <i
@@ -72,7 +95,8 @@
                     <ul>
                       <sup>Features</sup>
                       <li>
-                        Buy, Sell,Trade accounts (B2B)
+                        <i>Pre-bid</i> or offer <i>incentives</i> & <i>referrals</i> for jobs in close <u>proximity</u> to your
+                        other jobs.
                         <ion-icon
                           name="help-circle-outline"
                           (click)="openPopup()"
@@ -81,7 +105,7 @@
                         ></ion-icon>
                       </li>
                       <li>
-                        Offer incentives & referrals for jobs in close proximity to your other jobs.
+                        Buy, Sell, Trade/Barter for nearby accounts (B2B)
                         <ion-icon
                           name="help-circle-outline"
                           (click)="openPopup()"
@@ -125,7 +149,7 @@
                     location. Claim your home to view offers or 'Request a Bid' notifiying those contractors of your interest. Or
                     simply start by 'Searching' the area.
                   </p>
-                  <p>
+                  <p style="font-size: smaller">
                     Contractors understand they need your participation to be successful in selling, trading, or providing service
                     while on medical leave, vacation, or other. You'll have the opportunity to participate in the process of
                     finding a contractor that best fits your needs.

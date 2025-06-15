@@ -3,7 +3,7 @@ import { Router } from '@angular/router'; // Preserving your router import
 import { AuthService } from './services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ToastController } from '@ionic/angular';
+import { MenuController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     public authService: AuthService,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private menu: MenuController
   ) {} // Preserving your router dependency
 
   ngOnInit(): void {
@@ -39,6 +40,11 @@ export class AppComponent implements OnInit, OnDestroy {
   onMenu(): void {
     // This method can be used to handle menu actions if needed
     alert('Under Construction: Menu action triggered');
+    this.closeMenu();
+  }
+
+  closeMenu() {
+    this.menu.close();
   }
 
   checkApiHealth(): void {

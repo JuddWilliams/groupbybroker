@@ -4,9 +4,13 @@
       <!-- <ion-title>Travel less, Pay less, Make more</ion-title> -->
 
       <ion-buttons [collapse]="true" slot="start">
-        <ion-menu-button (click)="onMenu()" auto-hide="false"></ion-menu-button>
-        <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Request Bids </ion-button>
-        <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Post it </ion-button>
+        <ion-menu-button auto-hide="false" id="main-content"></ion-menu-button>
+        <!-- (click)="onMenu()"  -->
+        <div id="createAccountDiv">
+          <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Create account </ion-button>
+          <sup style="padding-left: 3px">∙free and easy∙</sup>
+        </div>
+        <!-- <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Post it </ion-button> -->
       </ion-buttons>
 
       <!-- <div style="padding-left: 10px; background-color: yellow">Under Construction</div> -->
@@ -23,3 +27,25 @@
   <ion-content> </ion-content>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>
+
+<!-- Main Menu -->
+<ion-menu menuId="main" contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Main Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabSearch']">Search feature</ion-item>
+      <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabDashboard']">Your Dashboard</ion-item>
+      <ion-item (click)="onMenu()">Dispute or report issue</ion-item>
+      <ion-item (click)="onMenu()">Contact us</ion-item>
+      <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabAbout']">About us</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<!-- <ion-content id="main-content">
+  <ion-menu-button></ion-menu-button>  
+</ion-content> -->
