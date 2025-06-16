@@ -8,12 +8,9 @@
     <ion-grid>
       <ion-row>
         <ion-col style="padding-bottom: 0px">
-          <span>We promote efficiency. For example, as you travel less your customers pay less... and you make more. </span>
-          <br />
           <sup style="padding-left: 5px">
-            Click '
-            <a routerLink="/tabs/tabAbout" class="about-link" style="vertical-align: baseline; padding-left: 2px">About</a>' to
-            learn more .
+            '<a routerLink="/tabs/tabAbout" class="about-link" style="vertical-align: baseline; padding-left: 2px">Learn more</a>'
+            or use map to find items of interest. Or click to 'Post'...
           </sup>
           <ion-icon name="trending-down-outline" style="font-size: 16px" color="primary"></ion-icon>
         </ion-col>
@@ -34,10 +31,17 @@
               <span>
                 <b>{{withinRangeContractorListings.length}}</b>
                 item<span *ngIf="withinRangeContractorListings.length !== 1">s</span>
+                / click to add
               </span>
             </div>
             <!-- The map itself -->
-            <google-map class="map-container-google" #googleMap [options]="mapOptions" (boundsChanged)="onMapBoundsChanged()">
+            <google-map
+              class="map-container-google"
+              #googleMap
+              [options]="mapOptions"
+              (boundsChanged)="onMapBoundsChanged()"
+              (mapClick)="onMapClick($event)"
+            >
               <!-- Existing markers +  '(' + contractorListing.contractorListing.optionType + ')'  -->
               <map-marker
                 class="marker"
@@ -73,52 +77,89 @@
               <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
               <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
             </ion-select>
-            <div style="font-size: small; padding-bottom: 7px">
-              Options:
-              <ion-icon
-                name="help-circle-outline"
-                (click)="openPopupOptions()"
-                title="Click for more information"
-                style="cursor: pointer"
-              ></ion-icon>
+            <div id="OptionsDiv">
+              <div style="font-size: small; padding-bottom: 7px">
+                Options:
+                <ion-icon
+                  name="help-circle-outline"
+                  (click)="openPopupOptions()"
+                  title="Click for more information"
+                  style="cursor: pointer"
+                ></ion-icon>
+              </div>
+
+              <div class="checkbox-group">
+                <ion-checkbox
+                  color="success"
+                  class="my-label-text-wrapper ion-checkbox-success"
+                  [(ngModel)]="optionAcceptingBids"
+                  labelPlacement="end"
+                  (ionChange)="selectCheckBox('Accepting Bids')"
+                  >Accepting Bids</ion-checkbox
+                >
+                <ion-checkbox
+                  color="primary"
+                  class="my-label-text-wrapper ion-checkbox-primary"
+                  [(ngModel)]="optionForSale"
+                  labelPlacement="end"
+                  (ionChange)="selectCheckBox('For Sale')"
+                  >For Sale</ion-checkbox
+                >
+                <ion-checkbox
+                  color="primary"
+                  class="my-label-text-wrapper ion-checkbox-primary"
+                  [(ngModel)]="optionTrade"
+                  labelPlacement="end"
+                  (ionChange)="selectCheckBox('optionForTrade')"
+                  >Trade</ion-checkbox
+                >
+                <ion-checkbox
+                  color="primary"
+                  class="my-label-text-wrapper ion-checkbox-primary"
+                  [(ngModel)]="optionPartner"
+                  labelPlacement="end"
+                  (ionChange)="selectCheckBox('Partner')"
+                  >Partner</ion-checkbox
+                >
+                <ion-checkbox
+                  color="primary"
+                  class="my-label-text-wrapper ion-checkbox-primary"
+                  [(ngModel)]="optionCover"
+                  labelPlacement="end"
+                  (ionChange)="selectCheckBox('optionForCover')"
+                  >Cover</ion-checkbox
+                >
+              </div>
             </div>
 
-            <div class="checkbox-group">
-              <ion-checkbox
-                class="my-label-text-wrapper"
-                [(ngModel)]="optionOpenToBid"
-                labelPlacement="end"
-                (ionChange)="selectCheckBox('Open to Bid')"
-                >Open to Bid</ion-checkbox
-              >
-              <ion-checkbox
-                class="my-label-text-wrapper"
-                [(ngModel)]="optionForSale"
-                labelPlacement="end"
-                (ionChange)="selectCheckBox('For Sale')"
-                >For Sale</ion-checkbox
-              >
-              <ion-checkbox
-                class="my-label-text-wrapper"
-                [(ngModel)]="optionTrade"
-                labelPlacement="end"
-                (ionChange)="selectCheckBox('optionForTrade')"
-                >Trade</ion-checkbox
-              >
-              <ion-checkbox
-                class="my-label-text-wrapper"
-                [(ngModel)]="optionPartner"
-                labelPlacement="end"
-                (ionChange)="selectCheckBox('Partner')"
-                >Partner</ion-checkbox
-              >
-              <ion-checkbox
-                class="my-label-text-wrapper"
-                [(ngModel)]="optionCover"
-                labelPlacement="end"
-                (ionChange)="selectCheckBox('optionForCover')"
-                >Cover</ion-checkbox
-              >
+            <div id="Other1Div">
+              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
+                Other:
+                <ion-icon
+                  name="help-circle-outline"
+                  (click)="alertMsg('help todo: Show Jobs in area are contractors that are in the area')"
+                  title="Click for more information"
+                  style="cursor: pointer"
+                ></ion-icon>
+              </div>
+              <div class="checkbox-group">
+                <ion-checkbox
+                  color="warning"
+                  class="my-label-text-wrapper ion-checkbox-warning"
+                  [(ngModel)]="other1"
+                  labelPlacement="end"
+                  (ionChange)="selectOtherCheckBox('other1')"
+                  >Show Contractors 'working'</ion-checkbox
+                >
+                <ion-checkbox
+                  color="warning"
+                  class="my-label-text-wrapper ion-checkbox-warning"
+                  [(ngModel)]="other2"
+                  labelPlacement="end"
+                  (ionChange)="selectOtherCheckBox('other2')"
+                  >Contractors offering 'incentives' or 'referrals'</ion-checkbox
+                >
+              </div>
             </div>
           </div>
 

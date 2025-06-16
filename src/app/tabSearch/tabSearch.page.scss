@@ -105,6 +105,17 @@ ion-col:not(.fixed-width-col) {
 }
 
 
+.ion-checkbox-primary {
+  --checkbox-background: #0054e9; /* your desired color */
+}
+
+.ion-checkbox-success {
+  --checkbox-background: #2dd55b; /* your desired color */
+}
+
+.ion-checkbox-warning {
+  --checkbox-background: #ffc409; /* your desired color */
+}
  
 .my-label-text-wrapper {
 

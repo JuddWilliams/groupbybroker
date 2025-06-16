@@ -1,0 +1,16 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>testPage</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">testPage</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  note: call this to get and set neighborhood field. not allow free form as it probably won't match later ;-)
+  <ion-input [(ngModel)]="address" label="Floating label" labelPlacement="floating" label="Address:"></ion-input>
+  <ion-button size="small" (click)="testGetNeighborHood()">test Get NeighborHood</ion-button>
+</ion-content>

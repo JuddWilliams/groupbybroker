@@ -42,6 +42,9 @@
       <ion-item (click)="onMenu()">Dispute or report issue</ion-item>
       <ion-item (click)="onMenu()">Contact us</ion-item>
       <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabAbout']">About us</ion-item>
+      <ion-item *ngIf="loggedInEmail === 'juddsurfs@gmail.com'" (click)="closeMenu()" [routerLink]="['/test-page']"
+        >Test page if Juddsurfs</ion-item
+      >
     </ion-list>
   </ion-content>
 </ion-menu>

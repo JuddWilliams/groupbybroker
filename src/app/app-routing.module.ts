@@ -21,7 +21,11 @@ const routes: Routes = [
   {
     path: 'set-password',
     loadChildren: () => import('./set-password/set-password.module').then((m) => m.SetPasswordPageModule),
+  },  {
+    path: 'test-page',
+    loadChildren: () => import('./test-page/test-page.module').then( m => m.TestPagePageModule)
   },
+
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],

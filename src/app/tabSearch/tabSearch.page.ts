@@ -55,7 +55,12 @@ export class TabSearchPage implements OnInit {
   optionTrade: boolean = true;
   optionPartner: boolean = true;
   optionCover: boolean = true;
-  optionOpenToBid: boolean = true;
+  optionAcceptingBids: boolean = true;
+
+  // otehr
+  //
+  other1: boolean = false;
+  other2: boolean = false;
 
   satelliteZoom = 19;
   streetViewHeading = 0; // default north
@@ -66,6 +71,7 @@ export class TabSearchPage implements OnInit {
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value
   optionValue: string[] = ['Open to Bid', 'For Sale', 'Trade', 'Partner', 'Cover']; // Default selected values for options
+  otherValue: string[] = ['tbd'];
   selectedAddress: any = null;
 
   currentContractorListing: any | undefined;
@@ -82,6 +88,24 @@ export class TabSearchPage implements OnInit {
     url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Blue marker for withinRangeContractorListings
     scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
   };
+
+  async onMapClick(event: google.maps.MapMouseEvent) {
+    const lat = event.latLng?.lat();
+    const lng = event.latLng?.lng();
+    if (lat == null || lng == null) return;
+
+    const apiKey = environment.googleMapsApiKey; // Replace with your API key
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const address = data.results?.[0]?.formatted_address || 'Address not found';
+      alert(`Clicked address: ${address} \n would you like to create a post for this address?`);
+    } catch (err) {
+      alert('Error fetching address');
+    }
+  }
 
   public alertButtons = [
     {
@@ -264,15 +288,29 @@ export class TabSearchPage implements OnInit {
     this.sortingValue = value;
   }
 
+  alertMsg(message: string) {
+    alert(message);
+  }
+
   selectCheckBox(value: string): void {
     const selected: string[] = [];
-    if (this.optionOpenToBid) selected.push('Open to Bid');
+    if (this.optionAcceptingBids) selected.push('Accepting Bids');
     if (this.optionForSale) selected.push('For Sale');
     if (this.optionTrade) selected.push('Trade');
     if (this.optionPartner) selected.push('Partner');
     if (this.optionCover) selected.push('Cover');
     this.optionValue = selected;
     console.log('Selected options:', this.optionValue);
+    this.checkAddressesWithinRange();
+  }
+
+  selectOtherCheckBox(value: string): void {
+    const selected: string[] = [];
+    if (this.other1) selected.push('other1');
+    if (this.other2) selected.push('other2');
+
+    this.otherValue = selected;
+    console.log('Selected otherValue:', this.otherValue);
     this.checkAddressesWithinRange();
   }
 
