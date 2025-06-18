@@ -56,8 +56,10 @@ export class TabSearchPage implements OnInit {
   optionPartner: boolean = true;
   optionCover: boolean = true;
   optionAcceptingBids: boolean = true;
+  optionMyProperties: boolean = true;
+  optionMyJobs: boolean = true;
 
-  // otehr
+  // other
   //
   other1: boolean = false;
   other2: boolean = false;
@@ -299,6 +301,8 @@ export class TabSearchPage implements OnInit {
     if (this.optionTrade) selected.push('Trade');
     if (this.optionPartner) selected.push('Partner');
     if (this.optionCover) selected.push('Cover');
+    if (this.optionMyProperties) selected.push('My Properties');
+    if (this.optionMyJobs) selected.push('My Jobs');
     this.optionValue = selected;
     console.log('Selected options:', this.optionValue);
     this.checkAddressesWithinRange();

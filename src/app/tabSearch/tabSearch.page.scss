@@ -113,8 +113,20 @@ ion-col:not(.fixed-width-col) {
   --checkbox-background: #2dd55b; /* your desired color */
 }
 
-.ion-checkbox-warning {
-  --checkbox-background: #ffc409; /* your desired color */
+.ion-checkbox-warning-tint {
+  --checkbox-background: #ffca22; /* your desired color */
+}
+
+.ion-checkbox-warning-shade {
+  --checkbox-background: #e0ac08; /* your desired color */
+}
+
+.ion-checkbox-medium {
+  --checkbox-background: #6f6f6f; /* your desired color */
+}
+
+.ion-checkbox-medium-shade {
+  --checkbox-background: #545454; /* your desired color */
 }
  
 .my-label-text-wrapper {

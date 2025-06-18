@@ -61,7 +61,6 @@
         </ion-col>
         <ion-col style="padding-top: 0px" size="12" size-md="6" size-lg="6">
           <div style="padding-bottom: 10px">
-            <!-- *ngIf="withinRangeContractorListings.length >= 1"  -->
             <ion-select
               style="width: 190px"
               label="Filter job type:"
@@ -77,8 +76,68 @@
               <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
               <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
             </ion-select>
-            <div id="OptionsDiv">
-              <div style="font-size: small; padding-bottom: 7px">
+
+            <!-- start options -->
+            <div id="UserDiv" style="padding-bottom: 7px">
+              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
+                Ownership options:
+                <div class="checkbox-group" style="padding-top: 7px">
+                  <ion-checkbox
+                    color="medium"
+                    class="my-label-text-wrapper ion-checkbox-medium"
+                    [(ngModel)]="optionMyProperties"
+                    labelPlacement="end"
+                    (ionChange)="selectCheckBox('My Properties')"
+                    >My Properties
+                    <ion-icon
+                      name="help-circle-outline"
+                      (click)="alertMsg('You have claimed an address as your home or property.')"
+                      title="Click for more information"
+                      style="cursor: pointer"
+                    ></ion-icon
+                  ></ion-checkbox>
+                  <ion-checkbox
+                    style="--checkbox-background-checked: var(--ion-color-medium-shade)"
+                    class="my-label-text-wrapper ion-checkbox-medium-shade"
+                    [(ngModel)]="optionMyJobs"
+                    labelPlacement="end"
+                    (ionChange)="selectCheckBox('My Jobs')"
+                    >My Jobs
+                    <ion-icon
+                      name="help-circle-outline"
+                      (click)="alertMsg('You or another user tagged your company working at this address.')"
+                      title="Click for more information"
+                      style="cursor: pointer"
+                    ></ion-icon
+                  ></ion-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <div id="HomeOwnerDiv" style="padding-bottom: 7px">
+              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
+                Homeowner options:
+                <ion-icon
+                  name="help-circle-outline"
+                  (click)="alertMsg('help todo: homeowners out for bids')"
+                  title="Click for more information"
+                  style="cursor: pointer"
+                ></ion-icon>
+              </div>
+              <div class="checkbox-group">
+                <ion-checkbox
+                  color="success"
+                  class="my-label-text-wrapper ion-checkbox-success"
+                  [(ngModel)]="optionAcceptingBids"
+                  labelPlacement="end"
+                  (ionChange)="selectCheckBox('Accepting Bids')"
+                  >Accepting Bids</ion-checkbox
+                >
+              </div>
+            </div>
+
+            <div id="OptionsDiv" style="padding-bottom: 7px">
+              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
                 Options:
                 <ion-icon
                   name="help-circle-outline"
@@ -90,13 +149,14 @@
 
               <div class="checkbox-group">
                 <ion-checkbox
-                  color="success"
-                  class="my-label-text-wrapper ion-checkbox-success"
-                  [(ngModel)]="optionAcceptingBids"
+                  color="primary"
+                  class="my-label-text-wrapper ion-checkbox-primary"
+                  [(ngModel)]="optionPartner"
                   labelPlacement="end"
-                  (ionChange)="selectCheckBox('Accepting Bids')"
-                  >Accepting Bids</ion-checkbox
+                  (ionChange)="selectCheckBox('Partner')"
+                  >Partner</ion-checkbox
                 >
+
                 <ion-checkbox
                   color="primary"
                   class="my-label-text-wrapper ion-checkbox-primary"
@@ -113,14 +173,7 @@
                   (ionChange)="selectCheckBox('optionForTrade')"
                   >Trade</ion-checkbox
                 >
-                <ion-checkbox
-                  color="primary"
-                  class="my-label-text-wrapper ion-checkbox-primary"
-                  [(ngModel)]="optionPartner"
-                  labelPlacement="end"
-                  (ionChange)="selectCheckBox('Partner')"
-                  >Partner</ion-checkbox
-                >
+
                 <ion-checkbox
                   color="primary"
                   class="my-label-text-wrapper ion-checkbox-primary"
@@ -132,33 +185,38 @@
               </div>
             </div>
 
-            <div id="Other1Div">
-              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
-                Other:
-                <ion-icon
-                  name="help-circle-outline"
-                  (click)="alertMsg('help todo: Show Jobs in area are contractors that are in the area')"
-                  title="Click for more information"
-                  style="cursor: pointer"
-                ></ion-icon>
-              </div>
+            <div id="Other1Div" style="padding-bottom: 7px">
+              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">General:</div>
               <div class="checkbox-group">
                 <ion-checkbox
-                  color="warning"
-                  class="my-label-text-wrapper ion-checkbox-warning"
+                  style="--checkbox-background-checked: var(--ion-color-warning-tint)"
+                  class="my-label-text-wrapper ion-checkbox-warning-tint"
                   [(ngModel)]="other1"
                   labelPlacement="end"
                   (ionChange)="selectOtherCheckBox('other1')"
-                  >Show Contractors 'working'</ion-checkbox
-                >
+                  >Working in area
+                  <ion-icon
+                    name="help-circle-outline"
+                    (click)="alertMsg('A homeowner or contractor tagged this address so others are aware they are in the area. They may offer incentives or referrals for your business.')"
+                    title="Click for more information"
+                    style="cursor: pointer"
+                  ></ion-icon
+                ></ion-checkbox>
+
                 <ion-checkbox
-                  color="warning"
-                  class="my-label-text-wrapper ion-checkbox-warning"
+                  style="--checkbox-background-checked: var(--ion-color-warning-shade)"
+                  class="my-label-text-wrapper ion-checkbox-warning-shade"
                   [(ngModel)]="other2"
                   labelPlacement="end"
                   (ionChange)="selectOtherCheckBox('other2')"
-                  >Contractors offering 'incentives' or 'referrals'</ion-checkbox
-                >
+                  >Unsolicited Bid
+                  <ion-icon
+                    name="help-circle-outline"
+                    (click)="alertMsg('Contractor offered a proposal for your business. They may offer incentives or other benefits for your business. They are generally only visible to the contractor who posted and the homeowner.')"
+                    title="Click for more information"
+                    style="cursor: pointer"
+                  ></ion-icon
+                ></ion-checkbox>
               </div>
             </div>
           </div>
