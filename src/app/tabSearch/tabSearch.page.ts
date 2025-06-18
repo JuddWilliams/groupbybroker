@@ -477,6 +477,15 @@ export class TabSearchPage implements OnInit {
         type: contractorListing.serviceType || '',
         private: contractorListing.private || false,
         optionType: contractorListing.optionType || '',
+        icon: {
+          url:
+            'data:image/svg+xml;charset=UTF-8,' +
+            encodeURIComponent(`
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="1" height="1">
+                                    <rect fill="none" />
+                                  </svg>
+                                `),
+        },
       }));
 
       // geocode and filter by bounds
@@ -496,6 +505,11 @@ export class TabSearchPage implements OnInit {
 
       // optional: delay before showing resolve(), then toast
       await new Promise((resolve) => setTimeout(resolve, 500));
+
+      this.withinRangeContractorListings.forEach((listing) => {
+        listing.contractorListing.icon = this.getCircleIcon(listing); // this worked: rangeIconOverride
+        console.log('Updated icon for listing:', listing);
+      });
 
       // sort by type (alphabetically, case-insensitive)
       this.withinRangeContractorListings.sort((a, b) =>
@@ -518,5 +532,53 @@ export class TabSearchPage implements OnInit {
 
   isWithinBounds(lat: number, lng: number, bounds: google.maps.LatLngBounds): boolean {
     return bounds.contains(new google.maps.LatLng(lat, lng));
+  }
+
+  getCircleIcon(contractorListing: any): google.maps.Icon {
+    let typeColorMap: { [key: string]: string } = {
+      'Accepting Bids': '#4CAF50', // green
+
+      'Working in Area': '#A020F0', // orange
+
+      Partner: '#4285F4', // blue
+      'For Sale': '#4285F4', // blue
+      Trade: '#4285F4', // blue
+      Cover: '#4285F4', // blue
+      // Add more as needed
+    };
+
+    const size = 40;
+    const center = size / 2;
+    const maxRadius = center - 2; // leave space for stroke
+
+    // Split type string into array of options
+    const optionTypes = contractorListing.contractorListing.optionType
+      .split(',')
+      .map((t: string) => t.trim())
+      .filter((t: string) => t);
+
+    const ringWidth = maxRadius / (optionTypes.length || 1);
+
+    let svgCircles = '';
+    optionTypes.forEach((option: string, i: number) => {
+      const radius = maxRadius - i * ringWidth;
+      svgCircles += `<circle cx="${center}" cy="${center}" r="${radius}" fill="${typeColorMap[option] || '#ccc'}"/>`;
+    });
+
+    // Add black outline on top
+    svgCircles += `<circle cx="${center}" cy="${center}" r="${maxRadius}" fill="none" stroke="black" stroke-width="2"/>`;
+
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+      ${svgCircles}
+    </svg>
+  `;
+
+    return {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim()),
+      scaledSize: new google.maps.Size(size, size),
+      anchor: new google.maps.Point(center, center),
+      labelOrigin: new google.maps.Point(0, 0), // move label above the icon
+    };
   }
 }

@@ -42,12 +42,16 @@
               (boundsChanged)="onMapBoundsChanged()"
               (mapClick)="onMapClick($event)"
             >
-              <!-- Existing markers +  '(' + contractorListing.contractorListing.optionType + ')'  -->
+              <!-- 
+               [icon]="rangeIcon" 
+               [icon]="getRangeIcon(contractorListing)
+               [icon]="contractorListing.contractorListing.icon"               
+               -->
               <map-marker
                 class="marker"
                 *ngFor="let contractorListing of withinRangeContractorListings"
                 [position]="getLatLng(contractorListing)"
-                [icon]="rangeIcon"
+                [icon]="contractorListing.contractorListing.icon"
                 [label]="{
                     text: contractorListing.contractorListing.type +  ' (' + contractorListing.contractorListing.optionType + ')',                     
                     color: 'black',
