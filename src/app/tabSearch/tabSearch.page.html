@@ -65,6 +65,7 @@
         </ion-col>
         <ion-col style="padding-top: 0px" size="12" size-md="6" size-lg="6">
           <div style="padding-bottom: 10px">
+            <div style="background-color: yellow">remember to set optionValue with all values</div>
             <ion-select
               style="width: 190px"
               label="Filter job type:"
@@ -363,7 +364,7 @@
               <ion-col style="text-align: right">
                 <div
                   style="padding-top: 3px"
-                  *ngIf="!this.currentContractorListing?.contractorListing?.optionType?.toLowerCase().includes('open to bid')"
+                  *ngIf="!this.currentContractorListing?.contractorListing?.optionType?.toLowerCase().includes('Accepting Bids')"
                 >
                   <sup> <b>Contractor:</b> {{this.currentContractorListing?.contractorListing?.company?.companyName}} </sup>
                   <div style="display: flex; justify-content: flex-end">

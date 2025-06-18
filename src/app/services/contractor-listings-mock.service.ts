@@ -17,7 +17,7 @@ export class ContractorListingsMockService {
         businessName: 'JnW Lawn Care',
         serviceType: 'Yard care',
         private: false,
-        optionType: 'Accepting Bids, Partner, Trade, Working in Area', //'Open to bid', 'For Sale', 'Trade', 'Partner', 'Cover'
+        optionType: 'Partner, For Sale, Trade, Working in Area', //'Open to bid', 'For Sale', 'Trade', 'Partner', 'Cover'
         homeOwnerRating: 100,
       },
       {
@@ -28,7 +28,7 @@ export class ContractorListingsMockService {
         businessName: 'Williams Pool & Spa Services',
         serviceType: 'Pool Maintenance',
         private: false,
-        optionType: 'Working in Area',
+        optionType: 'For Sale',
       },
       {
         street: '7976 Woodpecker Trail',

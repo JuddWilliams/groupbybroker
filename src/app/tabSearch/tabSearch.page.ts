@@ -72,7 +72,7 @@ export class TabSearchPage implements OnInit {
   items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value
-  optionValue: string[] = ['Open to Bid', 'For Sale', 'Trade', 'Partner', 'Cover']; // Default selected values for options
+  optionValue: string[] = ['Accepting Bids', 'For Sale', 'Trade', 'Partner', 'Cover']; // Default selected values for options
   otherValue: string[] = ['tbd'];
   selectedAddress: any = null;
 
@@ -538,7 +538,8 @@ export class TabSearchPage implements OnInit {
     let typeColorMap: { [key: string]: string } = {
       'Accepting Bids': '#4CAF50', // green
 
-      'Working in Area': '#A020F0', // orange
+      'Working in Area': '#ff9900', // orange
+      //  purple: A020F0
 
       Partner: '#4285F4', // blue
       'For Sale': '#4285F4', // blue
@@ -556,6 +557,23 @@ export class TabSearchPage implements OnInit {
       .split(',')
       .map((t: string) => t.trim())
       .filter((t: string) => t);
+
+    const allowed = ['Partner', 'For Sale', 'Trade', 'Cover'];
+    let allowedFound = false;
+
+    // Remove extra allowed types after the first one
+    for (let i = 0; i < optionTypes.length; ) {
+      if (allowed.includes(optionTypes[i])) {
+        if (!allowedFound) {
+          allowedFound = true;
+          i++; // keep the first allowed, move to next
+        } else {
+          optionTypes.splice(i, 1); // remove extra allowed, don't increment i
+        }
+      } else {
+        i++; // non-allowed, move to next
+      }
+    }
 
     const ringWidth = maxRadius / (optionTypes.length || 1);
 
