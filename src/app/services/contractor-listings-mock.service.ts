@@ -7,8 +7,60 @@ import { Observable, of } from 'rxjs';
 export class ContractorListingsMockService {
   ContractorListings(city?: string, state?: string, postalCode?: string, type?: string, option?: string[]): Observable<any[]> {
     console.log('ContractorListingsMockService called with:', { type, option });
-    // Example mock data
+    // Example mock data [as Judd the contractor]
     let data = [
+      {
+        // example accepting bid.  need to process to bid! and user to review.
+        street: '4322 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        //businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Accepting Bids', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+      {
+        street: '4330 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Unsolicited Bid', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+      {
+        street: '4316 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Working in Area, Cover', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+
+      {
+        street: '14071 Inlet drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Working in Area, Partner, Trade, Cover', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+
+      // Add more mock listings as needed
+    ];
+
+    /* // Other example mock test.  as judd the user.
+        let data = [
       {
         street: '4322 Harbour Island drive',
         city: 'Jacksonville',
@@ -25,8 +77,8 @@ export class ContractorListingsMockService {
         city: 'Jacksonville',
         state: 'FL',
         postalCode: '32225',
-        businessName: 'JnW Lawn Care',
-        serviceType: 'Yard care',
+        businessName: 'Williams Pool & Spa Services',
+        serviceType: 'Pool Maintenance',
         private: false,
         optionType: 'Unsolicited Bid', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
         homeOwnerRating: 100,
@@ -65,7 +117,7 @@ export class ContractorListingsMockService {
         homeOwnerRating: 100,
       },
       {
-        street: '12315 Hawkstowe lane',
+        street: '12307 Hawkstowe lane',
         city: 'Jacksonville',
         state: 'FL',
         postalCode: '32225',
@@ -87,6 +139,7 @@ export class ContractorListingsMockService {
 
       // Add more mock listings as needed
     ];
+     */
 
     // Filter by type if provided
     if (type != 'All') {

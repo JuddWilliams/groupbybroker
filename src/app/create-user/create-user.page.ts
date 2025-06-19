@@ -11,17 +11,62 @@ import * as bcrypt from 'bcryptjs';
 })
 export class CreateUserPage {
   nickName = '';
-  email = ''; 
+  email = '';
   password = '';
   errorMessage = '';
 
   // List of U.S. states
   states: string[] = [
-    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-    'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-    'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+    'AL',
+    'AK',
+    'AZ',
+    'AR',
+    'CA',
+    'CO',
+    'CT',
+    'DE',
+    'FL',
+    'GA',
+    'HI',
+    'ID',
+    'IL',
+    'IN',
+    'IA',
+    'KS',
+    'KY',
+    'LA',
+    'ME',
+    'MD',
+    'MA',
+    'MI',
+    'MN',
+    'MS',
+    'MO',
+    'MT',
+    'NE',
+    'NV',
+    'NH',
+    'NJ',
+    'NM',
+    'NY',
+    'NC',
+    'ND',
+    'OH',
+    'OK',
+    'OR',
+    'PA',
+    'RI',
+    'SC',
+    'SD',
+    'TN',
+    'TX',
+    'UT',
+    'VT',
+    'VA',
+    'WA',
+    'WV',
+    'WI',
+    'WY',
   ];
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -32,7 +77,7 @@ export class CreateUserPage {
       return; // Stop execution if the email is invalid
     }
 
-     // Validate password
+    // Validate password
     if (!this.isValidPassword(this.password)) {
       this.errorMessage =
         'Password must be at least 8 characters long, include at least one uppercase letter, one number, and one special character[eg. @$!%*?&].';
@@ -40,17 +85,16 @@ export class CreateUserPage {
     }
 
     if (!this.isValidNickName(this.nickName)) {
-      this.errorMessage =
-        'Please enter at least 2 characters for the nickname.';
+      this.errorMessage = 'Please enter at least 2 characters for the nickname.';
       return; // Stop execution if the password is invalid
     }
 
     const hashedPassword = bcrypt.hashSync(this.password, 10); // Cost factor of 10
-    
+
     const userData = {
       nickName: this.nickName,
-      email: this.email,            
-      password: hashedPassword, 
+      email: this.email,
+      password: hashedPassword,
     };
 
     console.log('User data before sending to API:', userData); // Debugging line
@@ -59,7 +103,7 @@ export class CreateUserPage {
       next: (response) => {
         console.log('User created successfully:', response); // Debugging line
         // Automatically log in the user after successful registration
-        this.authService.saveLogin(response.token, response.userId, response.nickName);
+        this.authService.saveLogin(response.token, response.userId, response.nickName, true);
         this.router.navigate(['/login']); // Redirect to the dashboard or another page
       },
       error: (error) => {

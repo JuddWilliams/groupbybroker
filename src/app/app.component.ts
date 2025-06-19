@@ -98,6 +98,10 @@ export class AppComponent implements OnInit, OnDestroy {
     return this.authService.getLoggedInUser(); // Get the logged-in user nickname
   }
 
+  get contractorName(): string | null {
+    return this.authService.getLoggedInContractorName(); // Get the logged-in user nickname
+  }
+
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']); // Preserving your navigation logic

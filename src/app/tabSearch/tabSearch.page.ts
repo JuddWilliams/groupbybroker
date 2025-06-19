@@ -20,6 +20,7 @@ import { Subject, firstValueFrom } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-tabSearch',
@@ -89,10 +90,7 @@ export class TabSearchPage implements OnInit {
     'Unsolicited Bid',
   ]; // Default selected values for options
 
-  // other
-  //
-  other1: boolean = false;
-  other2: boolean = false;
+  selectedAddresses: any = []; // Array to hold selected points for multi-select
 
   satelliteZoom = 19;
   streetViewHeading = 0; // default north
@@ -120,13 +118,10 @@ export class TabSearchPage implements OnInit {
     scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
   };
 
-  selectedPoints: any = []; // Array to hold selected points for multi-select
   async onMapClick(event: google.maps.MapMouseEvent) {
     const lat = event.latLng?.lat();
     const lng = event.latLng?.lng();
     if (lat == null || lng == null) return;
-
-    console.log('Selected points:', this.selectedPoints);
 
     const apiKey = environment.googleMapsApiKey; // Replace with your API key
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
@@ -143,13 +138,13 @@ export class TabSearchPage implements OnInit {
         ((event.domEvent as MouseEvent).ctrlKey || (event.domEvent as MouseEvent).metaKey)
       ) {
         // Multi-select
-        this.selectedPoints.push({ lat, lng, address });
+        this.selectedAddresses.push({ lat, lng, address });
       } else {
         // Single select
-        this.selectedPoints = [{ lat, lng, address }];
+        this.selectedAddresses = [{ lat, lng, address }];
       }
 
-      let addresses = this.selectedPoints.map((item: any, i: number) => `${i + 1}- ${item.address}`).join('\n');
+      let addresses = this.selectedAddresses.map((item: any, i: number) => `${i + 1}- ${item.address}`).join('\n');
       alert(
         `${addresses} \n\n Would you like to create a post for this address(s)? \n 
         You can do multiple addresses at once by holding down the [Ctrl] key! 
@@ -206,6 +201,14 @@ export class TabSearchPage implements OnInit {
     },
   ];
 
+  get isContractor(): boolean | null {
+    return this.authService.isLoggedInUserAContractor(); // Get the logged-in user nickname
+  }
+
+  get contractorName(): string | null {
+    return this.authService.getLoggedInContractorName(); // Get the logged-in user nickname
+  }
+
   constructor(
     private alertController: AlertController,
     private toastController: ToastController,
@@ -216,11 +219,13 @@ export class TabSearchPage implements OnInit {
     private contractorListingsService: ContractorListingsMockService,
     private router: Router, // add this
     private loadingController: LoadingController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    public authService: AuthService
   ) {}
 
   async ngOnInit() {
-    console.log('Selected options:', this.optionTypeValue);
+    console.log(`isContractor?`, this.isContractor);
+    console.log(`contractorName?`, this.contractorName);
     this.platFormReady();
 
     this.boundsChange$.pipe(debounceTime(800)).subscribe(() => {
@@ -230,12 +235,12 @@ export class TabSearchPage implements OnInit {
     // Flicker for 5 seconds, then stop
     setTimeout(() => {
       this.flickerOverlay = false;
-    }, 4000);
+    }, 6000);
 
     // Show participate popup after x seconds
     setTimeout(() => {
       //this.showParticipatePopup();  // TODO: implemented in later
-      console.log('Show participate popup after 60 seconds - TODO: implemented in later');
+      console.info('Show participate popup after x seconds - TODO: implemented in later');
     }, 30000);
 
     window.addEventListener('resize', () => this.checkViewportSize());
@@ -259,7 +264,6 @@ export class TabSearchPage implements OnInit {
   refreshMap(coords?: { lat: number; lng: number }) {
     // Use passed coordinates if available, otherwise default to Jacksonville, Fl. (lat: 30.3322, lng: -81.6557)
     const center = coords ? coords : { lat: 30.3322, lng: -81.6557 };
-    console.log('Refreshing map with center:', center);
     this.mapOptions = {
       center,
       zoom: 12,
@@ -359,7 +363,6 @@ export class TabSearchPage implements OnInit {
     if (this.optionUnsolicitedBid) selected.push('Unsolicited Bid');
 
     this.optionTypeValue = selected;
-    console.log('Selected options:', this.optionTypeValue);
     this.checkAddressesWithinRange();
   }
 
@@ -411,10 +414,8 @@ export class TabSearchPage implements OnInit {
     const height = window.innerHeight;
     this.isSmallViewport = width < 600; // Example: Treat viewports smaller than 600px as "small"
     // if (this.isSmallViewport) {
-    //   console.log('Rendering for a small viewport');
     //   // Apply logic for small viewports
     // } else {
-    //   console.log('Rendering for a large viewport');
     //   // Apply logic for large viewports
     // }
   }
@@ -552,8 +553,7 @@ export class TabSearchPage implements OnInit {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       this.withinRangeContractorListings.forEach((listing) => {
-        listing.contractorListing.icon = this.getCircleIcon(listing); // this worked: rangeIconOverride
-        console.log('Updated icon for listing:', listing);
+        listing.contractorListing.icon = this.getCircleIcon(listing);
       });
 
       // sort by type (alphabetically, case-insensitive)
@@ -564,6 +564,13 @@ export class TabSearchPage implements OnInit {
       if (this.withinRangeContractorListings.length === 0) {
         this.presentToast('No listings found. Zoom out or try a different area.', 'warning', 3000);
       }
+
+      // Flicker for 5 seconds, then stop
+      this.flickerOverlay = true;
+      setTimeout(() => {
+        this.flickerOverlay = false;
+      }, 4000);
+
       // else {
       //   this.presentToast(`Found ${this.withinRangeContractorListings.length} contractor listings within specified area.`, 'success', 1000);
       // }
@@ -591,8 +598,6 @@ export class TabSearchPage implements OnInit {
       .filter((t: string) => t);
 
     let allowedFound = false;
-
-    console.log('Contractor optionTypes:', optionTypes);
 
     // Remove extra allowed types after the first one
     for (let i = 0; i < optionTypes.length; ) {

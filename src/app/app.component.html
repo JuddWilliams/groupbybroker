@@ -18,7 +18,7 @@
         <!-- Circle with User's Initials -->
         <ion-button title="{{ loggedInEmail }}" *ngIf="!authService.isLoggedIn()" routerLink="/login"><u>Login</u></ion-button>
         <ion-button title="{{ loggedInEmail }}" *ngIf="authService.isLoggedIn()" (click)="onLogout()"><u>Logout</u></ion-button>
-        <div title="{{ loggedInUser }}" *ngIf="loggedInUser" class="user-circle">
+        <div title="{{ loggedInUser + ' at ' + contractorName }}" *ngIf="loggedInUser" class="user-circle">
           {{ getInitials(loggedInUser) }}
         </div>
       </ion-buttons>

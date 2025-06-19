@@ -48,7 +48,9 @@ export class LoginPage {
     // Simulate what you would do on a successful login
     this.loading = false; // Hide spinner
     console.log('Login successful:', mockResponse);
-    this.authService.saveLogin(mockResponse.token, mockResponse.userId, mockResponse.nickName); // Save login details
+    const isContractor = true; // Default to false, can be set based on your logic
+    const contractorName = 'JnW Lawn Care'; // Default contractor name, can be set based on your logic
+    this.authService.saveLogin(mockResponse.token, mockResponse.userId, mockResponse.nickName, isContractor, contractorName); // Save login details
     this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
 
     // working code. uncomment once backend is subscribed to

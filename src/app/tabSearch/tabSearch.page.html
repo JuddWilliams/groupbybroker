@@ -8,11 +8,28 @@
     <ion-grid>
       <ion-row>
         <ion-col style="padding-bottom: 0px">
-          <sup style="padding-left: 5px">
-            '<a routerLink="/tabs/tabAbout" class="about-link" style="vertical-align: baseline; padding-left: 2px">Learn more</a>'
-            or use map to find items of interest. Or click to 'Post'...
-          </sup>
-          <ion-icon name="trending-down-outline" style="font-size: 16px" color="primary"></ion-icon>
+          <p style="padding-left: 5px">
+            <ion-icon
+              name="git-branch-outline"
+              (click)="alertMsg('You have claimed an address as your home or property.')"
+              title="Click for more information"
+              style="cursor: pointer"
+            ></ion-icon>
+            Use map to find items of interest.
+            <ion-icon
+              name="create-outline"
+              (click)="alertMsg('You have claimed an address as your home or property.')"
+              title="Click for more information"
+              style="cursor: pointer"
+            ></ion-icon>
+            click to 'Add/Edit'...
+            <small
+              >click '<a routerLink="/tabs/tabAbout" class="about-link" style="vertical-align: baseline; padding-left: 2px"
+                >How it works</a
+              >' to learn more.
+            </small>
+            <ion-icon name="trending-down-outline" style="font-size: 16px" color="primary"></ion-icon>
+          </p>
         </ion-col>
       </ion-row>
       <!-- <ion-row>
@@ -84,12 +101,13 @@
             <!-- start options -->
             <div id="UserDiv" style="padding-bottom: 7px">
               <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
-                Ownership options:
+                General options:
                 <div style="background-color: yellow">
                   TODO: don't show if not logged in: if logged in, only show the correct 1 based on user type
                 </div>
                 <div class="checkbox-group" style="padding-top: 7px">
                   <ion-checkbox
+                    *ngIf="isContractor === false"
                     color="primary"
                     class="my-label-text-wrapper ion-checkbox-primary"
                     [(ngModel)]="optionMyProperties"
@@ -104,6 +122,7 @@
                     ></ion-icon
                   ></ion-checkbox>
                   <ion-checkbox
+                    *ngIf="isContractor === true"
                     color="secondary"
                     class="my-label-text-wrapper ion-checkbox-secondary"
                     [(ngModel)]="optionMyJobs"
@@ -219,7 +238,7 @@
                   >Unsolicited Bid
                   <ion-icon
                     name="help-circle-outline"
-                    (click)="alertMsg('Contractor offered a proposal for your business. They may offer incentives or other benefits for your business. They are generally only visible to the contractor who posted and the homeowner.')"
+                    (click)="alertMsg('Contractor offered a proposal for your business. They may offer incentives or other benefits for your business.  They are generally only visible to the homeowner and contractor who posted.')"
                     title="Click for more information"
                     style="cursor: pointer"
                   ></ion-icon
