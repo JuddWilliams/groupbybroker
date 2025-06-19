@@ -17,7 +17,7 @@ export class ContractorListingsMockService {
         businessName: 'JnW Lawn Care',
         serviceType: 'Yard care',
         private: false,
-        optionType: 'Partner, For Sale, Trade, Working in Area', //'Open to bid', 'For Sale', 'Trade', 'Partner', 'Cover'
+        optionType: 'Accepting Bids, My Properties', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
         homeOwnerRating: 100,
       },
       {
@@ -28,7 +28,7 @@ export class ContractorListingsMockService {
         businessName: 'Williams Pool & Spa Services',
         serviceType: 'Pool Maintenance',
         private: false,
-        optionType: 'For Sale',
+        optionType: 'For Sale, My Jobs',
       },
       {
         street: '7976 Woodpecker Trail',
@@ -38,7 +38,7 @@ export class ContractorListingsMockService {
         //businessName: 'JnW Lawn Care',
         serviceType: 'Yard care',
         private: false,
-        optionType: 'Accepting Bids',
+        optionType: 'Working in Area, My Jobs', // Working in Area, Unsolicited Bid
       },
 
       // Add more mock listings as needed

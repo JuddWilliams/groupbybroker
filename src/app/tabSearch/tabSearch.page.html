@@ -42,7 +42,7 @@
               (boundsChanged)="onMapBoundsChanged()"
               (mapClick)="onMapClick($event)"
             >
-              <!-- 
+              <!--  text: contractorListing.contractorListing.type +  ' (' + contractorListing.contractorListing.optionType + ')',   
                [icon]="rangeIcon" 
                [icon]="getRangeIcon(contractorListing)
                [icon]="contractorListing.contractorListing.icon"               
@@ -53,7 +53,7 @@
                 [position]="getLatLng(contractorListing)"
                 [icon]="contractorListing.contractorListing.icon"
                 [label]="{
-                    text: contractorListing.contractorListing.type +  ' (' + contractorListing.contractorListing.optionType + ')',                     
+                    text: contractorListing.contractorListing.type,                     
                     color: 'black',
                     fontSize: '16px',
                     fontWeight: 'bold'
@@ -65,7 +65,6 @@
         </ion-col>
         <ion-col style="padding-top: 0px" size="12" size-md="6" size-lg="6">
           <div style="padding-bottom: 10px">
-            <div style="background-color: yellow">remember to set optionValue with all values</div>
             <ion-select
               style="width: 190px"
               label="Filter job type:"
@@ -86,13 +85,16 @@
             <div id="UserDiv" style="padding-bottom: 7px">
               <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
                 Ownership options:
+                <div style="background-color: yellow">
+                  TODO: don't show if not logged in: if logged in, only show the correct 1 based on user type
+                </div>
                 <div class="checkbox-group" style="padding-top: 7px">
                   <ion-checkbox
-                    color="medium"
-                    class="my-label-text-wrapper ion-checkbox-medium"
+                    color="primary"
+                    class="my-label-text-wrapper ion-checkbox-primary"
                     [(ngModel)]="optionMyProperties"
                     labelPlacement="end"
-                    (ionChange)="selectCheckBox('My Properties')"
+                    (ionChange)="selectCheckBox()"
                     >My Properties
                     <ion-icon
                       name="help-circle-outline"
@@ -102,11 +104,11 @@
                     ></ion-icon
                   ></ion-checkbox>
                   <ion-checkbox
-                    style="--checkbox-background-checked: var(--ion-color-medium-shade)"
-                    class="my-label-text-wrapper ion-checkbox-medium-shade"
+                    color="secondary"
+                    class="my-label-text-wrapper ion-checkbox-secondary"
                     [(ngModel)]="optionMyJobs"
                     labelPlacement="end"
-                    (ionChange)="selectCheckBox('My Jobs')"
+                    (ionChange)="selectCheckBox()"
                     >My Jobs
                     <ion-icon
                       name="help-circle-outline"
@@ -135,7 +137,7 @@
                   class="my-label-text-wrapper ion-checkbox-success"
                   [(ngModel)]="optionAcceptingBids"
                   labelPlacement="end"
-                  (ionChange)="selectCheckBox('Accepting Bids')"
+                  (ionChange)="selectCheckBox()"
                   >Accepting Bids</ion-checkbox
                 >
               </div>
@@ -143,7 +145,7 @@
 
             <div id="OptionsDiv" style="padding-bottom: 7px">
               <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
-                Options:
+                Contractor Options:
                 <ion-icon
                   name="help-circle-outline"
                   (click)="openPopupOptions()"
@@ -154,51 +156,51 @@
 
               <div class="checkbox-group">
                 <ion-checkbox
-                  color="primary"
-                  class="my-label-text-wrapper ion-checkbox-primary"
+                  color="medium"
+                  class="my-label-text-wrapper ion-checkbox-medium"
                   [(ngModel)]="optionPartner"
                   labelPlacement="end"
-                  (ionChange)="selectCheckBox('Partner')"
+                  (ionChange)="selectCheckBox()"
                   >Partner</ion-checkbox
                 >
 
                 <ion-checkbox
-                  color="primary"
-                  class="my-label-text-wrapper ion-checkbox-primary"
+                  color="medium"
+                  class="my-label-text-wrapper ion-checkbox-medium"
                   [(ngModel)]="optionForSale"
                   labelPlacement="end"
-                  (ionChange)="selectCheckBox('For Sale')"
+                  (ionChange)="selectCheckBox()"
                   >For Sale</ion-checkbox
                 >
                 <ion-checkbox
-                  color="primary"
-                  class="my-label-text-wrapper ion-checkbox-primary"
+                  color="medium"
+                  class="my-label-text-wrapper ion-checkbox-medium"
                   [(ngModel)]="optionTrade"
                   labelPlacement="end"
-                  (ionChange)="selectCheckBox('optionForTrade')"
+                  (ionChange)="selectCheckBox()"
                   >Trade</ion-checkbox
                 >
 
                 <ion-checkbox
-                  color="primary"
-                  class="my-label-text-wrapper ion-checkbox-primary"
+                  color="medium"
+                  class="my-label-text-wrapper ion-checkbox-medium"
                   [(ngModel)]="optionCover"
                   labelPlacement="end"
-                  (ionChange)="selectCheckBox('optionForCover')"
+                  (ionChange)="selectCheckBox()"
                   >Cover</ion-checkbox
                 >
               </div>
             </div>
 
             <div id="Other1Div" style="padding-bottom: 7px">
-              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">General:</div>
+              <!-- <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">General:</div> -->
               <div class="checkbox-group">
                 <ion-checkbox
-                  style="--checkbox-background-checked: var(--ion-color-warning-tint)"
-                  class="my-label-text-wrapper ion-checkbox-warning-tint"
-                  [(ngModel)]="other1"
+                  style="--checkbox-background-checked: var(--ion-color-warning-shade)"
+                  class="my-label-text-wrapper ion-checkbox-warning-shade"
+                  [(ngModel)]="optionWorkingInAreas"
                   labelPlacement="end"
-                  (ionChange)="selectOtherCheckBox('other1')"
+                  (ionChange)="selectCheckBox()"
                   >Working in area
                   <ion-icon
                     name="help-circle-outline"
@@ -209,11 +211,11 @@
                 ></ion-checkbox>
 
                 <ion-checkbox
-                  style="--checkbox-background-checked: var(--ion-color-warning-shade)"
-                  class="my-label-text-wrapper ion-checkbox-warning-shade"
-                  [(ngModel)]="other2"
+                  style="--checkbox-background-checked: var(--ion-color-danger-tint)"
+                  class="my-label-text-wrapper ion-checkbox-danger-tint"
+                  [(ngModel)]="optionUnsolicitedBid"
                   labelPlacement="end"
-                  (ionChange)="selectOtherCheckBox('other2')"
+                  (ionChange)="selectCheckBox()"
                   >Unsolicited Bid
                   <ion-icon
                     name="help-circle-outline"
@@ -271,6 +273,7 @@
             <li style="padding-bottom: 7px" *ngFor="let addressObj of withinRangeContractorListings">
               <div id="DisplayCard-List">
                 '{{addressObj.contractorListing.type}}' - by {{addressObj.contractorListing.company.companyName}}<br />
+                ( {{addressObj.contractorListing.optionType}} )<br />
                 <sup>
                   at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{
                   addressObj.contractorListing.address.state }} {{ addressObj.contractorListing.address.postalCode }} (

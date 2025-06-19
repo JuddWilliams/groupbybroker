@@ -105,16 +105,20 @@ ion-col:not(.fixed-width-col) {
 }
 
 
-.ion-checkbox-primary {
-  --checkbox-background: #0054e9; /* your desired color */
-}
-
 .ion-checkbox-success {
   --checkbox-background: #2dd55b; /* your desired color */
 }
 
-.ion-checkbox-warning-tint {
-  --checkbox-background: #ffca22; /* your desired color */
+.ion-checkbox-primary {
+  --checkbox-background: #0054e9; /* your desired color */
+}
+
+.ion-checkbox-secondary {
+  --checkbox-background: #0163aa; /* your desired color */
+}
+
+.ion-checkbox-tertiary-tint {
+  --checkbox-background: #7045ff; /* your desired color */
 }
 
 .ion-checkbox-warning-shade {
@@ -128,6 +132,12 @@ ion-col:not(.fixed-width-col) {
 .ion-checkbox-medium-shade {
   --checkbox-background: #545454; /* your desired color */
 }
+
+
+.ion-checkbox-danger-tint {
+  --checkbox-background: #cb1a27; /* your desired color */
+}
+
  
 .my-label-text-wrapper {
 
@@ -151,7 +161,7 @@ ion-col:not(.fixed-width-col) {
 .map-overlay-text {
   position: absolute;
   top: 10px;
-  left: 50%;
+  left: 55%;
   transform: translateX(-50%);
   background: rgba(255, 251, 230, 0.95);
   border: 1px solid #ffe082;

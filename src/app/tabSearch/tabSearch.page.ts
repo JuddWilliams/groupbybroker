@@ -51,13 +51,40 @@ export class TabSearchPage implements OnInit {
   readonly numberOfContractorsInAreaThreshold: number = 5;
   locationNote: string = '';
 
+  optionMyJobs: boolean = true;
+  optionMyProperties: boolean = true;
+  optionAcceptingBids: boolean = true;
   optionForSale: boolean = true;
   optionTrade: boolean = true;
   optionPartner: boolean = true;
   optionCover: boolean = true;
-  optionAcceptingBids: boolean = true;
-  optionMyProperties: boolean = true;
-  optionMyJobs: boolean = true;
+  optionWorkingInAreas: boolean = true;
+  optionUnsolicitedBid: boolean = true;
+
+  typeColorMap: { [key: string]: string } = {
+    'My Properties': '#0054e9', // primary blue
+    'My Jobs': '#0163aa', // secondary blue
+    'Accepting Bids': '#4CAF50', // green
+    Partner: '#6f6f6f', // medium gray
+    'For Sale': '#6f6f6f', // medium gray
+    Trade: '#6f6f6f', // medium gray
+    Cover: '#6f6f6f', // medium gray
+    'Working in Area': '#ff9900', // orange
+    'Unsolicited Bid': '#cb1a27', // orange
+  };
+
+  readonly contractorOptionTypes = ['Partner', 'For Sale', 'Trade', 'Cover'];
+  optionTypeValue: string[] = [
+    'My Properties',
+    'My Jobs',
+    'Accepting Bids',
+    'For Sale',
+    'Trade',
+    'Partner',
+    'Cover',
+    'Working in Area',
+    'Unsolicited Bid',
+  ]; // Default selected values for options
 
   // other
   //
@@ -69,10 +96,9 @@ export class TabSearchPage implements OnInit {
   streetViewFov = 80; // default field of view
   streetViewPitch = 0; // default is level
 
-  items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
+  readonly items = ['Overall', 'Nearest me', 'Popularity by Area', 'Cost', 'Quality', 'Dependability', 'Professionalism'];
   //sorting: string = 'useAi'; // Default sorting option
   sortingValue: string = 'useAi'; // Default selected value
-  optionValue: string[] = ['Accepting Bids', 'For Sale', 'Trade', 'Partner', 'Cover']; // Default selected values for options
   otherValue: string[] = ['tbd'];
   selectedAddress: any = null;
 
@@ -169,6 +195,7 @@ export class TabSearchPage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    console.log('Selected options:', this.optionTypeValue);
     this.platFormReady();
 
     this.boundsChange$.pipe(debounceTime(800)).subscribe(() => {
@@ -294,27 +321,20 @@ export class TabSearchPage implements OnInit {
     alert(message);
   }
 
-  selectCheckBox(value: string): void {
+  selectCheckBox(): void {
     const selected: string[] = [];
+    if (this.optionMyProperties) selected.push('My Properties');
+    if (this.optionMyJobs) selected.push('My Jobs');
     if (this.optionAcceptingBids) selected.push('Accepting Bids');
     if (this.optionForSale) selected.push('For Sale');
     if (this.optionTrade) selected.push('Trade');
     if (this.optionPartner) selected.push('Partner');
     if (this.optionCover) selected.push('Cover');
-    if (this.optionMyProperties) selected.push('My Properties');
-    if (this.optionMyJobs) selected.push('My Jobs');
-    this.optionValue = selected;
-    console.log('Selected options:', this.optionValue);
-    this.checkAddressesWithinRange();
-  }
+    if (this.optionWorkingInAreas) selected.push('Working in Area');
+    if (this.optionUnsolicitedBid) selected.push('Unsolicited Bid');
 
-  selectOtherCheckBox(value: string): void {
-    const selected: string[] = [];
-    if (this.other1) selected.push('other1');
-    if (this.other2) selected.push('other2');
-
-    this.otherValue = selected;
-    console.log('Selected otherValue:', this.otherValue);
+    this.optionTypeValue = selected;
+    console.log('Selected options:', this.optionTypeValue);
     this.checkAddressesWithinRange();
   }
 
@@ -458,7 +478,7 @@ export class TabSearchPage implements OnInit {
           undefined,
           undefined,
           this.selectedIndustry,
-          this.optionValue
+          this.optionTypeValue
         )
       );
 
@@ -535,20 +555,7 @@ export class TabSearchPage implements OnInit {
   }
 
   getCircleIcon(contractorListing: any): google.maps.Icon {
-    let typeColorMap: { [key: string]: string } = {
-      'Accepting Bids': '#4CAF50', // green
-
-      'Working in Area': '#ff9900', // orange
-      //  purple: A020F0
-
-      Partner: '#4285F4', // blue
-      'For Sale': '#4285F4', // blue
-      Trade: '#4285F4', // blue
-      Cover: '#4285F4', // blue
-      // Add more as needed
-    };
-
-    const size = 40;
+    const size = 35;
     const center = size / 2;
     const maxRadius = center - 2; // leave space for stroke
 
@@ -558,12 +565,13 @@ export class TabSearchPage implements OnInit {
       .map((t: string) => t.trim())
       .filter((t: string) => t);
 
-    const allowed = ['Partner', 'For Sale', 'Trade', 'Cover'];
     let allowedFound = false;
+
+    console.log('Contractor optionTypes:', optionTypes);
 
     // Remove extra allowed types after the first one
     for (let i = 0; i < optionTypes.length; ) {
-      if (allowed.includes(optionTypes[i])) {
+      if (this.contractorOptionTypes.includes(optionTypes[i])) {
         if (!allowedFound) {
           allowedFound = true;
           i++; // keep the first allowed, move to next
@@ -580,7 +588,7 @@ export class TabSearchPage implements OnInit {
     let svgCircles = '';
     optionTypes.forEach((option: string, i: number) => {
       const radius = maxRadius - i * ringWidth;
-      svgCircles += `<circle cx="${center}" cy="${center}" r="${radius}" fill="${typeColorMap[option] || '#ccc'}"/>`;
+      svgCircles += `<circle cx="${center}" cy="${center}" r="${radius}" fill="${this.typeColorMap[option] || '#ccc'}"/>`;
     });
 
     // Add black outline on top
