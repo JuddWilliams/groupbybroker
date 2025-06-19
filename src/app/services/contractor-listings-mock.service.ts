@@ -17,11 +17,55 @@ export class ContractorListingsMockService {
         businessName: 'JnW Lawn Care',
         serviceType: 'Yard care',
         private: false,
-        optionType: 'Accepting Bids, My Properties', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        optionType: 'Unsolicited Bid', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
         homeOwnerRating: 100,
       },
       {
-        street: '12307 Hawkstowe lane',
+        street: '4330 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Unsolicited Bid', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+      {
+        street: '4316 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+      {
+        street: '4317 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+      {
+        street: '4325 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        private: false,
+        optionType: 'Accepting Bids', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        homeOwnerRating: 100,
+      },
+      {
+        street: '12315 Hawkstowe lane',
         city: 'Jacksonville',
         state: 'FL',
         postalCode: '32225',

@@ -64,13 +64,16 @@ export class TabSearchPage implements OnInit {
   typeColorMap: { [key: string]: string } = {
     'My Properties': '#0054e9', // primary blue
     'My Jobs': '#0163aa', // secondary blue
+
     'Accepting Bids': '#4CAF50', // green
+
     Partner: '#6f6f6f', // medium gray
     'For Sale': '#6f6f6f', // medium gray
     Trade: '#6f6f6f', // medium gray
     Cover: '#6f6f6f', // medium gray
+
     'Working in Area': '#ff9900', // orange
-    'Unsolicited Bid': '#cb1a27', // orange
+    'Unsolicited Bid': '#006600', // success tinted
   };
 
   readonly contractorOptionTypes = ['Partner', 'For Sale', 'Trade', 'Cover'];
@@ -555,7 +558,7 @@ export class TabSearchPage implements OnInit {
   }
 
   getCircleIcon(contractorListing: any): google.maps.Icon {
-    const size = 35;
+    const size = 30;
     const center = size / 2;
     const maxRadius = center - 2; // leave space for stroke
 
@@ -603,8 +606,16 @@ export class TabSearchPage implements OnInit {
     return {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim()),
       scaledSize: new google.maps.Size(size, size),
-      anchor: new google.maps.Point(center, center),
+      anchor: new google.maps.Point(20, 35),
       labelOrigin: new google.maps.Point(0, 0), // move label above the icon
     };
+
+    /*
+    const icon = {
+  url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim()),
+  scaledSize: new google.maps.Size(40, 40),
+  anchor: new google.maps.Point(20, 40) // x=center, y=bottom
+};
+ */
   }
 }
