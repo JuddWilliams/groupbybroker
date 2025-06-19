@@ -120,10 +120,13 @@ export class TabSearchPage implements OnInit {
     scaledSize: new google.maps.Size(40, 40), // Optional: Resize the icon
   };
 
+  selectedPoints: any = []; // Array to hold selected points for multi-select
   async onMapClick(event: google.maps.MapMouseEvent) {
     const lat = event.latLng?.lat();
     const lng = event.latLng?.lng();
     if (lat == null || lng == null) return;
+
+    console.log('Selected points:', this.selectedPoints);
 
     const apiKey = environment.googleMapsApiKey; // Replace with your API key
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
@@ -132,7 +135,26 @@ export class TabSearchPage implements OnInit {
       const response = await fetch(url);
       const data = await response.json();
       const address = data.results?.[0]?.formatted_address || 'Address not found';
-      alert(`Clicked address: ${address} \n would you like to create a post for this address?`);
+
+      if (
+        event.domEvent &&
+        'ctrlKey' in event.domEvent &&
+        'metaKey' in event.domEvent &&
+        ((event.domEvent as MouseEvent).ctrlKey || (event.domEvent as MouseEvent).metaKey)
+      ) {
+        // Multi-select
+        this.selectedPoints.push({ lat, lng, address });
+      } else {
+        // Single select
+        this.selectedPoints = [{ lat, lng, address }];
+      }
+
+      let addresses = this.selectedPoints.map((item: any, i: number) => `${i + 1}- ${item.address}`).join('\n');
+      alert(
+        `${addresses} \n\n Would you like to create a post for this address(s)? \n 
+        You can do multiple addresses at once by holding down the [Ctrl] key! 
+        This can be used in conjunction with creating similar bids or other features.`
+      );
     } catch (err) {
       alert('Error fetching address');
     }
