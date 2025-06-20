@@ -10,6 +10,10 @@
           <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']">Create account </ion-button>
           <!-- <sup style="padding-left: 3px">∙free and easy∙</sup> -->
         </div>
+        <div *ngIf="isAuthPage()" id="addDiv">
+          <ion-button id="idAdd" size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']">Add </ion-button>
+          <!-- <sup style="padding-left: 3px">∙free and easy∙</sup> -->
+        </div>
         <!-- <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']"> Post it </ion-button> -->
       </ion-buttons>
 

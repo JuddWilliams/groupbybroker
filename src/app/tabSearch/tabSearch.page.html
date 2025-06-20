@@ -82,22 +82,24 @@
         </ion-col>
         <ion-col style="padding-top: 0px" size="12" size-md="6" size-lg="6">
           <div style="padding-bottom: 10px">
-            <ion-select
-              style="width: 190px"
-              label="Filter job type:"
-              label-placement="floating"
-              [(ngModel)]="selectedIndustry"
-              (ionChange)="onIndustryChange()"
-            >
-              <ion-select-option value="All">All Job Types</ion-select-option>
-              <ion-select-option value="Yard Care">Yard Care</ion-select-option>
-              <ion-select-option value="Pesticides">Pesticides</ion-select-option>
-              <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
-              <ion-select-option value="Pool Maintenance">Pool Maintenance</ion-select-option>
-              <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
-              <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
-            </ion-select>
-
+            <div style="padding-bottom: 10px; display: flex; align-items: center; gap: 10px">
+              <ion-select
+                id="idType"
+                style="width: 190px"
+                label="Filter job type:"
+                label-placement="floating"
+                [(ngModel)]="selectedIndustry"
+                (ionChange)="onIndustryChange()"
+              >
+                <ion-select-option value="All">All Job Types</ion-select-option>
+                <ion-select-option value="Yard Care">Yard Care</ion-select-option>
+                <ion-select-option value="Pesticides">Pesticides</ion-select-option>
+                <ion-select-option value="Weed & Feed">Weed & Feed</ion-select-option>
+                <ion-select-option value="Pool Maintenance">Pool Maintenance</ion-select-option>
+                <ion-select-option value="Poop Scooping">Poop Scooping</ion-select-option>
+                <ion-select-option value="Maid & Cleaning Services">Maid & Cleaning Services</ion-select-option>
+              </ion-select>
+            </div>
             <!-- start options -->
             <div id="UserDiv" style="padding-bottom: 7px">
               <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
