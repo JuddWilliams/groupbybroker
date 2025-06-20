@@ -25,6 +25,10 @@ const routes: Routes = [
     path: 'test-page',
     loadChildren: () => import('./test-page/test-page.module').then( m => m.TestPagePageModule)
   },
+  {
+    path: 'add-record-modal',
+    loadChildren: () => import('./add-record-modal/add-record-modal.module').then( m => m.AddRecordModalPageModule)
+  },
 
 ];
 @NgModule({

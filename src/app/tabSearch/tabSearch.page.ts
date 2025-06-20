@@ -21,6 +21,8 @@ import { debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../services/auth.service';
+import { RecordModalService } from '../services/addrecord-modal.service';
+import { RecordService } from '../services/record.service';
 
 @Component({
   selector: 'app-tabSearch',
@@ -150,10 +152,35 @@ export class TabSearchPage implements OnInit {
         You can do multiple addresses at once by holding down the [Ctrl] key! 
         This can be used in conjunction with creating similar bids or other features.`
       );
+
+      // const record = await this.recordModalService.openAddRecordModal();
+      // if (record) {
+      //   this.addRecord(record);
+      // }
+
+      const record = await this.recordModalService.openAddRecordModal();
+      if (record) {
+        this.recordService.addRecord(record).subscribe({
+          next: (response) => {
+            console.log('tabSearch: Add record response:', response); // <-- log the API response here
+            this.presentToast('New record added successfully!', 'success', 2000, 'bottom');
+          },
+          error: (error) => {
+            console.error('tabSearch: Add record error:', error); // <-- log the error if any
+            this.presentToast('Failed to add record.', 'danger', 2000, 'bottom');
+          },
+        });
+      }
     } catch (err) {
       alert('Error fetching address');
     }
   }
+
+  // addRecord(record: any): void {
+  //   // Implement the logic to add a record
+  //   console.log('TabSearch: New record added (TODO-move to service so i can call from mapClick() ):', record);
+  //   this.presentToast('New record added successfully!', 'success', 2000, 'bottom');
+  // }
 
   public alertButtons = [
     {
@@ -220,7 +247,9 @@ export class TabSearchPage implements OnInit {
     private router: Router, // add this
     private loadingController: LoadingController,
     private modalController: ModalController,
-    public authService: AuthService
+    public authService: AuthService,
+    private recordModalService: RecordModalService,
+    private recordService: RecordService
   ) {}
 
   async ngOnInit() {
