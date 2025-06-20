@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Step 1</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input [(ngModel)]="record.name"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" (click)="goToNext()">Next</ion-button>
+</ion-content>

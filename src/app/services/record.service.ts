@@ -9,9 +9,8 @@ export class RecordService {
 
   addRecord(record: any) {
     // Adjust the URL and payload as needed for your backend
-    console.log('RecordService - Adding record:', record);
-    //return this.http.post(`${environment.apiUrl}/records`, record);
-
+    //console.log('RecordService - Adding record:', record);
     return of(record);
+    //return this.http.post(`${environment.apiUrl}/records`, record);
   }
 }
