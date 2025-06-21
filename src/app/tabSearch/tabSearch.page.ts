@@ -146,12 +146,12 @@ export class TabSearchPage implements OnInit {
         this.selectedAddresses = [{ lat, lng, address }];
       }
 
-      let addresses = this.selectedAddresses.map((item: any, i: number) => `${i + 1}- ${item.address}`).join('\n');
-      alert(
-        `${addresses} \n\n Would you like to create a post for this address(s)? \n 
-        You can do multiple addresses at once by holding down the [Ctrl] key! 
-        This can be used in conjunction with creating similar bids or other features.`
-      );
+      // let addresses = this.selectedAddresses.map((item: any, i: number) => `${i + 1}- ${item.address}`).join('\n');
+      // alert(
+      //   `${addresses} \n\n Would you like to create a post for this address(s)? \n
+      //   You can do multiple addresses at once by holding down the [Ctrl] key!
+      //   This can be used in conjunction with creating similar bids or other features.`
+      // );
 
       const inputData = {
         addresses: this.selectedAddresses,

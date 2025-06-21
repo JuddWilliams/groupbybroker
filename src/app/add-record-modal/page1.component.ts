@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { IonNav } from '@ionic/angular';
 import { Page2Component } from './page2.component';
+import { Page3Component } from './page3.component';
 
 @Component({
   selector: 'app-page1',
