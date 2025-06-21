@@ -6,7 +6,7 @@
 <ion-content>
   <li style="padding-bottom: 7px" *ngFor="let addressObj of getAddresses()">
     <div>
-      {{ addressObj.street }}, {{ addressObj.city }}, {{ addressObj.state }} {{ addressObj.postalCode }}
+      {{ addressObj.address }}
       <ion-button size="small" fill="outline" (click)="claimAddress(addressObj)" style="float: right; padding: 0px; margin: 0px">
         Claim
         <ion-icon name="add-circle"></ion-icon>

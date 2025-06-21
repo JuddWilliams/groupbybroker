@@ -9,18 +9,16 @@ import { Page2Component } from './page2.component';
 })
 export class Page1Component {
   @Input() record: any = {};
+  @Input() addresses: any | undefined;
 
   constructor(private nav: IonNav) {}
 
+  ngOnInit() {
+    console.log('Addresses passed:', this.addresses);
+  }
+
   getAddresses() {
-    return [
-      {
-        street: '4322 Harbour Island drive',
-        city: 'Jacksonville',
-        state: 'FL',
-        postalCode: '32225',
-      },
-    ];
+    return this.addresses;
   }
 
   claimAddress(address: any) {
