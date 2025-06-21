@@ -12,6 +12,23 @@ export class Page1Component {
 
   constructor(private nav: IonNav) {}
 
+  getAddresses() {
+    return [
+      {
+        street: '4322 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+      },
+    ];
+  }
+
+  claimAddress(address: any) {
+    console.log('Claiming address:', address);
+    this.record.city = address.city;
+    this.record.street = address.street;
+  }
+
   goToNext() {
     this.nav.push(Page2Component, { record: this.record });
   }

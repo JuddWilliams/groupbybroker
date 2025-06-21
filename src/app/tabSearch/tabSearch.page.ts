@@ -153,12 +153,11 @@ export class TabSearchPage implements OnInit {
         This can be used in conjunction with creating similar bids or other features.`
       );
 
-      // const record = await this.recordModalService.openAddRecordModal();
-      // if (record) {
-      //   this.addRecord(record);
-      // }
+      const inputData = {
+        addresses: this.selectedAddresses,
+      };
 
-      const record = await this.recordModalService.openAddRecordModal();
+      const record = await this.recordModalService.openAddRecordModal(inputData);
       if (record) {
         this.recordService.addRecord(record).subscribe({
           next: (response) => {

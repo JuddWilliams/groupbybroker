@@ -7,20 +7,5 @@
   </ion-toolbar>
 </ion-header>
 <ion-content id="add-record-modal-content">
-  <!-- <ion-modal #modal trigger="openModal" (willPresent)="onWillPresent()">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Modal</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="modal.dismiss()"> Close </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-nav #nav></ion-nav>
-      </ion-content>
-    </ng-template>
-  </ion-modal> -->
   <ion-nav [root]="page1" [rootParams]="{ record: record }"></ion-nav>
 </ion-content>

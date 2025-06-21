@@ -1,9 +1,19 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Step 1</ion-title>
+    <ion-title>Step 1: </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <li style="padding-bottom: 7px" *ngFor="let addressObj of getAddresses()">
+    <div>
+      {{ addressObj.street }}, {{ addressObj.city }}, {{ addressObj.state }} {{ addressObj.postalCode }}
+      <ion-button size="small" fill="outline" (click)="claimAddress(addressObj)" style="float: right; padding: 0px; margin: 0px">
+        Claim
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </div>
+  </li>
+
   <ion-list>
     <ion-item>
       <ion-label position="stacked">Name</ion-label>
