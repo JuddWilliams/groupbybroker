@@ -18,7 +18,7 @@ export class ContractorListingsMockService {
         //businessName: 'JnW Lawn Care',
         serviceType: 'Yard care',
         private: false,
-        optionType: 'Accepting Bids', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+        optionType: 'Unsolicited Bid', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
         homeOwnerRating: 100,
       },
       {

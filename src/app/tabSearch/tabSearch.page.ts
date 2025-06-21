@@ -274,6 +274,14 @@ export class TabSearchPage implements OnInit {
     window.addEventListener('resize', () => this.checkViewportSize());
   }
 
+  get isLoggedIn(): boolean | null {
+    return this.authService.isLoggedIn(); // Get the logged-in user nickname
+  }
+
+  isMyProperty(): boolean | null {
+    return false;
+  }
+
   async platFormReady() {
     await this.platform.ready();
     this.checkViewportSize();
@@ -343,6 +351,11 @@ export class TabSearchPage implements OnInit {
   }
 
   async onClaimIt() {
+    await this.closePopupListing();
+    this.router.navigate(['/tabs/tabDashboard']);
+  }
+
+  async onRequestBids() {
     await this.closePopupListing();
     this.router.navigate(['/tabs/tabDashboard']);
   }

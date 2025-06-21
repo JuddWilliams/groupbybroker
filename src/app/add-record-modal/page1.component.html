@@ -1,19 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Step 1: </ion-title>
+    <ion-title>Step 1: What would you like to do?</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <li style="padding-bottom: 7px" *ngFor="let addressObj of getAddresses()">
-    <div>
-      {{ addressObj.address }}
-      <ion-button size="small" fill="outline" (click)="claimAddress(addressObj)" style="float: right; padding: 0px; margin: 0px">
-        Claim
-        <ion-icon name="add-circle"></ion-icon>
-      </ion-button>
-    </div>
-  </li>
-
+  <p style="margin-left: 15px" *ngFor="let addressObj of getAddresses()">
+    {{ addressObj.address }}
+    <ion-button
+      [disabled]="isLoggedIn === false"
+      size="small"
+      fill="outline"
+      (click)="claimAddress(addressObj)"
+      style="float: right; padding-right: 7px; margin: 0px"
+    >
+      <ion-icon name="add-circle"></ion-icon> Claim
+    </ion-button>
+    <sup style="color: red" *ngIf="isLoggedIn === false">*Attention: You need to log in prior to claiming a property.</sup>
+  </p>
   <ion-list>
     <ion-item>
       <ion-label position="stacked">Name</ion-label>
@@ -21,5 +24,5 @@
     </ion-item>
   </ion-list>
 
-  <ion-button expand="block" (click)="goToNext()">Next</ion-button>
+  <ion-button style="padding: 10px" expand="block" (click)="goToNext()">Next</ion-button>
 </ion-content>

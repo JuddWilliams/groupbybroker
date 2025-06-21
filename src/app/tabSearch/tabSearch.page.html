@@ -319,7 +319,13 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button id="claimIt" size="small" fill="outline" (click)="onClaimIt()"> Claim this home </ion-button>
+            <ion-button *ngIf="isMyProperty()===true" id="submitBid" size="small" fill="outline" (click)="onRequestBids()">
+              Request Bids
+            </ion-button>
+
+            <ion-button *ngIf="isMyProperty()===false" id="claimIt" size="small" fill="outline" (click)="onClaimIt()">
+              Claim this home
+            </ion-button>
           </ion-buttons>
           <ion-title>{{this.currentContractorListing?.contractorListing?.address?.street}}</ion-title>
           <ion-buttons slot="end">
