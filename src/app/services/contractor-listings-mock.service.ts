@@ -21,8 +21,6 @@ export class ContractorListingsMockService {
   data: ContractorListing[] = [];
 
   ContractorListings(city?: string, state?: string, postalCode?: string, type?: string, option?: string[]): Observable<any[]> {
-    console.log('ContractorListingsMockService called with:', { type, option });
-
     const isLoggedIn = this.authService.isLoggedIn();
     const isContractor = this.authService.isLoggedInUserAContractor(); // Adjust as needed
 
@@ -90,7 +88,7 @@ export class ContractorListingsMockService {
 
   getHomeownerData() {
     // This method can be used to fetch the mock data directly if needed
-    let isClamimed = true; // !!!! to smulate if the user has claimed an address
+    let isClamimed = false; // !!!! to smulate if the user has claimed an address
 
     this.data = [
       {

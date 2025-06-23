@@ -103,12 +103,12 @@
                 [(ngModel)]="optionWorkingInAreas"
                 labelPlacement="end"
                 (ionChange)="selectCheckBox()"
-                >Working in area
+                >Working in area <sup><a>{{optionWorkingInAreasCount}}</a></sup>
                 <ion-icon
                   name="help-circle-outline"
                   (click)="alertMsg('A homeowner or contractor tagged this address so others are aware they are in the area. They may offer incentives or referrals for your business.')"
                   title="Click for more information"
-                  style="cursor: pointer"
+                  style="cursor: pointer; padding-left: 3px"
                 ></ion-icon
               ></ion-checkbox>
             </div>
@@ -126,12 +126,12 @@
                     [(ngModel)]="optionMyProperties"
                     labelPlacement="end"
                     (ionChange)="selectCheckBox()"
-                    >My Properties
+                    >My Properties <sup><a>{{optionMyPropertiesCount}}</a></sup>
                     <ion-icon
                       name="help-circle-outline"
                       (click)="alertMsg('You have claimed an address as your home or property.')"
                       title="Click for more information"
-                      style="cursor: pointer"
+                      style="cursor: pointer; padding-left: 3px"
                     ></ion-icon
                   ></ion-checkbox>
                   <ion-checkbox
@@ -141,12 +141,12 @@
                     [(ngModel)]="optionMyJobs"
                     labelPlacement="end"
                     (ionChange)="selectCheckBox()"
-                    >My Jobs
+                    >My Jobs <sup><b>{{optionMyJobsCount}}</b></sup>
                     <ion-icon
                       name="help-circle-outline"
                       (click)="alertMsg('You or another user tagged your company working at this address.')"
                       title="Click for more information"
-                      style="cursor: pointer"
+                      style="cursor: pointer; padding-left: 3px"
                     ></ion-icon
                   ></ion-checkbox>
                 </div>
@@ -159,7 +159,7 @@
                   name="help-circle-outline"
                   (click)="openPopupOptions()"
                   title="Click for more information"
-                  style="cursor: pointer"
+                  style="cursor: pointer; padding-left: 3px"
                 ></ion-icon
                 >: <sup>(*Login required)</sup>
               </div>
@@ -170,7 +170,7 @@
                   [(ngModel)]="optionAcceptingBids"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Accepting Bids</ion-checkbox
+                  >Accepting Bids <sup><b>{{optionAcceptingBidsCount}}</b></sup></ion-checkbox
                 >
               </div>
             </div>
@@ -181,7 +181,7 @@
                   name="help-circle-outline"
                   (click)="openPopupOptions()"
                   title="Click for more information"
-                  style="cursor: pointer"
+                  style="cursor: pointer; padding-left: 3px"
                 ></ion-icon
                 >: <sup>(*Login required)</sup>
               </div>
@@ -193,7 +193,7 @@
                   [(ngModel)]="optionPartner"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Partner</ion-checkbox
+                  >Partner<sup><a>{{optionPartnerCount}}</a></sup></ion-checkbox
                 >
                 <ion-checkbox
                   color="medium"
@@ -201,7 +201,7 @@
                   [(ngModel)]="optionForSale"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >For Sale</ion-checkbox
+                  >For Sale<sup><a>{{optionForSaleCount}}</a></sup></ion-checkbox
                 >
                 <ion-checkbox
                   color="medium"
@@ -209,7 +209,7 @@
                   [(ngModel)]="optionTrade"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Trade</ion-checkbox
+                  >Trade<sup><a>{{optionTradeCount}}</a></sup></ion-checkbox
                 >
 
                 <ion-checkbox
@@ -218,7 +218,7 @@
                   [(ngModel)]="optionCover"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Cover</ion-checkbox
+                  >Cover<sup><a>{{optionCoverCount}}</a></sup></ion-checkbox
                 >
               </div>
             </div>
@@ -229,7 +229,7 @@
                   name="help-circle-outline"
                   (click)="openPopupOptions()"
                   title="Click for more information"
-                  style="cursor: pointer"
+                  style="cursor: pointer; padding-left: 3px"
                 ></ion-icon
                 >: <sup>(*Login required)</sup>
               </div>
@@ -241,12 +241,12 @@
                   [(ngModel)]="optionUnsolicitedBid"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Unsolicited Bid
+                  >Unsolicited Bid <sup><a>{{optionUnsolicitedBidCount}}</a></sup>
                   <ion-icon
                     name="help-circle-outline"
                     (click)="alertMsg('Contractor offered a proposal for your business. They may offer incentives or other benefits for your business.  They are generally only visible to the homeowner and contractor who posted.')"
                     title="Click for more information"
-                    style="cursor: pointer"
+                    style="cursor: pointer; padding-left: 3px"
                   ></ion-icon
                 ></ion-checkbox>
               </div>

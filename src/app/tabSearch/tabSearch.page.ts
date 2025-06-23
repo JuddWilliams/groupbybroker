@@ -55,14 +55,23 @@ export class TabSearchPage implements OnInit {
   locationNote: string = '';
 
   optionMyJobs: boolean = true;
+  optionMyJobsCount: number = 0;
   optionMyProperties: boolean = true;
+  optionMyPropertiesCount: number = 0;
   optionAcceptingBids: boolean = true;
+  optionAcceptingBidsCount: number = 0;
   optionForSale: boolean = true;
+  optionForSaleCount: number = 0;
   optionTrade: boolean = true;
+  optionTradeCount: number = 0;
   optionPartner: boolean = true;
+  optionPartnerCount: number = 0;
   optionCover: boolean = true;
+  optionCoverCount: number = 0;
   optionWorkingInAreas: boolean = true;
+  optionWorkingInAreasCount: number = 0;
   optionUnsolicitedBid: boolean = true;
+  optionUnsolicitedBidCount: number = 0;
 
   typeColorMap: { [key: string]: string } = {
     'My Properties': '#0054e9', // primary blue
@@ -235,6 +244,10 @@ export class TabSearchPage implements OnInit {
     return this.authService.getLoggedInContractorName(); // Get the logged-in user nickname
   }
 
+  optionTypes: string[] = [];
+  optionTypeswDuplicates: string[] = [];
+  optionTypeCounts: { [key: string]: number } = {};
+
   constructor(
     private alertController: AlertController,
     private toastController: ToastController,
@@ -252,8 +265,6 @@ export class TabSearchPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    console.log(`isContractor?`, this.isContractor);
-    console.log(`contractorName?`, this.contractorName);
     this.platFormReady();
 
     this.boundsChange$.pipe(debounceTime(800)).subscribe(() => {
@@ -593,9 +604,13 @@ export class TabSearchPage implements OnInit {
       // optional: delay before showing resolve(), then toast
       await new Promise((resolve) => setTimeout(resolve, 500));
 
+      this.optionTypeCounts = {}; // reset counts
+      this.optionTypeswDuplicates = [];
       this.withinRangeContractorListings.forEach((listing) => {
         listing.contractorListing.icon = this.getCircleIcon(listing);
       });
+
+      this.setTypeCounts();
 
       // sort by type (alphabetically, case-insensitive)
       this.withinRangeContractorListings.sort((a, b) =>
@@ -623,6 +638,35 @@ export class TabSearchPage implements OnInit {
     }
   }
 
+  setTypeCounts() {
+    this.optionAcceptingBidsCount =
+      this.optionForSaleCount =
+      this.optionTradeCount =
+      this.optionPartnerCount =
+      this.optionCoverCount =
+      this.optionWorkingInAreasCount =
+      this.optionUnsolicitedBidCount =
+      this.optionMyPropertiesCount =
+      this.optionMyJobsCount =
+        0; // reset counts
+    // lets see if counts are correct>
+    console.log('setTypeCounts(): Option type counts:', this.optionTypeCounts);
+    // Loop through keys (types)
+    for (const type of Object.keys(this.optionTypeCounts)) {
+      console.log(`Type: ${type}, Count: ${this.optionTypeCounts[type]}`);
+      //types: 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+      if (type === 'Accepting Bids') this.optionAcceptingBidsCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'For Sale') this.optionForSaleCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'Trade') this.optionTradeCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'Partner') this.optionPartnerCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'Cover') this.optionCoverCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'Working in Area') this.optionWorkingInAreasCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'Unsolicited Bid') this.optionUnsolicitedBidCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'My Properties') this.optionMyPropertiesCount = this.optionTypeCounts[type] || 0;
+      else if (type === 'My Jobs') this.optionMyJobsCount = this.optionTypeCounts[type] || 0;
+    }
+  }
+
   isWithinBounds(lat: number, lng: number, bounds: google.maps.LatLngBounds): boolean {
     return bounds.contains(new google.maps.LatLng(lat, lng));
   }
@@ -633,33 +677,34 @@ export class TabSearchPage implements OnInit {
     const maxRadius = center - 2; // leave space for stroke
 
     // Split type string into array of options
-    const optionTypes = contractorListing.contractorListing.optionType
+    this.optionTypes = contractorListing.contractorListing.optionType
       .split(',')
       .map((t: string) => t.trim())
       .filter((t: string) => t);
-
-    console.log('iptinstypes', optionTypes);
-
+    //console.log('iptinstypes', this.optionTypes);
     let allowedFound = false;
 
+    // save original types with duplicates.  for later counts!
+    this.optionTypeswDuplicates.push(...this.optionTypes);
+
     // Remove extra allowed types after the first one
-    for (let i = 0; i < optionTypes.length; ) {
-      if (this.contractorOptionTypes.includes(optionTypes[i])) {
+    for (let i = 0; i < this.optionTypes.length; ) {
+      if (this.contractorOptionTypes.includes(this.optionTypes[i])) {
         if (!allowedFound) {
           allowedFound = true;
           i++; // keep the first allowed, move to next
         } else {
-          optionTypes.splice(i, 1); // remove extra allowed, don't increment i
+          this.optionTypes.splice(i, 1); // remove extra allowed, don't increment i
         }
       } else {
         i++; // non-allowed, move to next
       }
     }
 
-    const ringWidth = maxRadius / (optionTypes.length || 1);
+    const ringWidth = maxRadius / (this.optionTypes.length || 1);
 
     let svgCircles = '';
-    optionTypes.forEach((option: string, i: number) => {
+    this.optionTypes.forEach((option: string, i: number) => {
       const radius = maxRadius - i * ringWidth;
       svgCircles += `<circle cx="${center}" cy="${center}" r="${radius}" fill="${this.typeColorMap[option] || '#ccc'}"/>`;
     });
@@ -673,19 +718,17 @@ export class TabSearchPage implements OnInit {
     </svg>
   `;
 
+    // before returning, lets set counts for each.
+    this.optionTypeCounts = {};
+    this.optionTypeswDuplicates.forEach((type: string) => {
+      this.optionTypeCounts[type] = (this.optionTypeCounts[type] || 0) + 1;
+    });
+
     return {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim()),
       scaledSize: new google.maps.Size(size, size),
       anchor: new google.maps.Point(20, 35),
       labelOrigin: new google.maps.Point(0, 0), // move label above the icon
     };
-
-    /*
-    const icon = {
-  url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim()),
-  scaledSize: new google.maps.Size(40, 40),
-  anchor: new google.maps.Point(20, 40) // x=center, y=bottom
-};
- */
   }
 }
