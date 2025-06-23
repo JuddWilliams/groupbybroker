@@ -156,12 +156,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   isAuthPage(): boolean {
     const url = this.router.url;
-    return (
-      this.authService.isLoggedIn() ||
-      url.includes('login') ||
-      url.includes('create-user') ||
-      url.includes('reset-password') ||
-      url.includes('tabDashboard')
-    );
+    return url.includes('login') || url.includes('create-user') || url.includes('reset-password') || url.includes('tabDashboard');
   }
 }

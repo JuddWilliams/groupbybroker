@@ -638,6 +638,8 @@ export class TabSearchPage implements OnInit {
       .map((t: string) => t.trim())
       .filter((t: string) => t);
 
+    console.log('iptinstypes', optionTypes);
+
     let allowedFound = false;
 
     // Remove extra allowed types after the first one

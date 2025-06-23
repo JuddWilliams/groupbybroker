@@ -6,11 +6,11 @@
       <ion-buttons [collapse]="true" slot="start">
         <ion-menu-button auto-hide="false" id="main-content"></ion-menu-button>
         <!-- (click)="onMenu()"  -->
-        <div *ngIf="!isAuthPage()" id="createAccountDiv">
-          <ion-button size="small" fill="outline" [routerLink]="['/tabs/tabDashboard']">Create account </ion-button>
-          <!-- <sup style="padding-left: 3px">∙free and easy∙</sup> -->
+        <div *ngIf="!isAuthPage() && this.authService.isLoggedIn() === false" id="createAccountDiv">
+          <ion-button size="small" fill="outline" [routerLink]="['/create-user']">Create login </ion-button>
+          <sup style="padding-left: 3px">∙ Free, Easy, Never shared</sup>
         </div>
-        <div *ngIf="isAuthPage()" id="addDiv">
+        <div *ngIf="!isAuthPage() && this.authService.isLoggedIn() === true" id="addDiv">
           <ion-button id="idAdd" size="small" fill="outline" (click)="onAdd()">Add </ion-button>
           <!-- <sup style="padding-left: 3px">∙free and easy∙</sup> -->
         </div>

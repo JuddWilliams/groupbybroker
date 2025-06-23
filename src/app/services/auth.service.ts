@@ -29,6 +29,7 @@ export class AuthService {
   private apiKey = environment.apiKey; // Your API key
   private loggedInEmail: string | null = null; // Store the logged-in user's email
   private loggedInUser: string | null = null; // Store the logged-in user's email
+  private nickname: string | null = null; // Store the logged-in user's email
   private loggedInIsContractor: boolean | null = null; // Store the logged-in user's email
   private loggedInContractorName: string | null = null; // Store the logged-in user's email
 
@@ -54,8 +55,13 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('nickName');
+    localStorage.removeItem('isContractor');
+    localStorage.removeItem('contractorName');
     this.loggedInEmail = null; // Clear the email
     this.loggedInUser = null; // Clear the user
+    this.nickname = null; // Clear the email
+    this.loggedInIsContractor = null; // Clear the user
+    this.loggedInContractorName = null; // Clear the user
   }
 
   isLoggedIn(): boolean {

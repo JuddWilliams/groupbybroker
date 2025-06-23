@@ -44,7 +44,6 @@
           <div class="map-container" style="position: relative">
             <!-- Overlay text  hide on smaller??? *ngIf="!isSmallViewport" -->
             <div class="map-overlay-text" [class.flicker]="flickerOverlay">
-              <!-- <ion-icon name="bookmark-outline" size="large" style="vertical-align: middle; margin-right: 6px;"></ion-icon> -->
               <span>
                 <b>{{withinRangeContractorListings.length}}</b>
                 item<span *ngIf="withinRangeContractorListings.length !== 1">s</span>
@@ -59,11 +58,6 @@
               (boundsChanged)="onMapBoundsChanged()"
               (mapClick)="onMapClick($event)"
             >
-              <!--  text: contractorListing.contractorListing.type +  ' (' + contractorListing.contractorListing.optionType + ')',   
-               [icon]="rangeIcon" 
-               [icon]="getRangeIcon(contractorListing)
-               [icon]="contractorListing.contractorListing.icon"               
-               -->
               <map-marker
                 class="marker"
                 *ngFor="let contractorListing of withinRangeContractorListings"
@@ -101,7 +95,24 @@
               </ion-select>
             </div>
             <!-- start options -->
-            <div id="UserDiv" style="padding-bottom: 7px">
+
+            <div>
+              <ion-checkbox
+                style="--checkbox-background-checked: var(--ion-color-warning-shade)"
+                class="my-label-text-wrapper ion-checkbox-warning-shade"
+                [(ngModel)]="optionWorkingInAreas"
+                labelPlacement="end"
+                (ionChange)="selectCheckBox()"
+                >Working in area
+                <ion-icon
+                  name="help-circle-outline"
+                  (click)="alertMsg('A homeowner or contractor tagged this address so others are aware they are in the area. They may offer incentives or referrals for your business.')"
+                  title="Click for more information"
+                  style="cursor: pointer"
+                ></ion-icon
+              ></ion-checkbox>
+            </div>
+            <div id="UserDiv" *ngIf="isLoggedIn === true" style="padding-bottom: 7px">
               <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
                 General options:
                 <div style="background-color: yellow">
@@ -144,13 +155,13 @@
 
             <div id="HomeOwnerDiv" style="padding-bottom: 7px">
               <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
-                Homeowner options:
-                <ion-icon
+                Homeowner options<ion-icon
                   name="help-circle-outline"
-                  (click)="alertMsg('help todo: homeowners out for bids')"
+                  (click)="openPopupOptions()"
                   title="Click for more information"
                   style="cursor: pointer"
-                ></ion-icon>
+                ></ion-icon
+                >: <sup>(*Login required)</sup>
               </div>
               <div class="checkbox-group">
                 <ion-checkbox
@@ -166,13 +177,13 @@
 
             <div id="OptionsDiv" style="padding-bottom: 7px">
               <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
-                Contractor Options:
-                <ion-icon
+                Contractor Options<ion-icon
                   name="help-circle-outline"
                   (click)="openPopupOptions()"
                   title="Click for more information"
                   style="cursor: pointer"
-                ></ion-icon>
+                ></ion-icon
+                >: <sup>(*Login required)</sup>
               </div>
 
               <div class="checkbox-group">
@@ -184,7 +195,6 @@
                   (ionChange)="selectCheckBox()"
                   >Partner</ion-checkbox
                 >
-
                 <ion-checkbox
                   color="medium"
                   class="my-label-text-wrapper ion-checkbox-medium"
@@ -214,23 +224,17 @@
             </div>
 
             <div id="Other1Div" style="padding-bottom: 7px">
+              <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">
+                Common Options<ion-icon
+                  name="help-circle-outline"
+                  (click)="openPopupOptions()"
+                  title="Click for more information"
+                  style="cursor: pointer"
+                ></ion-icon
+                >: <sup>(*Login required)</sup>
+              </div>
               <!-- <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">General:</div> -->
               <div class="checkbox-group">
-                <ion-checkbox
-                  style="--checkbox-background-checked: var(--ion-color-warning-shade)"
-                  class="my-label-text-wrapper ion-checkbox-warning-shade"
-                  [(ngModel)]="optionWorkingInAreas"
-                  labelPlacement="end"
-                  (ionChange)="selectCheckBox()"
-                  >Working in area
-                  <ion-icon
-                    name="help-circle-outline"
-                    (click)="alertMsg('A homeowner or contractor tagged this address so others are aware they are in the area. They may offer incentives or referrals for your business.')"
-                    title="Click for more information"
-                    style="cursor: pointer"
-                  ></ion-icon
-                ></ion-checkbox>
-
                 <ion-checkbox
                   style="--checkbox-background-checked: #006600"
                   class="my-label-text-wrapper ion-checkbox-success-tint"
