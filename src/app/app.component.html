@@ -22,7 +22,11 @@
         <!-- Circle with User's Initials -->
         <ion-button title="{{ loggedInEmail }}" *ngIf="!authService.isLoggedIn()" routerLink="/login"><u>Login</u></ion-button>
         <ion-button title="{{ loggedInEmail }}" *ngIf="authService.isLoggedIn()" (click)="onLogout()"><u>Logout</u></ion-button>
-        <div title="{{ loggedInUser + ' at ' + contractorName }}" *ngIf="loggedInUser" class="user-circle">
+        <div
+          [title]="loggedInUser + ' as ' + (isContractor ? contractorName : 'homeowner')"
+          *ngIf="loggedInUser"
+          class="user-circle"
+        >
           {{ getInitials(loggedInUser) }}
         </div>
       </ion-buttons>
@@ -41,11 +45,11 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabSearch']">Search feature</ion-item>
+      <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabAbout']">How it Works</ion-item>
+      <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabSearch']">Go to Work</ion-item>
       <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabDashboard']">Your Dashboard</ion-item>
       <ion-item (click)="onMenu()">Dispute or report issue</ion-item>
       <ion-item (click)="onMenu()">Contact us</ion-item>
-      <ion-item (click)="closeMenu()" [routerLink]="['/tabs/tabAbout']">About us</ion-item>
       <ion-item *ngIf="loggedInEmail === 'juddsurfs@gmail.com'" (click)="closeMenu()" [routerLink]="['/test-page']"
         >Test page if Juddsurfs</ion-item
       >

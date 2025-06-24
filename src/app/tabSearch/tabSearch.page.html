@@ -64,7 +64,7 @@
                 [position]="getLatLng(contractorListing)"
                 [icon]="contractorListing.contractorListing.icon"
                 [label]="{
-                    text: contractorListing.contractorListing.type,                     
+                     text: (contractorListing.contractorListing.ref ? '(' + contractorListing.contractorListing.ref + ') ' : '') + contractorListing.contractorListing.type,    
                     color: 'black',
                     fontSize: '16px',
                     fontWeight: 'bold'
@@ -118,7 +118,7 @@
                 <div style="background-color: yellow">
                   TODO: don't show if not logged in: if logged in, only show the correct 1 based on user type
                 </div>
-                <div class="checkbox-group" style="padding-top: 7px">
+                <div style="padding-top: 7px">
                   <ion-checkbox
                     *ngIf="isContractor === false"
                     color="primary"
@@ -163,15 +163,21 @@
                 ></ion-icon
                 >: <sup>(*Login required)</sup>
               </div>
-              <div class="checkbox-group">
+              <div>
                 <ion-checkbox
                   color="success"
                   class="my-label-text-wrapper ion-checkbox-success"
                   [(ngModel)]="optionAcceptingBids"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Accepting Bids <sup><b>{{optionAcceptingBidsCount}}</b></sup></ion-checkbox
-                >
+                  >Accepting Bids <sup><b>{{optionAcceptingBidsCount}}</b></sup>
+                  <ion-icon
+                    name="help-circle-outline"
+                    (click)="alertMsg('You or another user tagged your company working at this address.')"
+                    title="Click for more information"
+                    style="cursor: pointer; padding-left: 3px"
+                  ></ion-icon
+                ></ion-checkbox>
               </div>
             </div>
 
@@ -193,7 +199,7 @@
                   [(ngModel)]="optionPartner"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Partner<sup><a>{{optionPartnerCount}}</a></sup></ion-checkbox
+                  >Partner <sup><a>{{optionPartnerCount}}</a></sup></ion-checkbox
                 >
                 <ion-checkbox
                   color="medium"
@@ -201,7 +207,7 @@
                   [(ngModel)]="optionForSale"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >For Sale<sup><a>{{optionForSaleCount}}</a></sup></ion-checkbox
+                  >For Sale <sup><a>{{optionForSaleCount}}</a></sup></ion-checkbox
                 >
                 <ion-checkbox
                   color="medium"
@@ -209,7 +215,7 @@
                   [(ngModel)]="optionTrade"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Trade<sup><a>{{optionTradeCount}}</a></sup></ion-checkbox
+                  >Trade <sup><a>{{optionTradeCount}}</a></sup></ion-checkbox
                 >
 
                 <ion-checkbox
@@ -218,8 +224,14 @@
                   [(ngModel)]="optionCover"
                   labelPlacement="end"
                   (ionChange)="selectCheckBox()"
-                  >Cover<sup><a>{{optionCoverCount}}</a></sup></ion-checkbox
-                >
+                  >Cover <sup><a>{{optionCoverCount}}</a></sup>
+                  <ion-icon
+                    name="help-circle-outline"
+                    (click)="alertMsg('You or another user tagged your company working at this address.')"
+                    title="Click for more information"
+                    style="cursor: pointer; padding-left: 3px"
+                  ></ion-icon
+                ></ion-checkbox>
               </div>
             </div>
 
@@ -234,7 +246,7 @@
                 >: <sup>(*Login required)</sup>
               </div>
               <!-- <div style="font-size: small; padding-top: 7px; padding-bottom: 7px">General:</div> -->
-              <div class="checkbox-group">
+              <div>
                 <ion-checkbox
                   style="--checkbox-background-checked: #006600"
                   class="my-label-text-wrapper ion-checkbox-success-tint"
@@ -297,6 +309,7 @@
           <ul>
             <li style="padding-bottom: 7px" *ngFor="let addressObj of withinRangeContractorListings">
               <div id="DisplayCard-List">
+                <span *ngIf="addressObj.contractorListing.ref">(<b>{{addressObj.contractorListing.ref}}</b>)</span>
                 '{{addressObj.contractorListing.type}}' - by {{addressObj.contractorListing.company.companyName}}<br />
                 ( {{addressObj.contractorListing.optionType}} )<br />
                 <sup>

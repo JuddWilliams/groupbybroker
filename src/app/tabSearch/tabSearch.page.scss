@@ -95,13 +95,13 @@ ion-col:not(.fixed-width-col) {
 //   gap: 16px;
 //   align-items: center;
 // }
-.checkbox-group {
+.checkbox-group {  
   display: flex;
   flex-wrap: wrap;  
   margin: 0px 0px 0px 11px !important;
   gap: 16px;       /* Allows checkboxes to wrap to next line */
   max-width: 100%;         /* Prevents overflow */
-  box-sizing: border-box;  /* Includes padding/border in width */
+  box-sizing: border-box;  /* Includes padding/border in width */  
 }
 
 

@@ -104,6 +104,10 @@ export class AppComponent implements OnInit, OnDestroy {
     return this.authService.getLoggedInUser(); // Get the logged-in user nickname
   }
 
+  get isContractor(): boolean | null {
+    return this.authService.isLoggedInUserAContractor(); // Get the logged-in user nickname
+  }
+
   get contractorName(): string | null {
     return this.authService.getLoggedInContractorName(); // Get the logged-in user nickname
   }

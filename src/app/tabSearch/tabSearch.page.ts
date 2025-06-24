@@ -549,7 +549,7 @@ export class TabSearchPage implements OnInit {
     }
 
     try {
-      // fetch contractor listings as a promise
+      // fetch contractor listings as a promise. using firstValueFrom to convert observable to promise to await it.
       const responseContractorListings = await firstValueFrom(
         this.contractorListingsService.ContractorListings(
           undefined,
@@ -616,6 +616,13 @@ export class TabSearchPage implements OnInit {
       this.withinRangeContractorListings.sort((a, b) =>
         a.contractorListing.type.localeCompare(b.contractorListing.type, undefined, { sensitivity: 'base' })
       );
+
+      // After sorting
+      this.withinRangeContractorListings.forEach((listing, idx) => {
+        listing.contractorListing.ref = String.fromCharCode(65 + idx); // 'A', 'B', 'C', ...
+      });
+
+      console.log('Contractor Listings within range:', this.withinRangeContractorListings);
 
       if (this.withinRangeContractorListings.length === 0) {
         this.presentToast('No listings found. Zoom out or try a different area.', 'warning', 3000);

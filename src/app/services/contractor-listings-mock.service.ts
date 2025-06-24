@@ -83,6 +83,15 @@ export class ContractorListingsMockService {
         serviceType: 'Yard care',
         optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
       },
+      {
+        street: '9 Harbor View lane',
+        city: 'Toms River',
+        state: 'NJ',
+        postalCode: '08753',
+        businessName: "Paul's Lawn Care",
+        serviceType: 'Yard care',
+        optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+      },
     ];
   }
 
@@ -97,9 +106,52 @@ export class ContractorListingsMockService {
         city: 'Jacksonville',
         state: 'FL',
         postalCode: '32225',
-        serviceType: 'Yard care',
+        businessName: 'Test Co Maid Services',
+        serviceType: 'Maid & Cleaning Services',
         //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
         optionType: isClamimed ? 'Unsolicited Bid, My Properties' : 'Unsolicited Bid',
+      },
+      {
+        street: '4330 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+      },
+      {
+        street: '4316 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'Test Pool Co.',
+        serviceType: 'Pool Maintenance',
+        optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+      },
+      {
+        street: '14071 Inlet drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        businessName: 'JnW Lawn Care',
+        serviceType: 'Yard care',
+        optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
+      },
+    ];
+  }
+
+  getContractorData() {
+    // This method can be used to fetch the mock data directly if needed
+    this.data = [
+      {
+        // example accepting bid.  need to process to bid! and user to review.
+        street: '4322 Harbour Island drive',
+        city: 'Jacksonville',
+        state: 'FL',
+        postalCode: '32225',
+        serviceType: 'Yard care',
+        optionType: 'Unsolicited Bid', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
       },
       {
         street: '4330 Harbour Island drive',
@@ -127,21 +179,6 @@ export class ContractorListingsMockService {
         businessName: 'JnW Lawn Care',
         serviceType: 'Yard care',
         optionType: 'Working in Area', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
-      },
-    ];
-  }
-
-  getContractorData() {
-    // This method can be used to fetch the mock data directly if needed
-    this.data = [
-      {
-        // example accepting bid.  need to process to bid! and user to review.
-        street: '4322 Harbour Island drive',
-        city: 'Jacksonville',
-        state: 'FL',
-        postalCode: '32225',
-        serviceType: 'Yard care',
-        optionType: 'Unsolicited Bid', //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
       },
     ];
   }

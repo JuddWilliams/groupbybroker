@@ -27,4 +27,5 @@ export interface ContractorListing {
   private: boolean;
   optionType: string; // 'Open to Bid', 'For Sale', 'Partner', 'Trade', 'Cover';
   icon: google.maps.Icon;
+  ref?: string;
 }
