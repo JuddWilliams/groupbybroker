@@ -51,7 +51,12 @@ export class LoginPage {
     const isContractor = true; // Default to false, can be set based on your logic
     const contractorName = 'JnW Lawn Care'; // Default contractor name, can be set based on your logic
     this.authService.saveLogin(mockResponse.token, mockResponse.userId, mockResponse.nickName, isContractor, contractorName); // Save login details
-    this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
+    //this.router.navigate([this.returnUrl]); // Redirect to the originally requested URL
+
+    // force refresh of the page to ensure the authService is updated
+    this.router.navigate([this.returnUrl]).then(() => {
+      window.location.reload();
+    });
 
     // working code. uncomment once backend is subscribed to
     //

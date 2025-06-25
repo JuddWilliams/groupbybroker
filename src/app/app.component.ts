@@ -149,7 +149,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']); // Preserving your navigation logic
+
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
 
   getInitials(nickName: string): string {
