@@ -23,8 +23,8 @@ export interface Company {
 export interface ContractorListing {
   address: Address;
   type: string;
-  company: Company;
-  private: boolean;
+  company?: Company;
+  private?: boolean;
   optionType: string; // 'Open to Bid', 'For Sale', 'Partner', 'Trade', 'Cover';
   icon: google.maps.Icon;
   ref?: string;

@@ -310,7 +310,7 @@
             <li style="padding-bottom: 7px" *ngFor="let addressObj of withinRangeContractorListings">
               <div id="DisplayCard-List">
                 <span *ngIf="addressObj.contractorListing.ref">(<b>{{addressObj.contractorListing.ref}}</b>)</span>
-                '{{addressObj.contractorListing.type}}' - by {{addressObj.contractorListing.company.companyName}}<br />
+                '{{addressObj.contractorListing.type}}' - by {{addressObj.contractorListing.company?.companyName}}<br />
                 ( {{addressObj.contractorListing.optionType}} )<br />
                 <sup>
                   at {{ addressObj.contractorListing.address.street }}, {{ addressObj.contractorListing.address.city }}, {{

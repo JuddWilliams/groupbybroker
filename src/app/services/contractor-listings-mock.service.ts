@@ -97,7 +97,7 @@ export class ContractorListingsMockService {
 
   getHomeownerData() {
     // This method can be used to fetch the mock data directly if needed
-    let isClamimed = false; // !!!! to smulate if the user has claimed an address
+    let isClamimed = true; // !!!! to smulate if the user has claimed an address
 
     this.data = [
       {
@@ -109,7 +109,7 @@ export class ContractorListingsMockService {
         businessName: 'Test Co Maid Services',
         serviceType: 'Maid & Cleaning Services',
         //  NOTE: when rerturning: save my jobs/my properties LAST!! (inner circle): 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
-        optionType: isClamimed ? 'Unsolicited Bid, My Properties' : 'Unsolicited Bid',
+        optionType: isClamimed ? 'Accepting Bids, My Properties' : 'Unsolicited Bid',
       },
       {
         street: '4330 Harbour Island drive',
