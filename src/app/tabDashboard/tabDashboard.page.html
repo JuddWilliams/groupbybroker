@@ -7,24 +7,53 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>My Work</ion-card-title>
-      <ion-card-subtitle>All things about me ;-)</ion-card-subtitle>
+      <ion-card-subtitle>Manage your profile</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngIf="myWork?.addresses?.length === 0">
+        <p>
+          <ion-text color="warning"><ion-icon name="warning"></ion-icon></ion-text>
+          <ion-text color="medium">
+            *Seems you haven't claimed your home or property. Although you can use '<a href="/tabs/tabSearch">Work Map</a>'
+            features, you can't see <i>unsolicited bids</i> or <i>request any bids</i>.</ion-text
+          >
+        </p>
+        <p>
+          Use the '<a href="/tabs/tabSearch">Map</a>' feature to find your property, click it, and follow the
+          <i>Claim</i> process.
+        </p>
+      </div>
+
+      <span *ngIf="myWork?.addresses?.length !== 0">addresses</span></ion-card-content
+    >
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Claimed Properties (if any)</ion-card-title>
+      <ion-card-subtitle> </ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content>
-      <h2>Claimed Properties (if any)</h2>
       <ion-item *ngFor="let address of myWork?.addresses">
         <ion-thumbnail slot="start">
-          <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
+          <img alt="alt" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
         </ion-thumbnail>
         <ion-label>{{ address.street }}, {{ address.city }}, {{ address.state }} {{ address.postalCode }}</ion-label>
       </ion-item>
     </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Postings (if any)</ion-card-title>
+      <ion-card-subtitle> </ion-card-subtitle>
+    </ion-card-header>
 
     <ion-card-content>
-      <h2>Postings (if any)</h2>
       <ion-item *ngFor="let listing of myWork?.listings">
         <ion-thumbnail slot="start">
-          <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
+          <img alt="alt" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
         </ion-thumbnail>
         <ion-label
           >{{ listing.address.street }}, {{ listing.address.city }}, {{ listing.address.state }} {{ listing.address.postalCode
@@ -34,9 +63,8 @@
     </ion-card-content>
   </ion-card>
   <ion-card>
-    <h1>BELOW IS JUST A PROOF OF CONCEPT FOR PAYMENT ACCEPTANCE (ignore/don't click)</h1>
-    <!-- <app-explore-container nameX="payment widget"></app-explore-container> -->
-    <div id="container">
+    <div [hidden]="hideFees===true" id="container">
+      <h1>BELOW IS JUST A PROOF OF CONCEPT FOR PAYMENT ACCEPTANCE (ignore/don't click)</h1>
       <div id="paypal-container-QBSGDFGR8JRLN"></div>
     </div>
   </ion-card>

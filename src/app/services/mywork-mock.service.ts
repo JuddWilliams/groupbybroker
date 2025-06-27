@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import { Address, ContractorListing } from '../models/address';
@@ -15,7 +15,12 @@ export interface MyWork {
   providedIn: 'root',
 })
 export class MyWorkMockService {
+  private addressesSubject = new BehaviorSubject<Address[]>([]);
+  addresses$ = this.addressesSubject.asObservable();
+
   data: MyWork | undefined;
+  myAddress: Address | undefined;
+  myAddressAcceptingBids: Address | undefined;
 
   constructor(private authService: AuthService) {}
 
@@ -28,23 +33,30 @@ export class MyWorkMockService {
       this.getContractorData();
     }
 
-    console.log('MyWorkMockService: MyWork returning:', this.data);
-
     return of(this.data ?? { addresses: [], listings: [], userPreference: '' });
+  }
+
+  claimAddress(address: Address) {
+    this.myAddress = address;
+    this.addressesSubject.next([address]);
+  }
+
+  getClaimedAddress() {
+    return this.myAddress; // Store the address in myAddress
   }
 
   getHomeownerData() {
     // This method can be used to fetch the mock data directly if needed
-    let isClamimed: boolean = false; // !!!! to smulate if the user has claimed an address
+    //let isClamimed: boolean = false; // !!!! to smulate if the user has claimed an address
 
-    if (isClamimed) {
+    if (this.myAddress !== undefined) {
       this.data = {
         addresses: [
           {
-            street: '4322 Harbour Island drive',
-            city: 'Jacksonville',
-            state: 'FL',
-            postalCode: '32225',
+            street: this.myAddress.street,
+            city: this.myAddress.city,
+            state: this.myAddress.state,
+            postalCode: this.myAddress.postalCode,
           },
         ],
         listings: [
@@ -80,9 +92,6 @@ export class MyWorkMockService {
   }
 
   getContractorData() {
-    // This method can be used to fetch the mock data directly if needed
-    let isClamimed = false; // !!!! to smulate if the user has claimed an address
-
     this.data = {
       addresses: [],
       listings: [

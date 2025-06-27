@@ -14,13 +14,19 @@ export class TabDashboardPage implements OnInit, AfterViewInit {
   constructor(private myWorkMockService: MyWorkMockService) {}
 
   myWork: MyWork | undefined; // This will hold the data from MyWorkMockService
+  hideFees: boolean = true;
 
   ngOnInit(): void {
-    console.log('TabDashboardPage initialized');
-
     this.myWorkMockService.MyWorkMock().subscribe((data: MyWork) => {
       this.myWork = data;
-      console.log('this.myWork', this.myWork);
+    });
+
+    this.myWorkMockService.addresses$.subscribe((addresses) => {
+      if (this.myWork) {
+        this.myWork.addresses = addresses;
+      } else {
+        this.myWork = { addresses: addresses };
+      }
     });
   }
 

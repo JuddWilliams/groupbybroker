@@ -23,6 +23,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from '../services/auth.service';
 import { RecordModalService } from '../services/addrecord-modal.service';
 import { RecordService } from '../services/record.service';
+import { MyWorkMockService } from '../services/mywork-mock.service';
 
 @Component({
   selector: 'app-tabSearch',
@@ -170,7 +171,6 @@ export class TabSearchPage implements OnInit {
       if (record) {
         this.recordService.addRecord(record).subscribe({
           next: (response) => {
-            console.log('tabSearch: Add record response:', response); // <-- log the API response here
             this.presentToast('New record added successfully!', 'success', 2000, 'bottom');
           },
           error: (error) => {
@@ -247,6 +247,7 @@ export class TabSearchPage implements OnInit {
   optionTypes: string[] = [];
   optionTypeswDuplicates: string[] = [];
   optionTypeCounts: { [key: string]: number } = {};
+  myAddress: Address | undefined; // so it gets freshed.
 
   constructor(
     private alertController: AlertController,
@@ -256,6 +257,7 @@ export class TabSearchPage implements OnInit {
     //private contractorListingsService: ContractorListingsService,
     //private contractorListingsMockService: ContractorListingsMockService,
     private contractorListingsService: ContractorListingsMockService,
+    private myWorkMockService: MyWorkMockService,
     private router: Router, // add this
     private loadingController: LoadingController,
     private modalController: ModalController,
@@ -278,19 +280,17 @@ export class TabSearchPage implements OnInit {
 
     // Show participate popup after x seconds
     setTimeout(() => {
-      //this.showParticipatePopup();  // TODO: implemented in later
+      //this.showParticipatePopup(); // TODO: implemented in later
+      this.showAboutUsPopup();
+      //
       console.info('Show participate popup after x seconds - TODO: implemented in later');
-    }, 30000);
+    }, 3000);
 
     window.addEventListener('resize', () => this.checkViewportSize());
   }
 
   get isLoggedIn(): boolean | null {
     return this.authService.isLoggedIn(); // Get the logged-in user nickname
-  }
-
-  isMyProperty(): boolean | null {
-    return false;
   }
 
   async platFormReady() {
@@ -361,9 +361,19 @@ export class TabSearchPage implements OnInit {
     this.streetViewPitch = Math.max(this.streetViewPitch - 10, -90);
   }
 
-  async onClaimIt() {
-    await this.closePopupListing();
-    this.router.navigate(['/tabs/tabDashboard']);
+  isMyProperty(): boolean | null {
+    this.myAddress = this.myWorkMockService.getClaimedAddress();
+    console.log('isMyProperty() - myaddress:', this.myAddress);
+    return this.myAddress === undefined ? false : true;
+  }
+
+  async onClaimIt(address: Address) {
+    this.myAddress = address;
+    this.myWorkMockService.claimAddress(address); // Store the address in myAddress
+
+    alert('You successfully claimed this address!');
+    //await this.closePopupListing();
+    //this.router.navigate(['/tabs/tabDashboard']);
   }
 
   async onRequestBids() {
@@ -441,10 +451,36 @@ export class TabSearchPage implements OnInit {
     await toast.present();
   }
 
+  async showAboutUsPopup() {
+    if (this.isLoggedIn) return; // skip as they know whats up
+
+    const alert = await this.alertController.create({
+      header: "'What we do' ...in 20 seconds",
+      message: `If you are looking for a quick and easy way to find the best contractor with incentives and 
+                recommendations from your neighbors, you came to the right place. But that's not all we do...
+                click 'How it Works' to learn more `,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'close',
+        },
+        // {
+        //   text: 'participate for free',
+        //   handler: () => {
+        //     this.router.navigate(['/tabs/tabDashboard']); // redirect to tabAbout
+        //   },
+        // },
+      ],
+    });
+    await alert.present();
+  }
+
   async showParticipatePopup() {
+    if (this.isLoggedIn) return; // skip as they know whats up
+
     const alert = await this.alertController.create({
       header: 'Join the Community',
-      message: 'As a free service you have nothing to loose.  Simple and easy to use.',
+      message: `As a free service you have nothing to loose.  Simple and easy to use. `,
       buttons: [
         {
           text: 'maybe later',
@@ -622,8 +658,6 @@ export class TabSearchPage implements OnInit {
         listing.contractorListing.ref = String.fromCharCode(65 + idx); // 'A', 'B', 'C', ...
       });
 
-      console.log('Contractor Listings within range:', this.withinRangeContractorListings);
-
       if (this.withinRangeContractorListings.length === 0) {
         this.presentToast('No listings found. Zoom out or try a different area.', 'warning', 3000);
       }
@@ -656,11 +690,9 @@ export class TabSearchPage implements OnInit {
       this.optionMyPropertiesCount =
       this.optionMyJobsCount =
         0; // reset counts
-    // lets see if counts are correct>
-    console.log('setTypeCounts(): Option type counts:', this.optionTypeCounts);
+
     // Loop through keys (types)
     for (const type of Object.keys(this.optionTypeCounts)) {
-      console.log(`Type: ${type}, Count: ${this.optionTypeCounts[type]}`);
       //types: 'Accepting Bids, For Sale, Trade, Partner, Cover, Working in Area, Unsolicited Bid, My Properties, My Jobs'
       if (type === 'Accepting Bids') this.optionAcceptingBidsCount = this.optionTypeCounts[type] || 0;
       else if (type === 'For Sale') this.optionForSaleCount = this.optionTypeCounts[type] || 0;
@@ -688,7 +720,6 @@ export class TabSearchPage implements OnInit {
       .split(',')
       .map((t: string) => t.trim())
       .filter((t: string) => t);
-    //console.log('iptinstypes', this.optionTypes);
     let allowedFound = false;
 
     // save original types with duplicates.  for later counts!

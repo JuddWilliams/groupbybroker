@@ -340,7 +340,13 @@
               Request Bids
             </ion-button>
 
-            <ion-button *ngIf="isMyProperty()===false" id="claimIt" size="small" fill="outline" (click)="onClaimIt()">
+            <ion-button
+              *ngIf="isMyProperty()===false"
+              id="claimIt"
+              size="small"
+              fill="outline"
+              (click)="onClaimIt(this.currentContractorListing?.contractorListing?.address)"
+            >
               Claim this home
             </ion-button>
           </ion-buttons>
